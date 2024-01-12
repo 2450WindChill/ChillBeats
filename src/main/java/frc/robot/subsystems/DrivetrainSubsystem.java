@@ -41,7 +41,7 @@ public class DrivetrainSubsystem extends SubsystemBase {
 
     swerveOdometry = new SwerveDriveOdometry(
       Constants.swerveKinematics,
-      getGyroAsRotation2d(),
+      getGyroYaw(),
       getModulePositions(),
       new Pose2d(0, 0, new Rotation2d(0))
     );
@@ -62,13 +62,21 @@ public class DrivetrainSubsystem extends SubsystemBase {
           translation.getX(), 
           translation.getY(), 
           rotation, 
-          getGyroAsRotation2d())
+          getGyroYaw())
       );
     }
 
     for (WindChillSwerveModule mod : swerveModules) {
       mod.setDesiredState(swerveModuleStates[mod.moduleNumber]);
     }
+  }
+
+  public SwerveModulePosition[] getPositions() {
+    SwerveModulePosition[] positions = new SwerveModulePosition[swerveModules.length];
+    for (int i = 0; i < swerveModules.length; i++) {
+      positions[i] = swerveModules[i].getPosition();
+    }
+    return positions;
   }
 
   // public void autonomousDrive(double xSpeed, double ySpeed, double rotation) {
@@ -95,7 +103,7 @@ public class DrivetrainSubsystem extends SubsystemBase {
   //   }
   // }
 
-  public Rotation2d getGyroAsRotation2d() {
+  public Rotation2d getGyroYaw() {
     Rotation2d rotation2d = Rotation2d.fromDegrees(gyro.getYaw());
 
     return rotation2d;
@@ -150,7 +158,7 @@ public class DrivetrainSubsystem extends SubsystemBase {
   
 
     swerveOdometry.update(
-      getGyroAsRotation2d(),
+      getGyroYaw(),
       getModulePositions()
     );
     SmartDashboard.putNumber("Gyro Yaw", gyro.getYaw());
