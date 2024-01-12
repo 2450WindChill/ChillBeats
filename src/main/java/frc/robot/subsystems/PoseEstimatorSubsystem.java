@@ -23,15 +23,20 @@ public class PoseEstimatorSubsystem extends SubsystemBase{
     }
 
     public void periodic() {
-        Pose2d currentPoseEstimate = poseEstimate.update(m_drivetrainSubsystem.getGyroYaw(),
-                                                            m_drivetrainSubsystem.getPositions());
+        Pose2d currentPoseEstimate = poseEstimate.update(
+                                        m_drivetrainSubsystem.getGyroYaw(),
+                                        m_drivetrainSubsystem.getPositions());
         
-        poseEstimate.addVisionMeasurement(getLimelightPose(), getLimelightTimeStamp());
+        if (LimelightHelpers.getTV("limelight")) {
+            poseEstimate.addVisionMeasurement(getLimelightPose(), getLimelightTimeStamp());
+        }
 
         SmartDashboard.putNumberArray(
                 "Pose Estimate",
                 new double[] {
-                    currentPoseEstimate.getX(), currentPoseEstimate.getY(), currentPoseEstimate.getRotation().getDegrees()
+                    currentPoseEstimate.getX(),
+                    currentPoseEstimate.getY(),
+                    currentPoseEstimate.getRotation().getDegrees()
         });
     }
 
@@ -47,5 +52,17 @@ public class PoseEstimatorSubsystem extends SubsystemBase{
 
     public Pose2d getBotPose() {
         return poseEstimate.getEstimatedPosition();
+    }
+
+    public double getBotX() {
+        return getBotPose().getX();
+    }
+
+    public double getBotY() {
+        return getBotPose().getY();
+    }
+
+    public double getBotRotation() {
+        return getBotPose().getRotation().getDegrees();
     }
 }
