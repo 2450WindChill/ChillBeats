@@ -5,6 +5,8 @@
 package frc.robot.subsystems;
 
 import com.ctre.phoenix.sensors.Pigeon2;
+import com.revrobotics.CANSparkMax;
+import com.revrobotics.CANSparkLowLevel.MotorType;
 
 import edu.wpi.first.hal.simulation.RoboRioDataJNI;
 import edu.wpi.first.math.geometry.Pose2d;
@@ -24,6 +26,7 @@ public class DrivetrainSubsystem extends SubsystemBase {
   public final Pigeon2 gyro;
   private WindChillSwerveModule[] swerveModules;
   public SwerveDriveOdometry swerveOdometry;
+  public CANSparkMax testMotor;
 
   /** Creates a new ExampleSubsystem. */
   public DrivetrainSubsystem() {
@@ -31,6 +34,8 @@ public class DrivetrainSubsystem extends SubsystemBase {
     gyro = new Pigeon2(Constants.pigeonID);
     gyro.configFactoryDefault();
     zeroGyro();
+
+    testMotor = new CANSparkMax(19, MotorType.kBrushless);
 
     swerveModules = new WindChillSwerveModule[] {
       new WindChillSwerveModule(0, Constants.FrontLeftModule.constants),
