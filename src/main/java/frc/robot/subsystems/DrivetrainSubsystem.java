@@ -4,7 +4,9 @@
 
 package frc.robot.subsystems;
 
-import com.ctre.phoenix.sensors.Pigeon2;
+import com.ctre.phoenix6.configs.CANcoderConfiguration;
+import com.ctre.phoenix6.configs.Pigeon2Configuration;
+import com.ctre.phoenix6.hardware.Pigeon2;
 import com.revrobotics.CANSparkMax;
 import com.revrobotics.CANSparkLowLevel.MotorType;
 
@@ -32,7 +34,7 @@ public class DrivetrainSubsystem extends SubsystemBase {
   public DrivetrainSubsystem() {
 
     gyro = new Pigeon2(Constants.pigeonID);
-    gyro.configFactoryDefault();
+    gyro.getConfigurator().apply(new Pigeon2Configuration());
     zeroGyro();
 
     testMotor = new CANSparkMax(19, MotorType.kBrushless);
@@ -58,10 +60,12 @@ public class DrivetrainSubsystem extends SubsystemBase {
     SwerveModuleState[] swerveModuleStates;
     // System.err.println("CALLING DRIVE");
     if (isRobotCentric) {
+      System.out.println("Angle value: " + translation.getY());
       swerveModuleStates = Constants.swerveKinematics.toSwerveModuleStates(
         new ChassisSpeeds(translation.getX(), translation.getY(), rotation)
       );
     } else {
+       System.out.println("Angle value: " + translation.getY());
       swerveModuleStates = Constants.swerveKinematics.toSwerveModuleStates(
         ChassisSpeeds.fromFieldRelativeSpeeds(
           translation.getX(), 
@@ -101,7 +105,7 @@ public class DrivetrainSubsystem extends SubsystemBase {
   // }
 
   public Rotation2d getGyroAsRotation2d() {
-    Rotation2d rotation2d = Rotation2d.fromDegrees(gyro.getYaw());
+    Rotation2d rotation2d = Rotation2d.fromDegrees(gyro.getYaw().getValue());
 
     return rotation2d;
   }
@@ -131,12 +135,12 @@ public class DrivetrainSubsystem extends SubsystemBase {
 
   public void motorAuto() {
     System.err.println("Motor Auto go");
-    drive(new Translation2d(-0.8, 0), gyro.getYaw(), true);
+    drive(new Translation2d(-0.8, 0), gyro.getYaw().getValue(), true);
   }
 
   public void stopAuto() {
     System.err.println("Motor auto stop");
-    drive(new Translation2d(0, 0), gyro.getYaw(), true);
+    drive(new Translation2d(0, 0), gyro.getYaw().getValue(), true);
   }
 
   @Override
@@ -158,9 +162,9 @@ public class DrivetrainSubsystem extends SubsystemBase {
       getGyroAsRotation2d(),
       getModulePositions()
     );
-    SmartDashboard.putNumber("Gyro Yaw", gyro.getYaw());
-    SmartDashboard.putNumber("Gyro Roll", gyro.getRoll());
-    SmartDashboard.putNumber("Gyro Pitch", gyro.getPitch());
+    SmartDashboard.putNumber("Gyro Yaw", gyro.getYaw().getValue());
+    SmartDashboard.putNumber("Gyro Roll", gyro.getRoll().getValue());
+    SmartDashboard.putNumber("Gyro Pitch", gyro.getPitch().getValue());
 
 
   }

@@ -12,10 +12,11 @@
 
 package frc.robot;
 
-import com.ctre.phoenix.sensors.CANCoder;
+import com.ctre.phoenix6.configs.CANcoderConfiguration;
+import com.ctre.phoenix6.hardware.CANcoder;
 import com.revrobotics.CANSparkMax;
 import com.revrobotics.RelativeEncoder;
-import com.revrobotics.SparkMaxPIDController;
+import com.revrobotics.SparkPIDController;
 import com.revrobotics.CANSparkLowLevel.MotorType;
 
 import edu.wpi.first.math.geometry.Rotation2d;
@@ -37,10 +38,10 @@ public class WindChillSwerveModule {
 
   private RelativeEncoder driveEncoder;
   private RelativeEncoder integratedAngleEncoder;
-  private CANCoder angleEncoder;
+  private CANcoder angleEncoder;
 
-  private final SparkMaxPIDController driveController;
-  private final SparkMaxPIDController angleController;
+  private final SparkPIDController driveController;
+  private final SparkPIDController angleController;
 
   private double ENCODER_RESEED_SECONDS = 5.0;
   private Timer reseedTimer = new Timer();
@@ -61,7 +62,7 @@ public class WindChillSwerveModule {
     motorEncoderVelocityCoefficient = motorEncoderPositionCoefficient * 10.0;
 
     /* Angle Encoder Config */
-    angleEncoder = new CANCoder(moduleConstants.cancoderID);
+    angleEncoder = new CANcoder(moduleConstants.cancoderID);
     configAngleEncoder();
 
     /* Angle Motor Config */
@@ -83,7 +84,7 @@ public class WindChillSwerveModule {
   public void setDesiredState(SwerveModuleState desiredState) {
 
     if (reseedTimer.advanceIfElapsed(ENCODER_RESEED_SECONDS) &&
-      angleEncoder.getVelocity() * motorEncoderVelocityCoefficient < ENCODER_RESEED_MAX_ANGULAR_VELOCITY) {
+      angleEncoder.getVelocity().getValue() * motorEncoderVelocityCoefficient < ENCODER_RESEED_MAX_ANGULAR_VELOCITY) {
       resetToAbsolute();
       System.out.println(moduleNumber + " reseting to Absolute");
     }
@@ -120,7 +121,7 @@ public class WindChillSwerveModule {
       newAngle -= 360;
     }
 
-    //angleController.setReference(newAngle, ControlType.kPosition);
+    angleController.setReference(newAngle, CANSparkMax.ControlType.kPosition);
 
     if (moduleNumber == 0) {
       // System.err.println("Angle: " + newAngle);
@@ -140,7 +141,7 @@ public class WindChillSwerveModule {
   }
 
   public Rotation2d getCanCoder() {
-    return Rotation2d.fromDegrees(angleEncoder.getAbsolutePosition());
+    return Rotation2d.fromDegrees(angleEncoder.getAbsolutePosition().getValue());
   }
 
   public double getDriveEncoder() {
@@ -185,7 +186,7 @@ public class WindChillSwerveModule {
   }
 
   private void configAngleEncoder() {
-    angleEncoder.configFactoryDefault();
+    angleEncoder.getConfigurator().apply(new CANcoderConfiguration());
     // CANCoderUtil.setCANCoderBusUsage(angleEncoder, CCUsage.kMinimal);
     // angleEncoder.configAllSettings(Robot.ctreConfigs.swerveCanCoderConfig);
   }
