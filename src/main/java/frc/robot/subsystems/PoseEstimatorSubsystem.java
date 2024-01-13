@@ -1,7 +1,11 @@
 package frc.robot.subsystems;
 
+import java.util.NoSuchElementException;
+
 import edu.wpi.first.math.estimator.SwerveDrivePoseEstimator;
 import edu.wpi.first.math.geometry.Pose2d;
+import edu.wpi.first.wpilibj.DriverStation;
+import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants;
@@ -40,14 +44,20 @@ public class PoseEstimatorSubsystem extends SubsystemBase{
         });
     }
 
-    public static Pose2d getLimelightPose() {
-        return LimelightHelpers.getBotPose2d("limelight");
+    public Pose2d getLimelightPose() {
+            if (DriverStation.getAlliance().orElse(null) == DriverStation.Alliance.Blue) {
+                return LimelightHelpers.getBotPose2d_wpiBlue("limelight");
+            } else {
+                return LimelightHelpers.getBotPose2d_wpiRed("limelight");
+            }
     }
 
-    public static double getLimelightTimeStamp() {
-         return -((LimelightHelpers.getLatency_Capture("limelight")
+    public double getLimelightTimeStamp() {
+         return Timer.getFPGATimestamp() 
+         /* -((LimelightHelpers.getLatency_Capture("limelight")
                     + LimelightHelpers.getLatency_Pipeline("limelight"))
                         / 1000.0);
+                        */
     }
 
     public Pose2d getBotPose() {
@@ -65,4 +75,4 @@ public class PoseEstimatorSubsystem extends SubsystemBase{
     public double getBotRotation() {
         return getBotPose().getRotation().getDegrees();
     }
-}
+} 
