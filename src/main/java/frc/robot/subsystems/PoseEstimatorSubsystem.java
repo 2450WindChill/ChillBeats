@@ -52,13 +52,12 @@ public class PoseEstimatorSubsystem extends SubsystemBase{
             }
     }
 
-    // Potentially could cause problem because this does not account for latency
+    // Gets gametime and then subtracts the latency of the pose
     public double getTimeStamp() {
-         return Timer.getFPGATimestamp();
-         /* -((LimelightHelpers.getLatency_Capture("limelight")
+         return Timer.getFPGATimestamp()
+                -((LimelightHelpers.getLatency_Capture("limelight")
                     + LimelightHelpers.getLatency_Pipeline("limelight"))
                         / 1000.0);
-                        */
     }
 
     public Pose2d getBotPose() {
