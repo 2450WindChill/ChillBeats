@@ -32,7 +32,7 @@ public class PoseEstimatorSubsystem extends SubsystemBase{
                                         m_drivetrainSubsystem.getPositions());
         
         if (LimelightHelpers.getTV("limelight")) {
-            poseEstimate.addVisionMeasurement(getLimelightPose(), getLimelightTimeStamp());
+            poseEstimate.addVisionMeasurement(getLimelightPose(), getTimeStamp());
         }
 
         SmartDashboard.putNumberArray(
@@ -45,15 +45,16 @@ public class PoseEstimatorSubsystem extends SubsystemBase{
     }
 
     public Pose2d getLimelightPose() {
-            if (DriverStation.getAlliance().orElse(null) == DriverStation.Alliance.Blue) {
-                return LimelightHelpers.getBotPose2d_wpiBlue("limelight");
-            } else {
+            if (DriverStation.getAlliance().orElse(null) == DriverStation.Alliance.Red) {
                 return LimelightHelpers.getBotPose2d_wpiRed("limelight");
+            } else {
+                return LimelightHelpers.getBotPose2d_wpiBlue("limelight");
             }
     }
 
-    public double getLimelightTimeStamp() {
-         return Timer.getFPGATimestamp() 
+    // Potentially could cause problem because this does not account for latency
+    public double getTimeStamp() {
+         return Timer.getFPGATimestamp();
          /* -((LimelightHelpers.getLatency_Capture("limelight")
                     + LimelightHelpers.getLatency_Pipeline("limelight"))
                         / 1000.0);
