@@ -4,6 +4,7 @@
 
 package frc.robot.commands;
 
+import frc.robot.Constants;
 import frc.robot.subsystems.DrivetrainSubsystem;
 import frc.robot.subsystems.PoseEstimatorSubsystem;
 import edu.wpi.first.math.geometry.Pose2d;
@@ -19,13 +20,13 @@ public class MoveToPose extends Command {
   public double currentY;
   public double currentRotation;
 
-  public double desiredX;
-  public double desiredY;
-  public double desiredRotation;
-
   public double calculatedX;
   public double calculatedY;
   public double calculatedRotation;
+
+  public double finalXSpeed;
+  public double finalYSpeed;
+  public double finalRotation;
 
   public Pose2d m_targetPose;
 
@@ -48,27 +49,49 @@ public class MoveToPose extends Command {
   // Called when the command is initially scheduled.
   @Override
   public void initialize() {
-    desiredX = m_targetPose.getX();
-    desiredY = m_targetPose.getY();
-    desiredRotation = m_targetPose.getRotation().getDegrees();
+
   }
 
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
 
-    calculatedX = desiredX - m_poseEstimate.getBotX();
-    calculatedY = desiredY - m_poseEstimate.getBotY();
-    calculatedRotation = desiredRotation - m_poseEstimate.getBotRotation();
+    // Finds translation and rotation to desired pose
+    calculatedX = m_targetPose.getX() - m_poseEstimate.getBotX();
+    calculatedY = m_targetPose.getY() - m_poseEstimate.getBotY();
+    calculatedRotation = m_targetPose.getRotation().getDegrees() - m_poseEstimate.getBotRotation();
 
-    speeds = new Translation2d(
-      calculatedX,
-      calculatedY
-    );
+    // Finds if the X component of the translation is +, -, or 0
+    if (calculatedX > 0) {
+      finalXSpeed = Constants.moveToPoseSpeed;
+    } else if (calculatedX < 0) {
+      finalXSpeed = -Constants.moveToPoseSpeed;
+    } else {
+      finalXSpeed = 0;
+    }
 
+    // Finds if the Y component of the translation is +, -, or 0
+    if (calculatedY > 0) {
+      finalYSpeed = Constants.moveToPoseSpeed;
+    } else if (calculatedY < 0) {
+      finalYSpeed = -Constants.moveToPoseSpeed;
+    } else {
+      finalYSpeed = 0;
+    }
+
+    // Finds if the rotation component of the translation is +, -, or 0
+    if (calculatedRotation > 0) {
+      finalRotation = Constants.moveToPoseSpeed;
+    } else if (calculatedRotation < 0) {
+      finalRotation = -Constants.moveToPoseSpeed;
+    } else {
+      finalRotation = 0;
+    }
+
+    // Calls .drive() with speeds and rotations towards desired pose
     m_drivetrainSubsystem.drive(
-      speeds,
-      calculatedRotation,
+      new Translation2d(finalXSpeed, finalYSpeed),
+      finalRotation,
       false
     );
   }
