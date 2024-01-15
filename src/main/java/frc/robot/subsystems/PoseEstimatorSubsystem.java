@@ -19,6 +19,9 @@ public class PoseEstimatorSubsystem extends SubsystemBase{
     public PoseEstimatorSubsystem(DrivetrainSubsystem drivetrainSubsystem) {
         m_drivetrainSubsystem = drivetrainSubsystem;
 
+        // Sets pose of Limelight relative to robot center
+        LimelightHelpers.setCameraPose_RobotSpace("limelight", 0, 0, 0, 0, 0, 0);
+
         poseEstimate = new SwerveDrivePoseEstimator(
             Constants.swerveKinematics,
             m_drivetrainSubsystem.getGyroYaw(),
