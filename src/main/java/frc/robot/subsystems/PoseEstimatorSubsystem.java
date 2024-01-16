@@ -1,7 +1,5 @@
 package frc.robot.subsystems;
 
-import java.util.NoSuchElementException;
-
 import edu.wpi.first.math.estimator.SwerveDrivePoseEstimator;
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.wpilibj.DriverStation;
@@ -19,8 +17,8 @@ public class PoseEstimatorSubsystem extends SubsystemBase{
     public PoseEstimatorSubsystem(DrivetrainSubsystem drivetrainSubsystem) {
         m_drivetrainSubsystem = drivetrainSubsystem;
 
-        // Sets pose of Limelight relative to robot center
-        LimelightHelpers.setCameraPose_RobotSpace("limelight", 0, 0, 0, 0, 0, 0);
+        // Sets pose of Limelight relative to robot center (currently in inches and degrees)
+        LimelightHelpers.setCameraPose_RobotSpace("limelight", 9.464, 7.462, 17.24, 0, 13, 0);
 
         poseEstimate = new SwerveDrivePoseEstimator(
             Constants.swerveKinematics,
