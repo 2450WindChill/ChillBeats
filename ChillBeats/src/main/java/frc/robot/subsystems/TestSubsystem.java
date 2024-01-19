@@ -13,10 +13,12 @@ import edu.wpi.first.wpilibj2.command.SubsystemBase;
 
 public class TestSubsystem extends SubsystemBase {
   
-  public final CANSparkMax motor = new CANSparkMax(1, MotorType.kBrushless);
-  public final RelativeEncoder encoder = motor.getEncoder();
+  public final CANSparkMax motorOne = new CANSparkMax(1, MotorType.kBrushless);
+  public final CANSparkMax motorTwo = new CANSparkMax(4, MotorType.kBrushless);
+  // public final RelativeEncoder encoder = motor.getEncoder();
   
   public TestSubsystem() {}
+     
 
   /**
    * Example command factory method.

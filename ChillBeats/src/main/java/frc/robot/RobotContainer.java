@@ -52,8 +52,9 @@ private final TestSubsystem m_TestSubsystem = new TestSubsystem();
 
     // Schedule `exampleMethodCommand` when the Xbox controller's B button is pressed,
     // cancelling on release.
-    m_driverController.b().whileTrue(new TestCommand(m_TestSubsystem));
-  }
+    m_driverController.x().whileTrue(new TestCommand(m_TestSubsystem, m_driverController));
+   
+      }
 
 
 
