@@ -37,12 +37,15 @@ private final CommandXboxController m_controller;
   @Override
   public void execute() {
     if (m_controller.getLeftX() > 0 ) {
-      m_subsystem.ankleMotor.set(0.02);
+      System.out.println("ultrakill");
+      m_subsystem.ankleMotor.set(0.06);
     }
     else if (m_controller.getLeftX() < 0 ) {
-      m_subsystem.ankleMotor.set(-0.02);
+      System.out.println("hello");
+      m_subsystem.ankleMotor.set(-0.06);
     }
     else {
+      System.out.println("rockin");
       m_subsystem.ankleMotor.set(0);
     }
   }

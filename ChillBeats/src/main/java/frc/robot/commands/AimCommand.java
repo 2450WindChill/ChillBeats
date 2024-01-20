@@ -37,10 +37,10 @@ private final CommandXboxController m_controller;
   public void execute() {
     if (m_controller.getLeftX() > 0 ) {
       
-      m_subsystem.wristMotor.set(.02);
+      m_subsystem.wristMotor.set(.5);
     }
     else if (m_controller.getLeftX() < 0 ) {
-     m_subsystem.wristMotor.set(-.02);
+     m_subsystem.wristMotor.set(-.5);
     }
     else {
       m_subsystem.wristMotor.set(0);

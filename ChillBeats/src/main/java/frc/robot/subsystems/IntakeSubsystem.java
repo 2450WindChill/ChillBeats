@@ -5,14 +5,14 @@
 package frc.robot.subsystems;
 
 import com.revrobotics.CANSparkLowLevel.MotorType;
-import com.revrobotics.CANSparkMax;
+import com.revrobotics.CANSparkFlex;
 
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 
 public class IntakeSubsystem extends SubsystemBase {
-     public final CANSparkMax intakeMotor = new CANSparkMax(13, MotorType.kBrushless);
-     public final CANSparkMax ankleMotor = new CANSparkMax(14, MotorType.kBrushless);
+     public final CANSparkFlex intakeMotor = new CANSparkFlex(13, MotorType.kBrushless);
+     public final CANSparkFlex ankleMotor = new CANSparkFlex(14, MotorType.kBrushless);
 
   /** Creates a new IntakeSubsystem. */
   public IntakeSubsystem() {}
