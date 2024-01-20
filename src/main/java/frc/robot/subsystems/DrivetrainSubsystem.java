@@ -37,8 +37,6 @@ public class DrivetrainSubsystem extends SubsystemBase {
     gyro.getConfigurator().apply(new Pigeon2Configuration());
     zeroGyro();
 
-    testMotor = new CANSparkMax(19, MotorType.kBrushless);
-
     swerveModules = new WindChillSwerveModule[] {
       new WindChillSwerveModule(0, Constants.FrontLeftModule.constants),
       new WindChillSwerveModule(1, Constants.FrontRightModule.constants),
@@ -60,12 +58,12 @@ public class DrivetrainSubsystem extends SubsystemBase {
     SwerveModuleState[] swerveModuleStates;
     // System.err.println("CALLING DRIVE");
     if (isRobotCentric) {
-      System.out.println("Angle value: " + translation.getY());
+      // System.out.println("Angle value: " + translation.getY());
       swerveModuleStates = Constants.swerveKinematics.toSwerveModuleStates(
         new ChassisSpeeds(translation.getX(), translation.getY(), rotation)
       );
     } else {
-       System.out.println("Angle value: " + translation.getY());
+      // System.out.println("Angle value: " + translation.getY());
       swerveModuleStates = Constants.swerveKinematics.toSwerveModuleStates(
         ChassisSpeeds.fromFieldRelativeSpeeds(
           translation.getX(), 
