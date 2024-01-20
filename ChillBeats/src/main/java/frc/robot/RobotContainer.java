@@ -5,11 +5,22 @@
 package frc.robot;
 
 import frc.robot.Constants.OperatorConstants;
+import frc.robot.commands.AimCommand;
+import frc.robot.commands.AnkleCommand;
 import frc.robot.commands.Autos;
+import frc.robot.commands.ElevatorCommand;
 import frc.robot.commands.ExampleCommand;
+import frc.robot.commands.IntakeCommand;
+import frc.robot.commands.IndexCommand;
+import frc.robot.commands.LaunchCommand;
 import frc.robot.commands.TestCommand;
 import frc.robot.subsystems.ExampleSubsystem;
 import frc.robot.subsystems.TestSubsystem;
+import frc.robot.subsystems.IntakeSubsystem;
+import frc.robot.subsystems.ElevatorSubsystem;
+import frc.robot.subsystems.AimSubsystem;
+import frc.robot.subsystems.LauncherSubsystem;
+import frc.robot.subsystems.IndexSubsystem;
 import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
@@ -24,7 +35,13 @@ import edu.wpi.first.wpilibj2.command.button.Trigger;
 public class RobotContainer {
   // The robot's subsystems and commands are defined here...
   private final ExampleSubsystem m_exampleSubsystem = new ExampleSubsystem();
-private final TestSubsystem m_TestSubsystem = new TestSubsystem();
+  //private final TestSubsystem m_TestSubsystem = new TestSubsystem();
+  private final IntakeSubsystem m_IntakeSubsystem = new IntakeSubsystem();
+  private final ElevatorSubsystem m_ElevatorSubsystem = new ElevatorSubsystem();
+  private final AimSubsystem m_AimSubsystem = new AimSubsystem();
+  private final LauncherSubsystem m_ShootSubsystem = new LauncherSubsystem();
+  private final IndexSubsystem m_IndexSubsystem = new IndexSubsystem();
+
 
   // Replace with CommandPS4Controller or CommandJoystick if needed
   private final CommandXboxController m_driverController =
@@ -50,9 +67,17 @@ private final TestSubsystem m_TestSubsystem = new TestSubsystem();
     new Trigger(m_exampleSubsystem::exampleCondition)
         .onTrue(new ExampleCommand(m_exampleSubsystem));
 
-    // Schedule `exampleMethodCommand` when the Xbox controller's B button is pressed,
+    // Schedule `AnkleCommand` when the Xbox controller's X button is pressed,
     // cancelling on release.
-    m_driverController.x().whileTrue(new TestCommand(m_TestSubsystem, m_driverController));
+    m_driverController.x().whileTrue(new AnkleCommand(m_IntakeSubsystem, m_driverController));
+    m_driverController.y().whileTrue(new IntakeCommand(m_IntakeSubsystem, m_driverController));
+    m_driverController.a().whileTrue(new ElevatorCommand(m_ElevatorSubsystem, m_driverController));
+    m_driverController.b().whileTrue(new AimCommand(m_AimSubsystem, m_driverController));
+    m_driverController.leftBumper().whileTrue(new IndexCommand(m_IndexSubsystem, m_driverController));
+    m_driverController.rightBumper().whileTrue(new LaunchCommand(m_ShootSubsystem, m_driverController));
+
+    
+    
    
       }
 
