@@ -162,4 +162,5 @@ public final class Constants {
   }
 
   public static final double moveToPoseSpeed = 0.5;
+  public static final double moveToPoseRotationSpeed = 0.5;
 }

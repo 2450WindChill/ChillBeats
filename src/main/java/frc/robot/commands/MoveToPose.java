@@ -81,9 +81,9 @@ public class MoveToPose extends Command {
 
     // Finds if the rotation component of the translation is +, -, or 0
     if (calculatedRotation > 0) {
-      finalRotation = Constants.moveToPoseSpeed;
+      finalRotation = Constants.moveToPoseRotationSpeed;
     } else if (calculatedRotation < 0) {
-      finalRotation = -Constants.moveToPoseSpeed;
+      finalRotation = -Constants.moveToPoseRotationSpeed;
     } else {
       finalRotation = 0;
     }
