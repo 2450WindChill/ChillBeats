@@ -2,12 +2,13 @@ package frc.robot.subsystems;
 
 import edu.wpi.first.math.estimator.SwerveDrivePoseEstimator;
 import edu.wpi.first.math.geometry.Pose2d;
+import edu.wpi.first.math.geometry.Pose3d;
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants;
-import frc.robot.util.LimelightHelpers;
+import frc.robot.libs.LimelightHelpers;
 
 public class PoseEstimatorSubsystem extends SubsystemBase{
 
@@ -75,5 +76,13 @@ public class PoseEstimatorSubsystem extends SubsystemBase{
 
     public double getBotRotation() {
         return getBotPose().getRotation().getDegrees();
+    }
+
+    public double getAprilTag() {
+        return LimelightHelpers.getFiducialID("limelight");
+    }
+
+    public Pose3d getAprilTagPoseToBot() {
+        return LimelightHelpers.getTargetPose3d_RobotSpace("limelight");
     }
 } 

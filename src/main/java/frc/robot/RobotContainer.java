@@ -7,6 +7,7 @@ package frc.robot;
 import frc.robot.commands.Autos;
 import frc.robot.commands.DefaultDriveCommand;
 import frc.robot.commands.MoveToPose;
+import frc.robot.libs.LimelightHelpers;
 import frc.robot.subsystems.DrivetrainSubsystem;
 import frc.robot.subsystems.ExampleSubsystem;
 import frc.robot.subsystems.PoseEstimatorSubsystem;
@@ -53,7 +54,8 @@ public class RobotContainer {
 
     // Configure the trigger bindings
     configureBindings();
-  }
+    configureLimelight();
+    }
 
   /**
    * Use this method to define your trigger->command mappings. Triggers can be created via the
@@ -66,6 +68,19 @@ public class RobotContainer {
    */
   private void configureBindings() {
     drive_yButton.onTrue(new MoveToPose(m_drivetrainSubsystem, m_poseEstimator, new Pose2d()));
+  }
+
+  /*
+   * Configures limelight to use:
+   *  -Pipeline 0
+   *  -LEDs Off
+   *  -Camera in Proccesor Mode
+   */
+  private void configureLimelight() {
+    LimelightHelpers.setPipelineIndex("limelights", 0);
+    LimelightHelpers.setLEDMode_ForceOff("limelight");
+    LimelightHelpers.setCameraMode_Processor("limelight");
+
   }
 
   /**
