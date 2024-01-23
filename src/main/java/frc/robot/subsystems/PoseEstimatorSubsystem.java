@@ -62,27 +62,38 @@ public class PoseEstimatorSubsystem extends SubsystemBase{
                         / 1000.0);
     }
 
+    // Gets current estimated bot pose
     public Pose2d getBotPose() {
         return poseEstimate.getEstimatedPosition();
     }
 
+    // Gets estimated bot x
     public double getBotX() {
         return getBotPose().getX();
     }
 
+    // Gets estimated bot y
     public double getBotY() {
         return getBotPose().getY();
     }
 
+    // Gets estimated bot rotation
     public double getBotRotation() {
         return getBotPose().getRotation().getDegrees();
     }
 
-    public double getAprilTag() {
+    // Gets the ID of the primary apriltag in the limelights view
+    public double getAprilTagID() {
         return LimelightHelpers.getFiducialID("limelight");
     }
 
-    public Pose3d getAprilTagPoseToBot() {
+    // Get the 3d bot pose of the primary apriltag in the limelights view relative to the robots pose
+    public Pose3d getAprilTagPoseToBot3d() {
         return LimelightHelpers.getTargetPose3d_RobotSpace("limelight");
+    }
+
+    // Get the 2d bot pose of the primary apriltag in the limelights view relative to the robots pose
+    public Pose2d getAprilTagPoseToBot2d() {
+        return new Pose2d(getAprilTagPoseToBot3d().getX(), getAprilTagPoseToBot3d().getY(), getAprilTagPoseToBot3d().getRotation().toRotation2d());
     }
 } 
