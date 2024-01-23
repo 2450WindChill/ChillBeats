@@ -14,7 +14,7 @@ import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 public class AnkleCommand extends Command {
   @SuppressWarnings({ "PMD.UnusedPrivateField", "PMD.SingularField" })
   private final IntakeSubsystem m_subsystem;
-private final CommandXboxController m_controller;
+  private final CommandXboxController m_controller;
   /**
    * Creates a new ExampleCommand.
    *
@@ -37,15 +37,13 @@ private final CommandXboxController m_controller;
   @Override
   public void execute() {
     if (m_controller.getLeftX() > 0 ) {
-      System.out.println("ultrakill");
+      System.out.println("up");
       m_subsystem.ankleMotor.set(0.06);
-    }
-    else if (m_controller.getLeftX() < 0 ) {
-      System.out.println("hello");
+    } else if (m_controller.getLeftX() < 0 ) {
+      System.out.println("down");
       m_subsystem.ankleMotor.set(-0.06);
-    }
-    else {
-      System.out.println("rockin");
+    } else {
+      System.out.println("halt");
       m_subsystem.ankleMotor.set(0);
     }
   }
@@ -59,6 +57,9 @@ private final CommandXboxController m_controller;
   // Returns true when the command should end.
   @Override
   public boolean isFinished() {
+    if ((m_subsystem.toplimitSwitch.get() && m_controller.getLeftX() > 0) || (m_subsystem.bottomlimitSwitch.get() && m_controller.getLeftX() < 0)) {
+      return true; // returns true when trying to move into a limit switch
+    }
     return false;
   }
 }
