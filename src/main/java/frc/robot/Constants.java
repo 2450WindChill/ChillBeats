@@ -161,4 +161,19 @@ public final class Constants {
   public static class OperatorConstants {
     public static final int kDriverControllerPort = 0;
   }
+
+
+  // TODO: get feedforward and feedback gains from the identification tool.
+  public static final double ksVolts = 0.22;
+  public static final double kvVoltSecondsPerMeter = 1.98;
+  public static final double kaVoltSecondsSquaredPerMeter = 0.2;
+  public static final double kPDriveVel = 8.5;
+
+  // TODO: must on a nominal max acceleration and max velocity for the robot during path-following
+  public static final double kMaxSpeedMetersPerSecond = 3;
+  public static final double kMaxAccelerationMetersPerSecondSquared = 1;
+
+  // Reasonable baseline values for a RAMSETE follower in units of meters and seconds
+  public static final double kRamseteB = 2;
+  public static final double kRamseteZeta = 0.7;
 }

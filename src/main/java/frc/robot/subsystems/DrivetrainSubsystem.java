@@ -54,6 +54,21 @@ public class DrivetrainSubsystem extends SubsystemBase {
     periodic();
   }
 
+  // TODO: Figure out these encoders
+    // The left-side drive encoder
+    private final Encoder m_leftEncoder =
+    new Encoder(
+        DriveConstants.kLeftEncoderPorts[0],
+        DriveConstants.kLeftEncoderPorts[1],
+        DriveConstants.kLeftEncoderReversed);
+
+    // The right-side drive encoder
+    private final Encoder m_rightEncoder =
+    new Encoder(
+        DriveConstants.kRightEncoderPorts[0],
+        DriveConstants.kRightEncoderPorts[1],
+        DriveConstants.kRightEncoderReversed);
+
   public void drive(Translation2d translation, double rotation, boolean isRobotCentric) {
     SwerveModuleState[] swerveModuleStates;
     // System.err.println("CALLING DRIVE");
@@ -126,6 +141,62 @@ public class DrivetrainSubsystem extends SubsystemBase {
     gyro.setYaw(0);
   }
 
+  // --------------------------------------------------------------
+
+  // Pathplanning methods:
+
+    /**
+    //Returns the heading of the robot.
+   *
+   * @return the robot's heading in degrees, from -180 to 180
+   */
+  public double getHeading() {
+    return gyro.getRotation2d().getDegrees();
+  }
+
+    /**
+   * Returns the currently-estimated pose of the robot.
+   *
+   * @return The pose.
+   */
+  public Pose2d getPose() {
+    return swerveOdometry.getPoseMeters();
+  }
+
+    /**
+   * Controls the left and right sides of the drive directly with voltages.
+   *
+   * @param leftVolts the commanded left output
+   * @param rightVolts the commanded right output
+   */
+
+   // TODO: Figure out motor groups and volts constants
+  public void tankDriveVolts(double leftVolts, double rightVolts) {
+    m_leftMotors.setVoltage(leftVolts);
+    m_rightMotors.setVoltage(rightVolts);
+    m_drive.feed();
+  }
+
+  // TODO: change encoders
+  public void resetOdometry(Pose2d pose) {
+    resetEncoders();
+    m_odometry.resetPosition(
+        m_gyro.getRotation2d(), m_leftEncoder.getDistance(), m_rightEncoder.getDistance(), pose);
+  }
+
+    /**
+   * Returns the current wheel speeds of the robot.
+   *
+   * @return The current wheel speeds.
+   */
+
+  // TODO: Change for swerve
+  public DifferentialDriveWheelSpeeds getWheelSpeeds() {
+    return new DifferentialDriveWheelSpeeds(m_leftEncoder.getRate(), m_rightEncoder.getRate());
+  }
+
+// -----------------------------------------------------------------------------------------------
+
   public void setPosition(double position) {
     swerveModules[0].setPosition(position);
     System.err.println("Setting position to 0");
@@ -151,7 +222,9 @@ public class DrivetrainSubsystem extends SubsystemBase {
       SmartDashboard.putNumber(
           "Mod " + mod.moduleNumber + " Velocity", mod.getState().speedMetersPerSecond);
       
-      // SmartDashboard.putNumber("Average Encoder Value", getAverageEncoderVal());
+      // TODO: Change with new encoders
+      odometry.update(
+        m_gyro.getRotation2d(), m_leftEncoder.getDistance(), m_rightEncoder.getDistance());
     }
 
   
