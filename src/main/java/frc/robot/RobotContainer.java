@@ -4,7 +4,6 @@
 
 package frc.robot;
 
-import frc.robot.commands.Autos;
 import frc.robot.commands.DefaultDriveCommand;
 import frc.robot.commands.MoveToPose;
 import frc.robot.libs.LimelightHelpers;
@@ -12,6 +11,7 @@ import frc.robot.subsystems.DrivetrainSubsystem;
 import frc.robot.subsystems.ExampleSubsystem;
 import frc.robot.subsystems.PoseEstimatorSubsystem;
 import edu.wpi.first.math.geometry.Pose2d;
+import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj.XboxController.Button;
@@ -89,7 +89,8 @@ public class RobotContainer {
    * @return the command to run in autonomous
    */
   public Command getAutonomousCommand() {
-    // An example command will be run in autonomous
-    return new InstantCommand();
+    // Example auto which moves the robot forward 5 meters and then back to the origin without rotating
+    return new MoveToPose(m_drivetrainSubsystem, m_poseEstimator, new Pose2d(5, 0, new Rotation2d(0)))
+              .andThen(new MoveToPose(m_drivetrainSubsystem, m_poseEstimator, new Pose2d()));
   }
 }
