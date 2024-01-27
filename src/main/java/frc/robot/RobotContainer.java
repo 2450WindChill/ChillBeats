@@ -10,6 +10,7 @@ import frc.robot.commands.AnkleCommand;
 import frc.robot.commands.Autos;
 import frc.robot.commands.ElevatorCommand;
 import frc.robot.commands.ExampleCommand;
+import frc.robot.commands.FullIntakeCommand;
 import frc.robot.commands.IntakeCommand;
 import frc.robot.commands.IndexCommand;
 import frc.robot.commands.LaunchCommand;
@@ -78,12 +79,14 @@ public class RobotContainer {
 
     // Schedule `AnkleCommand` when the Xbox controller's X button is pressed,
     // cancelling on release.
-    m_driverController.x().whileTrue(new AnkleCommand(m_IntakeSubsystem, m_driverController));
-    m_driverController.y().whileTrue(new IntakeCommand(m_IntakeSubsystem, m_driverController));
-    m_driverController.a().whileTrue(new ElevatorCommand(m_ElevatorSubsystem, m_driverController));
-    m_driverController.b().whileTrue(new AimCommand(m_AimSubsystem, m_driverController));
+    // m_driverController.x().whileTrue(new AnkleCommand(m_IntakeSubsystem, m_driverController));
+    // m_driverController.y().whileTrue(new IntakeCommand(m_IntakeSubsystem, m_driverController));
+    m_driverController.rightBumper().whileTrue(new ElevatorCommand(m_ElevatorSubsystem, m_driverController));
+    // m_driverController.b().whileTrue(new AimCommand(m_AimSubsystem, m_driverController));
     m_driverController.leftBumper().whileTrue(new IndexCommand(m_IndexSubsystem, m_driverController));
     // m_driverController.rightBumper().whileTrue(new LaunchCommand(m_ShootSubsystem, m_driverController));
+    m_driverController.x().onTrue(new FullIntakeCommand(m_IntakeSubsystem));
+    //Laser laser
 
   }
 
