@@ -50,6 +50,7 @@ public final class Constants {
   
 
   public static final double rotationsPerOneFoot = 0.33;
+  public static final double feetToMeters = 0.3048;
 
   // TODO : Configure ratios (look up)
   public static final double driveGearRatio = (8.14 / 1.0); // 6.75:1
