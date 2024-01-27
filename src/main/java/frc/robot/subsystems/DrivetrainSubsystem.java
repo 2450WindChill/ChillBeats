@@ -216,7 +216,7 @@ public class DrivetrainSubsystem extends SubsystemBase {
   public void periodic() {
     for (WindChillSwerveModule mod : swerveModules) {
       SmartDashboard.putNumber(
-          "Mod " + mod.moduleNumber + " Cancoder", mod.getCanCoder().getDegrees());
+          "Mod " + mod.moduleNumber + " Cancoder", mod.getRawCanCoder());
       SmartDashboard.putNumber(
           "Mod " + mod.moduleNumber + " Integrated", mod.getState().angle.getDegrees());
       SmartDashboard.putNumber(

@@ -12,14 +12,13 @@
 
 package frc.robot;
 
-import javax.print.CancelablePrintJob;
-
 import com.ctre.phoenix6.configs.CANcoderConfiguration;
 import com.ctre.phoenix6.hardware.CANcoder;
+import com.ctre.phoenix6.signals.AbsoluteSensorRangeValue;
+import com.revrobotics.CANSparkLowLevel.MotorType;
 import com.revrobotics.CANSparkMax;
 import com.revrobotics.RelativeEncoder;
 import com.revrobotics.SparkPIDController;
-import com.revrobotics.CANSparkLowLevel.MotorType;
 
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.kinematics.SwerveModulePosition;
@@ -29,6 +28,7 @@ import edu.wpi.first.wpilibj.Timer;
 // import frc.lib.util.CANSparkMaxUtil;
 // import frc.lib.util.CANCoderUtil.CCUsage;
 // import frc.lib.util.CANSparkMaxUtil.Usage;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 
 public class WindChillSwerveModule {
   public int moduleNumber;
@@ -65,7 +65,7 @@ public class WindChillSwerveModule {
 
     /* Angle Encoder Config */
     angleEncoder = new CANcoder(moduleConstants.cancoderID);
-    configAngleEncoder();
+    // configAngleEncoder();
 
     /* Angle Motor Config */
     angleMotor = new CANSparkMax(moduleConstants.angleMotorID, MotorType.kBrushless);
@@ -124,7 +124,7 @@ public class WindChillSwerveModule {
       desiredAngle -= 360;
     }
 
-    System.err.println(desiredAngle);
+    SmartDashboard.putNumber("Desired Angle " + moduleNumber, desiredAngle);
 
     angleController.setReference(desiredAngle, CANSparkMax.ControlType.kPosition);
     lastAngle = angle;    
@@ -144,7 +144,7 @@ public class WindChillSwerveModule {
 
   // Not using because we're just using the absolute encoder
   private void resetToAbsolute() {
-    double absolutePosition = getCanCoder().getDegrees() /* - angleOffset.getDegrees() */;
+    double absolutePosition = getCanCoderInDegrees(); /* - angleOffset.getDegrees() */
     integratedAngleEncoder.setPosition(absolutePosition);
     // System.err.println("Reseting Mod " + moduleNumber + " to " +
     // absolutePosition);
@@ -155,8 +155,12 @@ public class WindChillSwerveModule {
     return Rotation2d.fromDegrees(integratedAngleEncoder.getPosition());
   }
 
-  public Rotation2d getCanCoder() {
-    return Rotation2d.fromDegrees(angleEncoder.getAbsolutePosition().getValue());
+  public double getCanCoderInDegrees() {
+    return getRawCanCoder() * 360.0;
+  }
+
+  public double getRawCanCoder() {
+    return angleEncoder.getAbsolutePosition().getValueAsDouble();
   }
 
   public double getDriveEncoder() {
@@ -180,7 +184,7 @@ public class WindChillSwerveModule {
     angleController.setFF(Constants.angleKFF);
     angleMotor.enableVoltageCompensation(Constants.voltageComp);
     angleMotor.burnFlash();
-    // resetToAbsolute();
+    resetToAbsolute();
   }
 
   private void configDriveMotor() {
@@ -201,7 +205,11 @@ public class WindChillSwerveModule {
   }
 
   private void configAngleEncoder() {
-    angleEncoder.getConfigurator().apply(new CANcoderConfiguration());
+    System.err.println("Configing CanCoder");
+    CANcoderConfiguration cancoderConfig = new CANcoderConfiguration();
+    cancoderConfig.MagnetSensor.AbsoluteSensorRange = AbsoluteSensorRangeValue.Unsigned_0To1;
+
+    angleEncoder.getConfigurator().apply(cancoderConfig);
     // CANCoderUtil.setCANCoderBusUsage(angleEncoder, CCUsage.kMinimal);
     // angleEncoder.configAllSettings(Robot.ctreConfigs.swerveCanCoderConfig);
   }
@@ -209,7 +217,7 @@ public class WindChillSwerveModule {
   public SwerveModulePosition getPosition() {
     return new SwerveModulePosition(
         (getDriveEncoder() / Constants.rotationsPerOneFoot) * Constants.feetToMeters,
-        getCanCoder());
+        Rotation2d.fromDegrees(getCanCoderInDegrees()));
   }
 
   public void setPosition(double position) {
