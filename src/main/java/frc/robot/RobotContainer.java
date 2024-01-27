@@ -4,6 +4,8 @@
 
 package frc.robot;
 
+import frc.robot.Constants.OperatorConstants;
+//import frc.robot.commands.Autos;
 import frc.robot.commands.DefaultDriveCommand;
 import frc.robot.commands.MoveToPose;
 import frc.robot.libs.LimelightHelpers;
@@ -21,6 +23,7 @@ import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import edu.wpi.first.wpilibj2.command.button.JoystickButton;
 import edu.wpi.first.wpilibj2.command.button.Trigger;
 
+
 /**
  * This class is where the bulk of the robot should be declared. Since Command-based is a
  * "declarative" paradigm, very little robot logic should actually be handled in the {@link Robot}
@@ -33,11 +36,16 @@ public class RobotContainer {
   private final DrivetrainSubsystem m_drivetrainSubsystem = new DrivetrainSubsystem();
   private final PoseEstimatorSubsystem m_poseEstimator = new PoseEstimatorSubsystem(m_drivetrainSubsystem);
 
-  static XboxController m_driverController = new XboxController(0);
+   static XboxController m_driverController = new XboxController(0);
+
+  // static XboxController m_driverController = new XboxController(0);
   static XboxController m_operatorController = new XboxController(1);
 
   public final JoystickButton drive_rightBumper = new JoystickButton(m_driverController, Button.kRightBumper.value);
   public final JoystickButton drive_yButton = new JoystickButton(m_driverController, Button.kY.value);
+  public final JoystickButton buttonA = new JoystickButton(m_driverController, Button.kA.value);
+
+
   // Replace with CommandPS4Controller or CommandJoystick if needed
 
   /** The container for the robot. Contains subsystems, OI devices, and commands. */
@@ -49,7 +57,7 @@ public class RobotContainer {
             () -> m_driverController.getLeftY(),
             () -> m_driverController.getLeftX(),
             () -> m_driverController.getRightX(),
-            () -> drive_rightBumper.getAsBoolean()
+            () -> true
           ));
 
     // Configure the trigger bindings
@@ -80,7 +88,6 @@ public class RobotContainer {
     LimelightHelpers.setPipelineIndex("limelights", 0);
     LimelightHelpers.setLEDMode_ForceOff("limelight");
     LimelightHelpers.setCameraMode_Processor("limelight");
-
   }
 
   /**

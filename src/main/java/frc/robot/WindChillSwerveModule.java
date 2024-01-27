@@ -12,11 +12,13 @@
 
 package frc.robot;
 
-import com.ctre.phoenix.sensors.CANCoder;
+import com.ctre.phoenix6.configs.CANcoderConfiguration;
+import com.ctre.phoenix6.hardware.CANcoder;
+import com.ctre.phoenix6.signals.AbsoluteSensorRangeValue;
+import com.revrobotics.CANSparkLowLevel.MotorType;
 import com.revrobotics.CANSparkMax;
 import com.revrobotics.RelativeEncoder;
-import com.revrobotics.SparkMaxPIDController;
-import com.revrobotics.CANSparkMaxLowLevel.MotorType;
+import com.revrobotics.SparkPIDController;
 
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.kinematics.SwerveModulePosition;
@@ -28,6 +30,7 @@ import frc.robot.libs.ModuleConfiguration;
 // import frc.lib.util.CANCoderUtil.CCUsage;
 // import frc.lib.util.CANSparkMaxUtil.Usage;
 import frc.robot.libs.OnboardModuleState;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 
 public class WindChillSwerveModule {
   public int moduleNumber;
@@ -39,10 +42,10 @@ public class WindChillSwerveModule {
 
   private RelativeEncoder driveEncoder;
   private RelativeEncoder integratedAngleEncoder;
-  private CANCoder angleEncoder;
+  private CANcoder angleEncoder;
 
-  private final SparkMaxPIDController driveController;
-  private final SparkMaxPIDController angleController;
+  private final SparkPIDController driveController;
+  private final SparkPIDController angleController;
 
   private double ENCODER_RESEED_SECONDS = 5.0;
   private Timer reseedTimer = new Timer();
@@ -63,8 +66,8 @@ public class WindChillSwerveModule {
     motorEncoderVelocityCoefficient = motorEncoderPositionCoefficient * 10.0;
 
     /* Angle Encoder Config */
-    angleEncoder = new CANCoder(moduleConstants.cancoderID);
-    configAngleEncoder();
+    angleEncoder = new CANcoder(moduleConstants.cancoderID);
+    // configAngleEncoder();
 
     /* Angle Motor Config */
     angleMotor = new CANSparkMax(moduleConstants.angleMotorID, MotorType.kBrushless);
@@ -84,11 +87,11 @@ public class WindChillSwerveModule {
 
   public void setDesiredState(SwerveModuleState desiredState) {
 
-    if (reseedTimer.advanceIfElapsed(ENCODER_RESEED_SECONDS) &&
-      angleEncoder.getVelocity() * motorEncoderVelocityCoefficient < ENCODER_RESEED_MAX_ANGULAR_VELOCITY) {
-      resetToAbsolute();
-      System.out.println(moduleNumber + " reseting to Absolute");
-    }
+    // if (reseedTimer.advanceIfElapsed(ENCODER_RESEED_SECONDS) &&
+    //   angleEncoder.getVelocity().getValue() * motorEncoderVelocityCoefficient < ENCODER_RESEED_MAX_ANGULAR_VELOCITY) {
+    //   // resetToAbsolute();
+    //   System.out.println(moduleNumber + " reseting to Absolute");
+    // }
     // Custom optimize command, since default WPILib optimize assumes continuous
     // controller which
     // REV and CTRE are not
@@ -107,42 +110,59 @@ public class WindChillSwerveModule {
   private void setAngle(SwerveModuleState desiredState) {
     // Prevent rotating module if speed is less then 1%. Prevents jittering.
     // Rotation2d angle = desiredState.angle;
+  
 
     Rotation2d angle = (Math.abs(desiredState.speedMetersPerSecond) <= (Constants.maxSpeed * 0.01))
         ? lastAngle
         : desiredState.angle;
 
-    double newAngle = angle.getDegrees();
+    double desiredAngle = angle.getDegrees();
 
-    while (newAngle < 0) {
-      newAngle += 360;
+    while (desiredAngle < 0) {
+      desiredAngle += 360;
     }
 
-    while (newAngle > 360) {
-      newAngle -= 360;
+    while (desiredAngle > 360) {
+      desiredAngle -= 360;
     }
 
-    //angleController.setReference(newAngle, ControlType.kPosition);
+    SmartDashboard.putNumber("Desired Angle " + moduleNumber, desiredAngle);
 
-    if (moduleNumber == 0) {
-      // System.err.println("Angle: " + newAngle);
-    }
+    angleController.setReference(desiredAngle, CANSparkMax.ControlType.kPosition);
     lastAngle = angle;    
   }
 
+  // private void setAngle(SwerveModuleState state){
+  //   double steerSetpoint = state.angle.getRadians();
+  //   if(steerSetpoint < 0){
+  //     steerSetpoint = 2*Math.PI + steerSetpoint % (2* Math.PI);
+  //   }else{
+  //     steerSetpoint = steerSetpoint % (2* Math.PI);
+  //   }
+  //   //steerSetpoint = (Math.abs(steerSetpoint-getSteerPosition()) < 0.15) ? 0 : steerSetpoint;
+  //   angleController.setReference(steerSetpoint, CANSparkMax.ControlType.kPosition);
+  //   //System.out.println(name + "pid out " + steerMotor.get());
+  // }
+
+  // Not using because we're just using the absolute encoder
   private void resetToAbsolute() {
-    double absolutePosition = getCanCoder().getDegrees() - angleOffset.getDegrees();
+    double absolutePosition = getCanCoderInDegrees(); /* - angleOffset.getDegrees() */
     integratedAngleEncoder.setPosition(absolutePosition);
     // System.err.println("Reseting Mod " + moduleNumber + " to " +
     // absolutePosition);
   }
 
+  // Using getCancoder instead
   private Rotation2d getAngle() {
     return Rotation2d.fromDegrees(integratedAngleEncoder.getPosition());
   }
 
-  public Rotation2d getCanCoder() {
-    return Rotation2d.fromDegrees(angleEncoder.getAbsolutePosition());
+  public double getCanCoderInDegrees() {
+    return getRawCanCoder() * 360.0;
+  }
+
+  public double getRawCanCoder() {
+    return angleEncoder.getAbsolutePosition().getValueAsDouble();
   }
 
   public double getDriveEncoder() {
@@ -187,15 +207,19 @@ public class WindChillSwerveModule {
   }
 
   private void configAngleEncoder() {
-    angleEncoder.configFactoryDefault();
+    System.err.println("Configing CanCoder");
+    CANcoderConfiguration cancoderConfig = new CANcoderConfiguration();
+    cancoderConfig.MagnetSensor.AbsoluteSensorRange = AbsoluteSensorRangeValue.Unsigned_0To1;
+
+    angleEncoder.getConfigurator().apply(cancoderConfig);
     // CANCoderUtil.setCANCoderBusUsage(angleEncoder, CCUsage.kMinimal);
     // angleEncoder.configAllSettings(Robot.ctreConfigs.swerveCanCoderConfig);
   }
 
   public SwerveModulePosition getPosition() {
     return new SwerveModulePosition(
-        (getDriveEncoder() / Constants.rotationsPerOneFoot) * 0.3048,
-        getAngle());
+        (getDriveEncoder() / Constants.rotationsPerOneFoot) * Constants.feetToMeters,
+        Rotation2d.fromDegrees(getCanCoderInDegrees()));
   }
 
   public void setPosition(double position) {
