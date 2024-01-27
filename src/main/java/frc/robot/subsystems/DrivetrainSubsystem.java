@@ -4,9 +4,17 @@
 
 package frc.robot.subsystems;
 
+import java.util.function.Consumer;
+
+import com.ctre.phoenix6.StatusCode;
 import com.ctre.phoenix6.configs.CANcoderConfiguration;
 import com.ctre.phoenix6.configs.Pigeon2Configuration;
+import com.ctre.phoenix6.hardware.CANcoder;
 import com.ctre.phoenix6.hardware.Pigeon2;
+import com.ctre.phoenix6.mechanisms.swerve.SwerveModule;
+import com.pathplanner.lib.util.HolonomicPathFollowerConfig;
+import com.pathplanner.lib.util.PIDConstants;
+import com.pathplanner.lib.util.ReplanningConfig;
 import com.revrobotics.CANSparkMax;
 import com.revrobotics.CANSparkLowLevel.MotorType;
 
@@ -15,24 +23,59 @@ import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.math.kinematics.ChassisSpeeds;
+import edu.wpi.first.math.kinematics.DifferentialDriveWheelSpeeds;
 import edu.wpi.first.math.kinematics.SwerveDriveKinematics;
 import edu.wpi.first.math.kinematics.SwerveDriveOdometry;
 import edu.wpi.first.math.kinematics.SwerveModulePosition;
 import edu.wpi.first.math.kinematics.SwerveModuleState;
+import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
+import edu.wpi.first.wpilibj2.command.Command;
+import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants;
 import frc.robot.WindChillSwerveModule;
+import com.pathplanner.lib.auto.AutoBuilder;
+import com.pathplanner.lib.commands.FollowPathHolonomic;
+import com.pathplanner.lib.path.PathPlannerPath;
 
 public class DrivetrainSubsystem extends SubsystemBase {
   public final Pigeon2 gyro;
   private WindChillSwerveModule[] swerveModules;
   public SwerveDriveOdometry swerveOdometry;
   public CANSparkMax testMotor;
+  public CANcoder canCoder;
 
   /** Creates a new ExampleSubsystem. */
   public DrivetrainSubsystem() {
 
+    // Configure AutoBuilder last
+    AutoBuilder.configureHolonomic(
+            this::getPose, // Robot pose supplier
+            this::resetPose, // Method to reset odometry (will be called if your auto has a starting pose)
+            this::getSpeeds, // ChassisSpeeds supplier. MUST BE ROBOT RELATIVE
+            this::driveRobotRelative, // Method that will drive the robot given ROBOT RELATIVE ChassisSpeeds
+            new HolonomicPathFollowerConfig( // HolonomicPathFollowerConfig, this should likely live in your Constants class
+                    new PIDConstants(5.0, 0.0, 0.0), // Translation PID constants
+                    new PIDConstants(5.0, 0.0, 0.0), // Rotation PID constants
+                    4.5, // Max module speed, in m/s
+                    0.4, // Drive base radius in meters. Distance from robot center to furthest module.
+                    new ReplanningConfig() // Default path replanning config. See the API for the options here
+            ),
+            () -> {
+                // Boolean supplier that controls when the path will be mirrored for the red alliance
+                // This will flip the path being followed to the red side of the field.
+                // THE ORIGIN WILL REMAIN ON THE BLUE SIDE
+
+                var alliance = DriverStation.getAlliance();
+                if (alliance.isPresent()) {
+                    return alliance.get() == DriverStation.Alliance.Red;
+                }
+                return false;
+            },
+            this // Reference to this subsystem to set requirements
+        );
+    
     gyro = new Pigeon2(Constants.pigeonID);
     gyro.getConfigurator().apply(new Pigeon2Configuration());
     zeroGyro();
@@ -53,21 +96,6 @@ public class DrivetrainSubsystem extends SubsystemBase {
 
     periodic();
   }
-
-  // TODO: Figure out these encoders
-    // The left-side drive encoder
-    private final Encoder m_leftEncoder =
-    new Encoder(
-        DriveConstants.kLeftEncoderPorts[0],
-        DriveConstants.kLeftEncoderPorts[1],
-        DriveConstants.kLeftEncoderReversed);
-
-    // The right-side drive encoder
-    private final Encoder m_rightEncoder =
-    new Encoder(
-        DriveConstants.kRightEncoderPorts[0],
-        DriveConstants.kRightEncoderPorts[1],
-        DriveConstants.kRightEncoderReversed);
 
   public void drive(Translation2d translation, double rotation, boolean isRobotCentric) {
     SwerveModuleState[] swerveModuleStates;
@@ -92,6 +120,36 @@ public class DrivetrainSubsystem extends SubsystemBase {
       mod.setDesiredState(swerveModuleStates[mod.moduleNumber]);
     }
   }
+
+  public Command followPathCommand(String pathName) {
+      PathPlannerPath path = PathPlannerPath.fromPathFile(pathName);
+
+        return new FollowPathHolonomic(
+                path,
+                this::getPose, // Robot pose supplier
+                this::getSpeeds, // ChassisSpeeds supplier. MUST BE ROBOT RELATIVE
+                this::driveRobotRelative, // Method that will drive the robot given ROBOT RELATIVE ChassisSpeeds
+                new HolonomicPathFollowerConfig( // HolonomicPathFollowerConfig, this should likely live in your Constants class
+                        new PIDConstants(Constants.driveKP, Constants.driveKI, Constants.driveKD), // Translation PID constants
+                        new PIDConstants(Constants.angleKP, Constants.angleKI, Constants.angleKD), // Rotation PID constants
+                        Constants.maxSpeed, // Max module speed, in m/s
+                        Constants.driveBaseRadius, // Drive base radius in meters. Distance from robot center to furthest module.
+                        new ReplanningConfig() // Default path replanning config. See the API for the options here
+                ),
+                () -> {
+                    // Boolean supplier that controls when the path will be mirrored for the red alliance
+                    // This will flip the path being followed to the red side of the field.
+                    // THE ORIGIN WILL REMAIN ON THE BLUE SIDE
+
+                    var alliance = DriverStation.getAlliance();
+                    if (alliance.isPresent()) {
+                        return alliance.get() == DriverStation.Alliance.Red;
+                    }
+                    return false;
+                },
+                this // Reference to this subsystem to set requirements
+        );
+              }
 
   // public void autonomousDrive(double xSpeed, double ySpeed, double rotation) {
   //   SwerveModuleState[] swerveModuleStates = Constants.swerveKinematics.toSwerveModuleStates(
@@ -131,6 +189,20 @@ public class DrivetrainSubsystem extends SubsystemBase {
     return positions;
 }
 
+ public SwerveModuleState[] getModuleStates(){
+    SwerveModuleState[] states = new SwerveModuleState[4];
+    for(WindChillSwerveModule mod : swerveModules){
+        states[mod.moduleNumber] = mod.getState();
+    }
+    return states;
+}
+
+ public WindChillSwerveModule[] getModules(){
+    return swerveModules;
+}
+
+
+
   public double getFrontLeftEncoderVal(){
       double frontLeftEncoderVal = swerveModules[0].getDriveEncoder();
       
@@ -163,38 +235,39 @@ public class DrivetrainSubsystem extends SubsystemBase {
     return swerveOdometry.getPoseMeters();
   }
 
-    /**
-   * Controls the left and right sides of the drive directly with voltages.
-   *
-   * @param leftVolts the commanded left output
-   * @param rightVolts the commanded right output
-   */
-
-   // TODO: Figure out motor groups and volts constants
-  public void tankDriveVolts(double leftVolts, double rightVolts) {
-    m_leftMotors.setVoltage(leftVolts);
-    m_rightMotors.setVoltage(rightVolts);
-    m_drive.feed();
+  public void resetPose(Pose2d pose2d) {
+    swerveOdometry.resetPosition(getGyroAsRotation2d(), getModulePositions(), getPose());
   }
 
-  // TODO: change encoders
+  // TODO: Figure out how to actually connect to all cancoders
+  public StatusCode resetCANcoder() {
+    return canCoder.setPosition(0);
+  }
+
   public void resetOdometry(Pose2d pose) {
-    resetEncoders();
-    m_odometry.resetPosition(
-        m_gyro.getRotation2d(), m_leftEncoder.getDistance(), m_rightEncoder.getDistance(), pose);
+    resetCANcoder();
+    swerveOdometry.resetPosition(
+        gyro.getRotation2d(), getModulePositions(), pose);
   }
 
-    /**
-   * Returns the current wheel speeds of the robot.
-   *
-   * @return The current wheel speeds.
-   */
-
-  // TODO: Change for swerve
-  public DifferentialDriveWheelSpeeds getWheelSpeeds() {
-    return new DifferentialDriveWheelSpeeds(m_leftEncoder.getRate(), m_rightEncoder.getRate());
+  public ChassisSpeeds getSpeeds() {
+    return Constants.swerveKinematics.toChassisSpeeds(getModuleStates());
+  }
+  
+  public void setStates(SwerveModuleState[] targetStates) {
+    SwerveDriveKinematics.desaturateWheelSpeeds(targetStates, Constants.maxSpeed);
+    var modules = getModules();
+    for (int i = 0; i < modules.length; i++) {
+      modules[i].setDesiredState(targetStates[i]);
+    }
   }
 
+
+  public void driveRobotRelative(ChassisSpeeds robotRelativeSpeeds) {
+    ChassisSpeeds targetSpeeds = ChassisSpeeds.discretize(robotRelativeSpeeds, 0.02);
+    SwerveModuleState[] targetStates = Constants.swerveKinematics.toSwerveModuleStates(targetSpeeds);
+    setStates(targetStates);
+}
 // -----------------------------------------------------------------------------------------------
 
   public void setPosition(double position) {
@@ -222,9 +295,8 @@ public class DrivetrainSubsystem extends SubsystemBase {
       SmartDashboard.putNumber(
           "Mod " + mod.moduleNumber + " Velocity", mod.getState().speedMetersPerSecond);
       
-      // TODO: Change with new encoders
-      odometry.update(
-        m_gyro.getRotation2d(), m_leftEncoder.getDistance(), m_rightEncoder.getDistance());
+      swerveOdometry.update(
+        gyro.getRotation2d(), getModulePositions());
     }
 
   
