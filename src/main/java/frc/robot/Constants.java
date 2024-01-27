@@ -55,6 +55,8 @@ public final class Constants {
   public static final double driveGearRatio = (8.14 / 1.0); // 6.75:1
   public static final double angleGearRatio = (150 / 7); // 12.8:1
 
+  public static final double driveBaseRadius = (Math.sqrt((trackWidth * trackWidth) + (trackWidth * trackWidth)))/2;
+
   public static final SwerveDriveKinematics swerveKinematics = new SwerveDriveKinematics(
       // Front Left
       new Translation2d(wheelBase / 2.0, trackWidth / 2.0),
@@ -168,6 +170,9 @@ public final class Constants {
   public static final double kvVoltSecondsPerMeter = 1.98;
   public static final double kaVoltSecondsSquaredPerMeter = 0.2;
   public static final double kPDriveVel = 8.5;
+
+  // TODO: figure out
+  public static final double autoVoltageConstraint = 0;
 
   // TODO: must on a nominal max acceleration and max velocity for the robot during path-following
   public static final double kMaxSpeedMetersPerSecond = 3;
