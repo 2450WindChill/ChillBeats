@@ -43,13 +43,9 @@ public class PoseEstimatorSubsystem extends SubsystemBase{
         });
     }
 
-    // Uses alliance color to get limelight pose from the correct alliance wall
+    // Gets bot pose using limelight always relative to blue alliance wall
     public Pose2d getLimelightPose() {
-            if (DriverStation.getAlliance().orElse(DriverStation.Alliance.Blue) == DriverStation.Alliance.Blue) {
-                return LimelightHelpers.getBotPose2d_wpiBlue("limelight");
-            } else {
-                return LimelightHelpers.getBotPose2d_wpiRed("limelight");
-            }
+        return LimelightHelpers.getBotPose2d("limelight");
     }
 
     // Gets gametime and then subtracts the latency of the pose

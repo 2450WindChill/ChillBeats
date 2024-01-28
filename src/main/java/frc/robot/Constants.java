@@ -4,6 +4,7 @@
 
 package frc.robot;
 
+import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.math.kinematics.SwerveDriveKinematics;
@@ -164,4 +165,16 @@ public final class Constants {
 
   public static final double moveToPoseSpeed = 0.5;
   public static final double moveToPoseRotationSpeed = 0.5;
+
+  public static final class BlueAllianceFieldElementsPoses {
+    public static Pose2d source;
+    public static Pose2d amp;
+    public static Pose2d speaker;
+  }
+
+  public static final class RedAllianceFieldElementPoses {
+    public static Pose2d source;
+    public static Pose2d amp;
+    public static Pose2d speaker;
+  }
 }
