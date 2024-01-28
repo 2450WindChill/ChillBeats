@@ -4,21 +4,16 @@
 
 package frc.robot;
 
-import frc.robot.Constants.OperatorConstants;
-//import frc.robot.commands.Autos;
 import frc.robot.commands.DefaultDriveCommand;
 import frc.robot.commands.MoveToPose;
 import frc.robot.libs.LimelightHelpers;
 import frc.robot.subsystems.DrivetrainSubsystem;
-import frc.robot.subsystems.ExampleSubsystem;
 import frc.robot.subsystems.PoseEstimatorSubsystem;
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
-import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj.XboxController.Button;
 import edu.wpi.first.wpilibj2.command.Command;
-import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import edu.wpi.first.wpilibj2.command.button.JoystickButton;
 import edu.wpi.first.wpilibj2.command.button.Trigger;
@@ -32,7 +27,6 @@ import edu.wpi.first.wpilibj2.command.button.Trigger;
  */
 public class RobotContainer {
   // The robot's subsystems and commands are defined here...
-  private final ExampleSubsystem m_exampleSubsystem = new ExampleSubsystem();
   private final DrivetrainSubsystem m_drivetrainSubsystem = new DrivetrainSubsystem();
   private final PoseEstimatorSubsystem m_poseEstimator = new PoseEstimatorSubsystem(m_drivetrainSubsystem);
 
@@ -57,10 +51,10 @@ public class RobotContainer {
             () -> m_driverController.getLeftY(),
             () -> m_driverController.getLeftX(),
             () -> m_driverController.getRightX(),
-            () -> true
+            () -> false
           ));
 
-    // Configure the trigger bindings
+    // Configure bindings and limelight
     configureBindings();
     configureLimelight();
     }
@@ -79,15 +73,17 @@ public class RobotContainer {
   }
 
   /*
-   * Configures limelight to use:
+   * Configures limelight to:
    *  -Pipeline 0
    *  -LEDs Off
-   *  -Camera in Proccesor Mode
+   *  -Proccesor Mode
+   *  -Pose relative to robot center (Meters and Degrees)
    */
   private void configureLimelight() {
     LimelightHelpers.setPipelineIndex("limelights", 0);
     LimelightHelpers.setLEDMode_ForceOff("limelight");
     LimelightHelpers.setCameraMode_Processor("limelight");
+    LimelightHelpers.setCameraPose_RobotSpace("limelight", 0, 0, 0, 0, 0, 0);
   }
 
   /**

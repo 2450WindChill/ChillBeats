@@ -18,9 +18,6 @@ public class PoseEstimatorSubsystem extends SubsystemBase{
     public PoseEstimatorSubsystem(DrivetrainSubsystem drivetrainSubsystem) {
         m_drivetrainSubsystem = drivetrainSubsystem;
 
-        // Sets pose of Limelight relative to robot center (currently in inches and degrees)
-        LimelightHelpers.setCameraPose_RobotSpace("limelight", 9.464, 7.462, 17.24, 0, 13, 0);
-
         poseEstimate = new SwerveDrivePoseEstimator(
             Constants.swerveKinematics,
             m_drivetrainSubsystem.getGyroYaw(),
@@ -46,11 +43,12 @@ public class PoseEstimatorSubsystem extends SubsystemBase{
         });
     }
 
+    // Uses alliance color to get limelight pose from the correct alliance wall
     public Pose2d getLimelightPose() {
-            if (DriverStation.getAlliance().orElse(null) == DriverStation.Alliance.Red) {
-                return LimelightHelpers.getBotPose2d_wpiRed("limelight");
-            } else {
+            if (DriverStation.getAlliance().orElse(DriverStation.Alliance.Blue) == DriverStation.Alliance.Blue) {
                 return LimelightHelpers.getBotPose2d_wpiBlue("limelight");
+            } else {
+                return LimelightHelpers.getBotPose2d_wpiRed("limelight");
             }
     }
 
