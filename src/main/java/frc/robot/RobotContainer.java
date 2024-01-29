@@ -26,7 +26,7 @@ import edu.wpi.first.wpilibj2.command.button.Trigger;
  */
 public class RobotContainer {
   // The robot's subsystems and commands are defined here...
-  private final ExampleSubsystem m_exampleSubsystem = new ExampleSubsystem();
+  // private final ExampleSubsystem m_exampleSubsystem = new ExampleSubsystem();
   private final DrivetrainSubsystem m_drivetrainSubsystem = new DrivetrainSubsystem();
 
    static XboxController m_driverController = new XboxController(0);
@@ -67,7 +67,7 @@ public class RobotContainer {
    */
   private void configureBindings() {
     // Schedule `ExampleCommand` when `exampleCondition` changes to `true`
-    buttonA.onTrue(new ExampleCommand(m_drivetrainSubsystem));
+    // buttonA.onTrue(new ExampleCommand(m_drivetrainSubsystem));
 
 
     
