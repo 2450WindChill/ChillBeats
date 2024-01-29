@@ -172,7 +172,7 @@ public final class Constants {
     public static Pose2d speaker;
   }
 
-  public static final class RedAllianceFieldElementPoses {
+  public static final class RedAllianceFieldElementsPoses {
     public static Pose2d source;
     public static Pose2d amp;
     public static Pose2d speaker;
