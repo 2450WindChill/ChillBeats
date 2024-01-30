@@ -7,6 +7,7 @@ package frc.robot.subsystems;
 import com.revrobotics.CANSparkLowLevel.MotorType;
 import com.revrobotics.CANSparkMax;
 
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 
@@ -14,7 +15,8 @@ public class AimSubsystem extends SubsystemBase {
   public final CANSparkMax wristMotor = new CANSparkMax(17, MotorType.kBrushless);
  
   /** Creates a new AimSubsystem. */
-  public AimSubsystem() {}
+  public AimSubsystem() {
+  }
 
   /**
    * Example command factory method.
@@ -43,6 +45,7 @@ public class AimSubsystem extends SubsystemBase {
   @Override
   public void periodic() {
     // This method will be called once per scheduler run
+   
   }
 
   @Override

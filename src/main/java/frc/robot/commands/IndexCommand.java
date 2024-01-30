@@ -55,6 +55,12 @@ private final CommandXboxController m_controller;
   // Returns true when the command should end.
   @Override
   public boolean isFinished() {
-    return false;
+    boolean descent = m_controller.getLeftX() < 0;
+    boolean ascent = m_controller.getLeftX() > 0;
+//descent and ascent to control when the control stops going up and down== no crashing into ground or robot. 
+    if ((m_subsystem.indexMotor.getEncoder().getPosition() > 4) && ascent) return true;
+    else if ((m_subsystem.indexMotor.getEncoder().getPosition() < 0) && descent) return true;
+    else return false;
   }
+// GOAL FOR 1/31:: Make it stop at 4. !!
 }

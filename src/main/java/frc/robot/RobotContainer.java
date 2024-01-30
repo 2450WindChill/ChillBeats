@@ -43,7 +43,7 @@ public class RobotContainer {
   private final IntakeSubsystem m_IntakeSubsystem = new IntakeSubsystem();
   private final ElevatorSubsystem m_ElevatorSubsystem = new ElevatorSubsystem();
   private final AimSubsystem m_AimSubsystem = new AimSubsystem();
-  // private final LauncherSubsystem m_ShootSubsystem = new LauncherSubsystem();
+  private final LauncherSubsystem m_ShootSubsystem = new LauncherSubsystem();
   private final IndexSubsystem m_IndexSubsystem = new IndexSubsystem();
 
   // Replace with CommandPS4Controller or CommandJoystick if needed
@@ -74,18 +74,18 @@ public class RobotContainer {
    */
   private void configureBindings() {
     // Schedule `ExampleCommand` when `exampleCondition` changes to `true`
-    new Trigger(m_exampleSubsystem::exampleCondition)
-        .onTrue(new ExampleCommand(m_exampleSubsystem));
+    // new Trigger(m_exampleSubsystem::exampleCondition)
+    //     .onTrue(new ExampleCommand(m_exampleSubsystem));
 
     // Schedule `AnkleCommand` when the Xbox controller's X button is pressed,
     // cancelling on release.
-    // m_driverController.x().whileTrue(new AnkleCommand(m_IntakeSubsystem, m_driverController));
-    // m_driverController.y().whileTrue(new IntakeCommand(m_IntakeSubsystem, m_driverController));
-    m_driverController.rightBumper().whileTrue(new ElevatorCommand(m_ElevatorSubsystem, m_driverController));
-    // m_driverController.b().whileTrue(new AimCommand(m_AimSubsystem, m_driverController));
+    m_driverController.x().whileTrue(new AnkleCommand(m_IntakeSubsystem, m_driverController));
+    m_driverController.y().whileTrue(new IntakeCommand(m_IntakeSubsystem, m_driverController));
+    m_driverController.a().whileTrue(new ElevatorCommand(m_ElevatorSubsystem, m_driverController));
+    m_driverController.b().whileTrue(new AimCommand(m_AimSubsystem, m_driverController));
     m_driverController.leftBumper().whileTrue(new IndexCommand(m_IndexSubsystem, m_driverController));
-    // m_driverController.rightBumper().whileTrue(new LaunchCommand(m_ShootSubsystem, m_driverController));
-    m_driverController.x().onTrue(new FullIntakeCommand(m_IntakeSubsystem));
+    m_driverController.rightBumper().whileTrue(new LaunchCommand(m_ShootSubsystem, m_driverController));
+    // m_driverController.x().onTrue(new FullIntakeCommand(m_IntakeSubsystem));
     //Laser laser
 
   }
