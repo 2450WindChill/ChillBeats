@@ -64,7 +64,7 @@ public class WindChillSwerveModule {
     motorEncoderVelocityCoefficient = motorEncoderPositionCoefficient * 10.0;
 
     /* Angle Encoder Config */
-    angleEncoder = new CANcoder(moduleConstants.cancoderID);
+    angleEncoder = new CANcoder(moduleConstants.cancoderID, "canivore");
     // configAngleEncoder();
 
     /* Angle Motor Config */
