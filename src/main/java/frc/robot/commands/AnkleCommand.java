@@ -38,10 +38,10 @@ public class AnkleCommand extends Command {
   public void execute() {
     if (m_controller.getLeftX() > 0 ) {
       System.out.println("up");
-      m_subsystem.ankleMotor.set(0.06);
+      m_subsystem.ankleMotor.set(1);
     } else if (m_controller.getLeftX() < 0 ) {
       System.out.println("down");
-      m_subsystem.ankleMotor.set(-0.06);
+      m_subsystem.ankleMotor.set(-1);
     } else {
       System.out.println("halt");
       m_subsystem.ankleMotor.set(0);

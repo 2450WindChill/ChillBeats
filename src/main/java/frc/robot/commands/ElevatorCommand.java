@@ -37,10 +37,10 @@ public class ElevatorCommand extends Command {
   @Override
   public void execute() {
     if (m_controller.getLeftX() > 0 ) {
-      m_subsystem.elevatorMotor.set(0.02);
+      m_subsystem.elevatorMotor.set(0.1);
     }
     else if (m_controller.getLeftX() < 0 ) {
-      m_subsystem.elevatorMotor.set(-0.02);
+      m_subsystem.elevatorMotor.set(-0.1);
     }
     else {
       m_subsystem.elevatorMotor.set(0);
@@ -56,11 +56,12 @@ public class ElevatorCommand extends Command {
   // Returns true when the command should end.
   @Override
   public boolean isFinished() {
-    boolean descent = m_controller.getLeftX() < 0;
-    boolean ascent = m_controller.getLeftX() > 0;
-//descent and ascent to control when the control stops going up and down== no crashing into ground or robot. 
-    if ((m_subsystem.elevatorMotor.getEncoder().getPosition() > 4) && ascent) return true;
-    else if ((m_subsystem.elevatorMotor.getEncoder().getPosition() < 0) && descent) return true;
-    else return false;
+    return false;
+//     boolean descent = m_controller.getLeftX() < 0;
+//     boolean ascent = m_controller.getLeftX() > 0;
+// //descent and ascent to control when the control stops going up and down== no crashing into ground or robot. 
+//     if ((m_subsystem.elevatorMotor.getEncoder().getPosition() > 4) && ascent) return true;
+//     else if ((m_subsystem.elevatorMotor.getEncoder().getPosition() < 0) && descent) return true;
+//     else return false;
   }
 }

@@ -36,12 +36,12 @@ private final CommandXboxController m_controller;
   @Override
   public void execute() {
     if (m_controller.getLeftX() > 0 ) {
-      m_subsystem.leftMotor.set(0.02);
-      m_subsystem.rightMotor.set(-0.02);
+      m_subsystem.leftMotor.set(1);
+      m_subsystem.rightMotor.set(-1);
     }
     else if (m_controller.getLeftX() < 0 ) {
-      m_subsystem.leftMotor.set(-0.02);
-      m_subsystem.rightMotor.set(0.02);
+      m_subsystem.leftMotor.set(-1);
+      m_subsystem.rightMotor.set(1);
     }
     else {
       m_subsystem.leftMotor.set(0.);
