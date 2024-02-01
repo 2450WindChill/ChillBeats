@@ -30,17 +30,13 @@ public class PoseEstimatorSubsystem extends SubsystemBase{
                                         m_drivetrainSubsystem.getGyroYaw(),
                                         m_drivetrainSubsystem.getPositions());
         
-        if (LimelightHelpers.getTV("limelight")) {
-            poseEstimate.addVisionMeasurement(getLimelightPose(), getTimeStamp());
-        }
+        // if (LimelightHelpers.getTV("limelight")) {
+        //     poseEstimate.addVisionMeasurement(getLimelightPose(), getTimeStamp());
+        // }
 
-        SmartDashboard.putNumberArray(
-                "Pose Estimate",
-                new double[] {
-                    currentPoseEstimate.getX(),
-                    currentPoseEstimate.getY(),
-                    currentPoseEstimate.getRotation().getDegrees()
-        });
+        SmartDashboard.putNumber("Pose X", getBotX());
+        SmartDashboard.putNumber("Pose Y", getBotY());
+        SmartDashboard.putNumber("Pose Rotation", getBotRotation());
     }
 
     // Gets bot pose using limelight always relative to blue alliance wall
