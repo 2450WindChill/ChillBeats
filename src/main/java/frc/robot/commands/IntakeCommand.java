@@ -55,9 +55,9 @@ private final CommandXboxController m_controller;
   // Returns true when the command should end.
   @Override
   public boolean isFinished() {
-    if (m_subsystem.notelimitSwitch.get() && m_controller.getLeftX() > 0) {
-      return true; // returns true when trying to move into the limit switch
-    }
+   // if (m_subsystem.notelimitSwitch.get() && m_controller.getLeftX() > 0) {
+    //  return true; // returns true when trying to move into the limit switch
+    
     return false;
   }
 }

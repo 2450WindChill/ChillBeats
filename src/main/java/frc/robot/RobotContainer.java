@@ -12,8 +12,8 @@ import frc.robot.commands.ElevatorCommand;
 import frc.robot.commands.ExampleCommand;
 import frc.robot.commands.FullIntakeCommand;
 import frc.robot.commands.IntakeCommand;
-import frc.robot.commands.IndexCommand;
 import frc.robot.commands.LaunchCommand;
+import frc.robot.commands.IndexCommand;
 import frc.robot.commands.TestCommand;
 import frc.robot.subsystems.ExampleSubsystem;
 import frc.robot.subsystems.TestSubsystem;
@@ -48,7 +48,9 @@ public class RobotContainer {
 
   // Replace with CommandPS4Controller or CommandJoystick if needed
   private final CommandXboxController m_driverController = new CommandXboxController(
-      OperatorConstants.kDriverControllerPort);
+   OperatorConstants.kDriverControllerPort);
+   private final CommandXboxController m_driverController2 = new CommandXboxController(
+   OperatorConstants.kDriverControllerPort2);
 
   /**
    * The container for the robot. Contains subsystems, OI devices, and commands.
@@ -84,7 +86,11 @@ public class RobotContainer {
     m_driverController.a().whileTrue(new ElevatorCommand(m_ElevatorSubsystem, m_driverController));
     m_driverController.b().whileTrue(new AimCommand(m_AimSubsystem, m_driverController));
     m_driverController.leftBumper().whileTrue(new IndexCommand(m_IndexSubsystem, m_driverController));
-    m_driverController.rightBumper().whileTrue(new LaunchCommand(m_ShootSubsystem, m_driverController));
+    //m_driverController.rightBumper().whileTrue(new LaunchCommand(m_ShootSubsystem, m_driverController));
+
+
+   m_driverController2.rightBumper().whileTrue(new LaunchCommand(m_ShootSubsystem, m_driverController2, 0.8));
+   m_driverController2.leftBumper().whileTrue(new LaunchCommand(m_ShootSubsystem, m_driverController2, 0.1));
     // m_driverController.x().onTrue(new FullIntakeCommand(m_IntakeSubsystem));
     //Laser laser
 
