@@ -18,7 +18,6 @@ import com.pathplanner.lib.util.ReplanningConfig;
 import com.revrobotics.CANSparkMax;
 import com.revrobotics.CANSparkLowLevel.MotorType;
 
-import edu.wpi.first.hal.simulation.RoboRioDataJNI;
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.geometry.Translation2d;
@@ -89,7 +88,7 @@ public class DrivetrainSubsystem extends SubsystemBase {
 
     swerveOdometry = new SwerveDriveOdometry(
       Constants.swerveKinematics,
-      getGyroAsRotation2d(),
+      getGyroYaw(),
       getModulePositions(),
       new Pose2d(0, 0, new Rotation2d(0))
     );
@@ -112,7 +111,7 @@ public class DrivetrainSubsystem extends SubsystemBase {
           translation.getX(), 
           translation.getY(), 
           rotation, 
-          getGyroAsRotation2d())
+          getGyroYaw())
       );
     }
 
@@ -150,6 +149,13 @@ public class DrivetrainSubsystem extends SubsystemBase {
                 this // Reference to this subsystem to set requirements
         );
               }
+  public SwerveModulePosition[] getPositions() {
+    SwerveModulePosition[] positions = new SwerveModulePosition[swerveModules.length];
+    for (int i = 0; i < swerveModules.length; i++) {
+      positions[i] = swerveModules[i].getPosition();
+    }
+    return positions;
+  }
 
   // public void autonomousDrive(double xSpeed, double ySpeed, double rotation) {
   //   SwerveModuleState[] swerveModuleStates = Constants.swerveKinematics.toSwerveModuleStates(
@@ -175,6 +181,10 @@ public class DrivetrainSubsystem extends SubsystemBase {
   //   }
   // }
 
+  public Rotation2d getGyroYaw() {
+    Rotation2d rotation2d = Rotation2d.fromDegrees(gyro.getYaw().getValueAsDouble());
+    return rotation2d;
+  }
   public Rotation2d getGyroAsRotation2d() {
     Rotation2d rotation2d = Rotation2d.fromDegrees(gyro.getYaw().getValue());
 
@@ -298,16 +308,10 @@ public class DrivetrainSubsystem extends SubsystemBase {
       swerveOdometry.update(
         gyro.getRotation2d(), getModulePositions());
     }
-
-  
-
-    swerveOdometry.update(
-      getGyroAsRotation2d(),
-      getModulePositions()
-    );
-    SmartDashboard.putNumber("Gyro Yaw", gyro.getYaw().getValue());
-    SmartDashboard.putNumber("Gyro Roll", gyro.getRoll().getValue());
-    SmartDashboard.putNumber("Gyro Pitch", gyro.getPitch().getValue());
+    
+    SmartDashboard.putNumber("Gyro Yaw", gyro.getYaw().getValueAsDouble());
+    SmartDashboard.putNumber("Gyro Roll", gyro.getRoll().getValueAsDouble());
+    SmartDashboard.putNumber("Gyro Pitch", gyro.getPitch().getValueAsDouble());
 
 
   }

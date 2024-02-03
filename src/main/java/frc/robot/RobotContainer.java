@@ -4,12 +4,10 @@
 
 package frc.robot;
 
-import frc.robot.Constants.OperatorConstants;
-//import frc.robot.commands.Autos;
 import frc.robot.commands.DefaultDriveCommand;
-import frc.robot.commands.ExampleCommand;
+import frc.robot.commands.MoveToPose;
+import frc.robot.libs.LimelightHelpers;
 import frc.robot.subsystems.DrivetrainSubsystem;
-import frc.robot.subsystems.ExampleSubsystem;
 
 import java.util.List;
 
@@ -30,6 +28,12 @@ import edu.wpi.first.math.trajectory.constraint.DifferentialDriveVoltageConstrai
 import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj.XboxController.Button;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
+import frc.robot.subsystems.PoseEstimatorSubsystem;
+import edu.wpi.first.math.geometry.Pose2d;
+import edu.wpi.first.math.geometry.Rotation2d;
+import edu.wpi.first.wpilibj.XboxController;
+import edu.wpi.first.wpilibj.XboxController.Button;
+import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.Commands;
@@ -48,8 +52,8 @@ import edu.wpi.first.wpilibj2.command.button.Trigger;
  */
 public class RobotContainer {
   // The robot's subsystems and commands are defined here...
-  private final ExampleSubsystem m_exampleSubsystem = new ExampleSubsystem();
   private final DrivetrainSubsystem m_drivetrainSubsystem = new DrivetrainSubsystem();
+  private final PoseEstimatorSubsystem m_poseEstimator = new PoseEstimatorSubsystem(m_drivetrainSubsystem);
 
    static XboxController m_driverController = new XboxController(0);
 
@@ -57,6 +61,7 @@ public class RobotContainer {
   static XboxController m_operatorController = new XboxController(1);
 
   public final JoystickButton drive_rightBumper = new JoystickButton(m_driverController, Button.kRightBumper.value);
+  public final JoystickButton drive_yButton = new JoystickButton(m_driverController, Button.kY.value);
   public final JoystickButton buttonA = new JoystickButton(m_driverController, Button.kA.value);
 
   private final SendableChooser<Command> autoChooser;
@@ -75,12 +80,14 @@ public class RobotContainer {
             () -> true
           ));
 
-    // Configure the trigger bindings
+    // Configure bindings and limelight
     configureBindings();
 
     autoChooser = AutoBuilder.buildAutoChooser(); // Default auto will be `Commands.none()`
     SmartDashboard.putData("Auto Mode", autoChooser);
-  }
+
+    configureLimelight();
+    }
 
   /**
    * Use this method to define your trigger->command mappings. Triggers can be created via the
@@ -92,9 +99,21 @@ public class RobotContainer {
    * joysticks}.
    */
   private void configureBindings() {
-    // Schedule `ExampleCommand` when `exampleCondition` changes to `true`
-    buttonA.onTrue(new ExampleCommand(m_drivetrainSubsystem));
+    drive_yButton.onTrue(new MoveToPose(m_drivetrainSubsystem, m_poseEstimator, new Pose2d()));
+  }
 
+  /*
+   * Configures limelight to:
+   *  -Pipeline 0
+   *  -LEDs Off
+   *  -Proccesor Mode
+   *  -Pose relative to robot center (Meters and Degrees)
+   */
+  private void configureLimelight() {
+    LimelightHelpers.setPipelineIndex("limelights", 0);
+    LimelightHelpers.setLEDMode_ForceOff("limelight");
+    LimelightHelpers.setCameraMode_Processor("limelight");
+    LimelightHelpers.setCameraPose_RobotSpace("limelight", 0, 0, 0, 0, 0, 0);
   }
     /**
    * Use this to pass the autonomous command to the main {@link Robot} class.
@@ -105,4 +124,7 @@ public class RobotContainer {
     //  return new PathPlannerAuto("SwerveAuto");
     return autoChooser.getSelected();
 }
-}
+    // // Example auto which moves the robot forward 5 meters and then back to the origin without rotating
+    // return new MoveToPose(m_drivetrainSubsystem, m_poseEstimator, new Pose2d(5, 0, new Rotation2d(0)))
+    //           .andThen(new MoveToPose(m_drivetrainSubsystem, m_poseEstimator, new Pose2d()));
+  }

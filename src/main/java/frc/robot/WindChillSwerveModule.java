@@ -24,10 +24,12 @@ import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.kinematics.SwerveModulePosition;
 import edu.wpi.first.math.kinematics.SwerveModuleState;
 import edu.wpi.first.wpilibj.Timer;
+import frc.robot.libs.ModuleConfiguration;
 // import frc.lib.util.CANCoderUtil;
 // import frc.lib.util.CANSparkMaxUtil;
 // import frc.lib.util.CANCoderUtil.CCUsage;
 // import frc.lib.util.CANSparkMaxUtil.Usage;
+import frc.robot.libs.OnboardModuleState;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 
 public class WindChillSwerveModule {

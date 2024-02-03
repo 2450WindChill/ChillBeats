@@ -4,10 +4,12 @@
 
 package frc.robot;
 
+import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.math.kinematics.SwerveDriveKinematics;
 import edu.wpi.first.math.util.Units;
+import frc.robot.libs.ModuleConfiguration;
 
 /**
  * The Constants class provides a convenient place for teams to hold robot-wide numerical or boolean
@@ -49,7 +51,6 @@ public final class Constants {
   
 
   public static final double rotationsPerOneFoot = 0.33;
-
   public static final double feetToMeters = 0.3048;
 
   public static final double driveGearRatio = (8.14 / 1.0); // 6.75:1
@@ -183,4 +184,18 @@ public final class Constants {
   public static final double kRamseteZeta = 0.7;
 
   public static final double kPThetaController = 1;
+  public static final double moveToPoseSpeed = 0.5;
+  public static final double moveToPoseRotationSpeed = 0.5;
+
+  public static final class BlueAllianceFieldElementsPoses {
+    public static Pose2d source;
+    public static Pose2d amp;
+    public static Pose2d speaker;
+  }
+
+  public static final class RedAllianceFieldElementsPoses {
+    public static Pose2d source;
+    public static Pose2d amp;
+    public static Pose2d speaker;
+  }
 }
