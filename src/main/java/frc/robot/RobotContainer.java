@@ -21,7 +21,9 @@ import frc.robot.subsystems.IntakeSubsystem;
 import frc.robot.subsystems.ElevatorSubsystem;
 import frc.robot.subsystems.AimSubsystem;
 import frc.robot.subsystems.LauncherSubsystem;
+import frc.robot.subsystems.LightySubsystem;
 import frc.robot.subsystems.IndexSubsystem;
+import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
@@ -45,6 +47,9 @@ public class RobotContainer {
   private final AimSubsystem m_AimSubsystem = new AimSubsystem();
   private final LauncherSubsystem m_ShootSubsystem = new LauncherSubsystem();
   private final IndexSubsystem m_IndexSubsystem = new IndexSubsystem();
+  public DriverStation.Alliance teamColor;
+  private final LightySubsystem m_LightySubsystem = new LightySubsystem(teamColor);
+
 
   // Replace with CommandPS4Controller or CommandJoystick if needed
   private final CommandXboxController m_driverController = new CommandXboxController(
@@ -87,9 +92,17 @@ public class RobotContainer {
     m_driverController.rightBumper().whileTrue(new LaunchCommand(m_ShootSubsystem, m_driverController));
     // m_driverController.x().onTrue(new FullIntakeCommand(m_IntakeSubsystem));
     //Laser laser
-
   }
-
+    public void setLEDsToAlliance() {
+      teamColor = DriverStation.getAlliance().get();
+      if (teamColor == DriverStation.Alliance.Red) {
+        System.err.println("Alliance RED");
+        m_LightySubsystem.SetLEDsToRed();
+      } else {
+        System.err.println("Alliance BLUE");
+        m_LightySubsystem.SetLEDsToBlue();
+      }
+    }
   /**
    * Use this to pass the autonomous command to the main {@link Robot} class.
    *
