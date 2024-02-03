@@ -57,6 +57,7 @@ public class MoveToPose extends Command {
   public void execute() {
 
     // Finds translation and rotation to desired pose
+    System.out.println("MOVE TO POSE");
     calculatedX = m_targetPose.getX() - m_poseEstimate.getBotX();
     calculatedY = m_targetPose.getY() - m_poseEstimate.getBotY();
     calculatedRotation = m_targetPose.getRotation().getDegrees() - m_poseEstimate.getBotRotation();
@@ -110,8 +111,10 @@ public class MoveToPose extends Command {
   @Override
   public boolean isFinished() {
     if ((Math.abs(calculatedRotation) <= 0.1) && (Math.abs(calculatedX) <= 0.1) && (Math.abs(calculatedY) <= 0.1)) {
+      System.out.println("MOVE TO POSE ISFINISHED");
       return true;
     } else {
+      System.out.println("MOVE TO POSE ISFINISHED");
       return false;
     }
   }

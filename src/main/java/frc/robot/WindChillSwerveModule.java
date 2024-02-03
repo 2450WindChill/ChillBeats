@@ -66,7 +66,7 @@ public class WindChillSwerveModule {
     motorEncoderVelocityCoefficient = motorEncoderPositionCoefficient * 10.0;
 
     /* Angle Encoder Config */
-    angleEncoder = new CANcoder(moduleConstants.cancoderID);
+    angleEncoder = new CANcoder(moduleConstants.cancoderID, "canivore");
     // configAngleEncoder();
 
     /* Angle Motor Config */
@@ -193,7 +193,12 @@ public class WindChillSwerveModule {
     driveMotor.restoreFactoryDefaults();
     // CANSparkMaxUtil.setCANSparkMaxBusUsage(driveMotor, Usage.kAll);
     driveMotor.setSmartCurrentLimit(Constants.driveContinuousCurrentLimit);
-    driveMotor.setInverted(Constants.driveInvert);
+    if (this.moduleNumber == 0) {
+      driveMotor.setInverted(true);
+    }
+    else {
+       driveMotor.setInverted(Constants.driveInvert);
+    }
     // driveMotor.setIdleMode(Constants.driveNeutralMode);
     driveEncoder.setVelocityConversionFactor(Constants.driveConversionVelocityFactor);
     driveEncoder.setPositionConversionFactor(Constants.driveConversionPositionFactor);

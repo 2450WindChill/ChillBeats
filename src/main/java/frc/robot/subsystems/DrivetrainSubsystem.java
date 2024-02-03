@@ -80,20 +80,12 @@ public class DrivetrainSubsystem extends SubsystemBase {
     zeroGyro();
 
     swerveModules = new WindChillSwerveModule[] {
+      // TODO: Need to fix modules, wheels not pointing right way
       new WindChillSwerveModule(0, Constants.FrontLeftModule.constants),
       new WindChillSwerveModule(1, Constants.FrontRightModule.constants),
       new WindChillSwerveModule(2, Constants.BackLeftModule.constants),
       new WindChillSwerveModule(3, Constants.BackRightModule.constants)
     };
-
-    swerveOdometry = new SwerveDriveOdometry(
-      Constants.swerveKinematics,
-      getGyroYaw(),
-      getModulePositions(),
-      new Pose2d(0, 0, new Rotation2d(0))
-    );
-
-    periodic();
   }
 
   public void drive(Translation2d translation, double rotation, boolean isRobotCentric) {
@@ -185,11 +177,6 @@ public class DrivetrainSubsystem extends SubsystemBase {
     Rotation2d rotation2d = Rotation2d.fromDegrees(gyro.getYaw().getValueAsDouble());
     return rotation2d;
   }
-  public Rotation2d getGyroAsRotation2d() {
-    Rotation2d rotation2d = Rotation2d.fromDegrees(gyro.getYaw().getValue());
-
-    return rotation2d;
-  }
 
   public SwerveModulePosition[] getModulePositions(){
     SwerveModulePosition[] positions = new SwerveModulePosition[4];
@@ -246,7 +233,7 @@ public class DrivetrainSubsystem extends SubsystemBase {
   }
 
   public void resetPose(Pose2d pose2d) {
-    swerveOdometry.resetPosition(getGyroAsRotation2d(), getModulePositions(), getPose());
+    swerveOdometry.resetPosition(getGyroYaw(), getModulePositions(), getPose());
   }
 
   // TODO: Figure out how to actually connect to all cancoders
@@ -304,9 +291,6 @@ public class DrivetrainSubsystem extends SubsystemBase {
           "Mod " + mod.moduleNumber + " Integrated", mod.getState().angle.getDegrees());
       SmartDashboard.putNumber(
           "Mod " + mod.moduleNumber + " Velocity", mod.getState().speedMetersPerSecond);
-      
-      swerveOdometry.update(
-        gyro.getRotation2d(), getModulePositions());
     }
     
     SmartDashboard.putNumber("Gyro Yaw", gyro.getYaw().getValueAsDouble());
