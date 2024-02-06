@@ -3,16 +3,18 @@ package frc.robot.subsystems;
 import edu.wpi.first.math.estimator.SwerveDrivePoseEstimator;
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Pose3d;
+import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
+import edu.wpi.first.wpilibj2.command.Commands;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants;
 import frc.robot.libs.LimelightHelpers;
 
 public class PoseEstimatorSubsystem extends SubsystemBase{
 
-    public final SwerveDrivePoseEstimator poseEstimate;
+    public SwerveDrivePoseEstimator poseEstimate;
     public final DrivetrainSubsystem m_drivetrainSubsystem;
 
     public PoseEstimatorSubsystem(DrivetrainSubsystem drivetrainSubsystem) {
@@ -23,6 +25,7 @@ public class PoseEstimatorSubsystem extends SubsystemBase{
             m_drivetrainSubsystem.getGyroYaw(),
             m_drivetrainSubsystem.getPositions(),
             new Pose2d());
+            SmartDashboard.putData("Reset pose", Commands.runOnce(() -> resetPose()));
     }
 
     public void periodic() {
@@ -55,6 +58,18 @@ public class PoseEstimatorSubsystem extends SubsystemBase{
     // Gets current estimated bot pose
     public Pose2d getBotPose() {
         return poseEstimate.getEstimatedPosition();
+    }
+
+    // public void zeroPose() {
+    //     poseEstimate.resetPosition(m_drivetrainSubsystem.getGyroYaw(), m_drivetrainSubsystem.getModulePositions(), new Pose2d(0, 0, new Rotation2d(0)));
+    // }
+
+    public void resetPose() {
+         poseEstimate = new SwerveDrivePoseEstimator(
+            Constants.swerveKinematics,
+            m_drivetrainSubsystem.getGyroYaw(),
+            m_drivetrainSubsystem.getModulePositions(),
+            new Pose2d(0, 0, new Rotation2d(0)));
     }
 
     // Gets estimated bot x

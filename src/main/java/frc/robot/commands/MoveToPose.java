@@ -49,7 +49,8 @@ public class MoveToPose extends Command {
   // Called when the command is initially scheduled.
   @Override
   public void initialize() {
-
+    //m_poseEstimate.zeroPose();
+    m_poseEstimate.resetPose();
   }
 
   // Called every time the scheduler runs while the command is scheduled.
@@ -110,7 +111,7 @@ public class MoveToPose extends Command {
   // Returns true when the command should end.
   @Override
   public boolean isFinished() {
-    if ((Math.abs(calculatedRotation) <= 0.1) && (Math.abs(calculatedX) <= 0.1) && (Math.abs(calculatedY) <= 0.1)) {
+    if ((Math.abs(calculatedRotation) <= .1) && (Math.abs(calculatedX) <= 0.1) && (Math.abs(calculatedY) <= 0.1)) {
       System.out.println("MOVE TO POSE ISFINISHED");
       return true;
     } else {
