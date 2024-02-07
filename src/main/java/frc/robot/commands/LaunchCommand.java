@@ -4,8 +4,10 @@
 
 package frc.robot.commands;
 
+import frc.robot.Constants;
 import frc.robot.subsystems.ExampleSubsystem;
 import frc.robot.subsystems.LauncherSubsystem;
+import edu.wpi.first.wpilibj.Preferences;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 
@@ -14,14 +16,19 @@ public class LaunchCommand extends Command {
   @SuppressWarnings({ "PMD.UnusedPrivateField", "PMD.SingularField" })
   private final LauncherSubsystem m_subsystem;
 private final CommandXboxController m_controller;
+private final double m_speed;
   /**
    * Creates a new ShootCommand.
    *
    * @param subsystem The subsystem used by this command.
    */
-  public LaunchCommand(LauncherSubsystem subsystem,CommandXboxController controller) {
+  public LaunchCommand(LauncherSubsystem subsystem,CommandXboxController controller, double speed) {
     m_subsystem = subsystem;
     m_controller = controller;
+    m_speed = speed;
+   
+
+
     // Use addRequirements() here to declare subsystem dependencies.
     addRequirements(subsystem);
   }
@@ -36,12 +43,12 @@ private final CommandXboxController m_controller;
   @Override
   public void execute() {
     if (m_controller.getLeftX() > 0 ) {
-      m_subsystem.leftMotor.set(1);
-      m_subsystem.rightMotor.set(-1);
+      m_subsystem.leftMotor.set(m_speed);
+      m_subsystem.rightMotor.set(-m_speed);
     }
     else if (m_controller.getLeftX() < 0 ) {
-      m_subsystem.leftMotor.set(-1);
-      m_subsystem.rightMotor.set(1);
+      m_subsystem.leftMotor.set(-m_speed);
+      m_subsystem.rightMotor.set(m_speed);
     }
     else {
       m_subsystem.leftMotor.set(0.);
