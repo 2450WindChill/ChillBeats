@@ -9,6 +9,8 @@ import frc.robot.subsystems.DrivetrainSubsystem;
 import frc.robot.subsystems.PoseEstimatorSubsystem;
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Translation2d;
+import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 
 public class MoveToPose extends Command {
@@ -49,8 +51,7 @@ public class MoveToPose extends Command {
   // Called when the command is initially scheduled.
   @Override
   public void initialize() {
-    //m_poseEstimate.zeroPose();
-    m_poseEstimate.resetPose();
+
   }
 
   // Called every time the scheduler runs while the command is scheduled.
@@ -62,6 +63,10 @@ public class MoveToPose extends Command {
     calculatedX = m_targetPose.getX() - m_poseEstimate.getBotX();
     calculatedY = m_targetPose.getY() - m_poseEstimate.getBotY();
     calculatedRotation = m_targetPose.getRotation().getDegrees() - m_poseEstimate.getBotRotation();
+
+    SmartDashboard.putNumber("Calculated X", calculatedX);
+    SmartDashboard.putNumber("Calculated Y", calculatedY);
+    SmartDashboard.putNumber("Calculated Rotation", calculatedRotation);
 
     // Finds if the X component of the translation is +, -, or 0
     if (calculatedX > 0) {
@@ -91,11 +96,11 @@ public class MoveToPose extends Command {
     }
 
     // Calls .drive() with speeds and rotations towards desired pose
-    m_drivetrainSubsystem.drive(
-      new Translation2d(finalXSpeed, finalYSpeed),
-      finalRotation,
-      false
-    );
+    // m_drivetrainSubsystem.drive(
+    //   new Translation2d(finalXSpeed, finalYSpeed),
+    //   finalRotation,
+    //   false
+    // );
   }
 
   // Called once the command ends or is interrupted.
@@ -111,11 +116,11 @@ public class MoveToPose extends Command {
   // Returns true when the command should end.
   @Override
   public boolean isFinished() {
-    if ((Math.abs(calculatedRotation) <= .1) && (Math.abs(calculatedX) <= 0.1) && (Math.abs(calculatedY) <= 0.1)) {
-      System.out.println("MOVE TO POSE ISFINISHED");
+    if ((Math.abs(calculatedRotation) <= 60) && (Math.abs(calculatedX) <= 0.1) && (Math.abs(calculatedY) <= 0.1)) {
+      System.out.println("MOVE TO POSE IS FINISHED");
       return true;
     } else {
-      System.out.println("MOVE TO POSE ISFINISHED");
+      System.err.println("move to pose NOT finished");
       return false;
     }
   }

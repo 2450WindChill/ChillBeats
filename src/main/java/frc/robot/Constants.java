@@ -184,7 +184,7 @@ public final class Constants {
   public static final double kRamseteZeta = 0.7;
 
   public static final double kPThetaController = 1;
-  public static final double moveToPoseSpeed = 0.5;
+  public static final double moveToPoseSpeed = 0.1;
   public static final double moveToPoseRotationSpeed = 0.5;
 
   public static final class BlueAllianceFieldElementsPoses {
