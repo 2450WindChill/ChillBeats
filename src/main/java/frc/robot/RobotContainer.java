@@ -26,6 +26,8 @@ import frc.robot.subsystems.IndexSubsystem;
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj2.command.Command;
+import edu.wpi.first.wpilibj2.command.Commands;
+import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import edu.wpi.first.wpilibj2.command.button.Trigger;
 
@@ -98,6 +100,8 @@ public class RobotContainer {
    m_driverController2.leftBumper().whileTrue(new LaunchCommand(m_ShootSubsystem, m_driverController2, 0.1));
     // m_driverController.x().onTrue(new FullIntakeCommand(m_IntakeSubsystem));
     //Laser laser
+    m_driverController.rightBumper().onTrue(Commands.runOnce(() ->m_LightySubsystem.SetLEDsToRed()));
+      m_driverController.leftBumper().onTrue(Commands.runOnce(() ->m_LightySubsystem.SetLEDsToPink()));
   }
     public void setLEDsToAlliance() {
       teamColor = DriverStation.getAlliance().get();
