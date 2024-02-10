@@ -6,6 +6,7 @@ package frc.robot.subsystems;
 
 import java.util.function.Consumer;
 
+import com.ctre.phoenix.motorcontrol.can.WPI_TalonFX;
 import com.ctre.phoenix6.StatusCode;
 import com.ctre.phoenix6.configs.CANcoderConfiguration;
 import com.ctre.phoenix6.configs.Pigeon2Configuration;
@@ -51,8 +52,8 @@ public class DrivetrainSubsystem extends SubsystemBase {
 
     // Configure AutoBuilder last
     AutoBuilder.configureHolonomic(
-            this::getPose, // Robot pose supplier
-            this::resetPose, // Method to reset odometry (will be called if your auto has a starting pose)
+            PoseEstimatorSubsystem::getBotPose, // Robot pose supplier
+            PoseEstimatorSubsystem::resetPose, // Method to reset odometry (will be called if your auto has a starting pose)
             this::getSpeeds, // ChassisSpeeds supplier. MUST BE ROBOT RELATIVE
             this::driveRobotRelative, // Method that will drive the robot given ROBOT RELATIVE ChassisSpeeds
             new HolonomicPathFollowerConfig( // HolonomicPathFollowerConfig, this should likely live in your Constants class
@@ -117,7 +118,7 @@ public class DrivetrainSubsystem extends SubsystemBase {
 
         return new FollowPathHolonomic(
                 path,
-                this::getPose, // Robot pose supplier
+                PoseEstimatorSubsystem::getBotPose, // Robot pose supplier
                 this::getSpeeds, // ChassisSpeeds supplier. MUST BE ROBOT RELATIVE
                 this::driveRobotRelative, // Method that will drive the robot given ROBOT RELATIVE ChassisSpeeds
                 new HolonomicPathFollowerConfig( // HolonomicPathFollowerConfig, this should likely live in your Constants class
@@ -228,13 +229,13 @@ public class DrivetrainSubsystem extends SubsystemBase {
    *
    * @return The pose.
    */
-  public Pose2d getPose() {
-    return swerveOdometry.getPoseMeters();
-  }
+  // public Pose2d getPose() {
+  //   return swerveOdometry.getPoseMeters();
+  // }
 
-  public void resetPose(Pose2d pose2d) {
-    swerveOdometry.resetPosition(getGyroYaw(), getModulePositions(), getPose());
-  }
+  // public void resetPose(Pose2d pose2d) {
+  //   swerveOdometry.resetPosition(getGyroYaw(), getModulePositions(), getPose());
+  // }
 
   // TODO: Figure out how to actually connect to all cancoders
   public StatusCode resetCANcoder() {
@@ -261,9 +262,11 @@ public class DrivetrainSubsystem extends SubsystemBase {
 
 
   public void driveRobotRelative(ChassisSpeeds robotRelativeSpeeds) {
-    ChassisSpeeds targetSpeeds = ChassisSpeeds.discretize(robotRelativeSpeeds, 0.02);
-    SwerveModuleState[] targetStates = Constants.swerveKinematics.toSwerveModuleStates(targetSpeeds);
-    setStates(targetStates);
+    SwerveModuleState[] modStates = Constants.swerveKinematics.toSwerveModuleStates(robotRelativeSpeeds);
+
+     for (WindChillSwerveModule mod : swerveModules) {
+      mod.setDesiredState(modStates[mod.moduleNumber]);
+    }
 }
 // -----------------------------------------------------------------------------------------------
 

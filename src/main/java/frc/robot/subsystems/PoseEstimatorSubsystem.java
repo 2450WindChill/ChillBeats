@@ -14,8 +14,8 @@ import frc.robot.libs.LimelightHelpers;
 
 public class PoseEstimatorSubsystem extends SubsystemBase{
 
-    public SwerveDrivePoseEstimator poseEstimate;
-    public final DrivetrainSubsystem m_drivetrainSubsystem;
+    public static SwerveDrivePoseEstimator poseEstimate;
+    public static DrivetrainSubsystem m_drivetrainSubsystem;
 
     public PoseEstimatorSubsystem(DrivetrainSubsystem drivetrainSubsystem) {
         m_drivetrainSubsystem = drivetrainSubsystem;
@@ -25,7 +25,7 @@ public class PoseEstimatorSubsystem extends SubsystemBase{
             m_drivetrainSubsystem.getGyroYaw(),
             m_drivetrainSubsystem.getPositions(),
             new Pose2d());
-            SmartDashboard.putData("Reset pose", Commands.runOnce(() -> resetPose()));
+            SmartDashboard.putData("Reset pose", Commands.runOnce(() -> zeroPose()));
     }
 
     public void periodic() {
@@ -56,7 +56,7 @@ public class PoseEstimatorSubsystem extends SubsystemBase{
     }
 
     // Gets current estimated bot pose
-    public Pose2d getBotPose() {
+    public static Pose2d getBotPose() {
         return poseEstimate.getEstimatedPosition();
     }
 
@@ -64,12 +64,16 @@ public class PoseEstimatorSubsystem extends SubsystemBase{
     //     poseEstimate.resetPosition(m_drivetrainSubsystem.getGyroYaw(), m_drivetrainSubsystem.getModulePositions(), new Pose2d(0, 0, new Rotation2d(0)));
     // }
 
-    public void resetPose() {
+    public void zeroPose() {
          poseEstimate = new SwerveDrivePoseEstimator(
             Constants.swerveKinematics,
             m_drivetrainSubsystem.getGyroYaw(),
             m_drivetrainSubsystem.getModulePositions(),
             new Pose2d(0, 0, new Rotation2d(0)));
+    }
+
+    public static void resetPose(Pose2d newPose) {
+        poseEstimate.resetPosition(m_drivetrainSubsystem.getGyroYaw(), m_drivetrainSubsystem.getPositions(), newPose);
     }
 
     // Gets estimated bot x

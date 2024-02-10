@@ -136,13 +136,14 @@ public class RobotContainer {
    */   
   public Command getAutonomousCommand() {
     System.out.println("AUTO IS RUNNING");
-     return new TestAutoCommand(m_drivetrainSubsystem, m_poseEstimator, 5, 0);
+     // return
+     // new TestAutoCommand(m_drivetrainSubsystem, m_poseEstimator, 5, 0);
      // Commands.run(() -> m_drivetrainSubsystem.testAuto(.4, 0), m_drivetrainSubsystem);
      // new MoveToPose(m_drivetrainSubsystem, m_poseEstimator, new Pose2d(0.2, 0, new Rotation2d(0)));
     // .andThen(new MoveToPose(m_drivetrainSubsystem, m_poseEstimator, new Pose2d(-0.2, 0, new Rotation2d(0))))
     // .andThen(new MoveToPose(m_drivetrainSubsystem, m_poseEstimator, new Pose2d(0, -0.2, new Rotation2d(0))))
     // .andThen(new MoveToPose(m_drivetrainSubsystem, m_poseEstimator, new Pose2d(0, 0.2, new Rotation2d(0))));
-    //  return new PathPlannerAuto("SwerveAuto");
+    return new PathPlannerAuto("SwerveAuto");
     //return autoChooser.getSelected();
 }
     // // Example auto which moves the robot forward 5 meters and then back to the origin without rotating
