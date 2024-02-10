@@ -20,6 +20,7 @@ import com.revrobotics.CANSparkMax;
 import com.revrobotics.RelativeEncoder;
 import com.revrobotics.SparkPIDController;
 
+import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.kinematics.SwerveModulePosition;
 import edu.wpi.first.math.kinematics.SwerveModuleState;
@@ -239,7 +240,12 @@ public class WindChillSwerveModule {
     integratedAngleEncoder.setPosition(position);
   }
 
-  public CANSparkMax getDriveMotor() {
-    return driveMotor;
+  public void setSpeedFromDouble(double speed) {
+    // double percentOutput = speed / Constants.maxSpeed;
+    driveMotor.set(speed);
+  }
+
+  public void setAngleFromDegrees(double angle) {
+    angleController.setReference(angle, CANSparkMax.ControlType.kPosition);  
   }
 }
