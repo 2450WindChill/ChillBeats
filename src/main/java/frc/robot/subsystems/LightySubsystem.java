@@ -17,13 +17,14 @@ public class LightySubsystem extends SubsystemBase {
   AddressableLEDBuffer m_ledBuffer;
 
   DriverStation.Alliance m_teamColor;
-  private int m_rainbowFirstPixelHue = 0;
+  private int m_rainbowFirstPixelValue = 0;
 
+  private int m_snakeindex = 0;
   
   
   /** Creates a new LightySubsystem. */
   public LightySubsystem(DriverStation.Alliance teamColor) { 
-   m_rainbowFirstPixelHue = 0;
+   m_rainbowFirstPixelValue = 0;
     m_teamColor = teamColor;
 
     // PWM port 9
@@ -96,7 +97,7 @@ public class LightySubsystem extends SubsystemBase {
 
     var value = (amplitude*Math.sin(frequency*T)+.5);
     var red = (int) (0*value*255);
-    var green = (int) (50*value*255);
+    var green = (int) (0*value*255);
     var blue = (int) (155*value*255);
     
       System.err.println("Red"+red); 
@@ -104,19 +105,20 @@ public class LightySubsystem extends SubsystemBase {
       System.err.println("Blue"+blue);
 
     // For every pixel
-    for (var i = 0; i < m_ledBuffer.getLength(); i++) {
-      m_ledBuffer.setRGB(i, red, green, blue);
-
-      // Calculate the hue - hue is easier for rainbows because the color
-      // shape is a circle so only one value needs to precess
-     
-      // Set the value
-    }
-    // Increase by to make the rainbow "move"
-    m_rainbowFirstPixelHue += 3;
+    m_rainbowFirstPixelValue += 3;
     // Check bounds
-    m_rainbowFirstPixelHue %= 180;
+    m_rainbowFirstPixelValue %= 100;
 
+    // for (var i = 0; i < m_ledBuffer.getLength(); i++) {
+    //   m_ledBuffer.setHSV(i, 100, 255, m_rainbowFirstPixelValue);
+    // }
+    // Increase by to make the rainbow "move"
+    for (var i = 0; i < m_ledBuffer.getLength(); i++) {
+      m_ledBuffer.setHSV(i, 100, 255, 0);
+    }  
+    m_ledBuffer.setHSV(m_snakeindex, 100, 255, 100);
+    m_snakeindex += 1;
+    m_snakeindex %= 75;
     m_led.setData(m_ledBuffer);
       
   }
