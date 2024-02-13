@@ -101,7 +101,7 @@ public class RobotContainer {
     // m_driverController.x().onTrue(new FullIntakeCommand(m_IntakeSubsystem));
     //Laser laser
     m_driverController.rightBumper().onTrue(Commands.runOnce(() ->m_LightySubsystem.SetLEDsToRed()));
-      m_driverController.leftBumper().onTrue(Commands.runOnce(() ->m_LightySubsystem.SetLEDsToPink()));
+   
   }
     public void setLEDsToAlliance() {
       teamColor = DriverStation.getAlliance().get();
@@ -113,6 +113,11 @@ public class RobotContainer {
         m_LightySubsystem.SetLEDsToBlue();
       }
     }
+    
+      public void rainbow(){
+      m_LightySubsystem.rainbow();
+      }
+    
   /**
    * Use this to pass the autonomous command to the main {@link Robot} class.
    *

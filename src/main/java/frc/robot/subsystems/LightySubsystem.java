@@ -7,6 +7,7 @@ package frc.robot.subsystems;
 import edu.wpi.first.wpilibj.AddressableLED;
 import edu.wpi.first.wpilibj.AddressableLEDBuffer;
 import edu.wpi.first.wpilibj.DriverStation;
+import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj2.command.CommandBase;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 
@@ -16,10 +17,13 @@ public class LightySubsystem extends SubsystemBase {
   AddressableLEDBuffer m_ledBuffer;
 
   DriverStation.Alliance m_teamColor;
+  private int m_rainbowFirstPixelHue = 0;
+
   
   
   /** Creates a new LightySubsystem. */
   public LightySubsystem(DriverStation.Alliance teamColor) { 
+   m_rainbowFirstPixelHue = 0;
     m_teamColor = teamColor;
 
     // PWM port 9
@@ -38,6 +42,7 @@ public class LightySubsystem extends SubsystemBase {
     m_led.start();
 
     SetLEDsToBlue();
+    
   }
 
 
@@ -79,14 +84,41 @@ public class LightySubsystem extends SubsystemBase {
    }
    
    m_led.setData(m_ledBuffer);
-  }
 
-public void SetLEDsToPink(){
+  } 
+  
+  public void rainbow() {
+
+    var T = Timer.getFPGATimestamp();
+
+    var amplitude = .5;
+    var frequency = .05;
+
+    var value = (amplitude*Math.sin(frequency*T)+.5);
+    var red = (int) (0*value*255);
+    var green = (int) (50*value*255);
+    var blue = (int) (155*value*255);
+    
+      System.err.println("Red"+red); 
+      System.err.println("Green"+green);
+      System.err.println("Blue"+blue);
+
+    // For every pixel
     for (var i = 0; i < m_ledBuffer.getLength(); i++) {
-      // Sets the specified LED to the RGB values for red
-      m_ledBuffer.setRGB(i, 245, 2, 229);
-   }
-   
-   m_led.setData(m_ledBuffer);
+      m_ledBuffer.setRGB(i, red, green, blue);
+
+      // Calculate the hue - hue is easier for rainbows because the color
+      // shape is a circle so only one value needs to precess
+     
+      // Set the value
+    }
+    // Increase by to make the rainbow "move"
+    m_rainbowFirstPixelHue += 3;
+    // Check bounds
+    m_rainbowFirstPixelHue %= 180;
+
+    m_led.setData(m_ledBuffer);
+      
   }
-}
+    }
+
