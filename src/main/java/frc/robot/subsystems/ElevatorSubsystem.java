@@ -5,6 +5,7 @@
 package frc.robot.subsystems;
 
 import com.revrobotics.CANSparkLowLevel.MotorType;
+import com.revrobotics.CANSparkFlex;
 import com.revrobotics.CANSparkMax;
 
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
@@ -12,7 +13,7 @@ import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 
 public class ElevatorSubsystem extends SubsystemBase {
-   public final CANSparkMax elevatorMotor = new CANSparkMax(16, MotorType.kBrushless);
+   public final CANSparkFlex elevatorMotor = new CANSparkFlex(16, MotorType.kBrushless);
   
 
   public ElevatorSubsystem() {}

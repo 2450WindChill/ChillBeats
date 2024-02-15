@@ -100,9 +100,9 @@ public class LightySubsystem extends SubsystemBase {
     var green = (int) (0*value*255);
     var blue = (int) (155*value*255);
     
-      System.err.println("Red"+red); 
-      System.err.println("Green"+green);
-      System.err.println("Blue"+blue);
+      // System.err.println("Red"+red); 
+      // System.err.println("Green"+green);
+      // System.err.println("Blue"+blue);
 
     // For every pixel
     m_rainbowFirstPixelValue += 3;

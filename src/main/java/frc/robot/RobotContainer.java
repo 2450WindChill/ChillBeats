@@ -13,6 +13,7 @@ import frc.robot.commands.ExampleCommand;
 import frc.robot.commands.FullIntakeCommand;
 import frc.robot.commands.IntakeCommand;
 import frc.robot.commands.LaunchCommand;
+import frc.robot.commands.MoveElevatorToPosCommand;
 import frc.robot.commands.IndexCommand;
 import frc.robot.commands.TestCommand;
 import frc.robot.subsystems.ExampleSubsystem;
@@ -88,16 +89,16 @@ public class RobotContainer {
 
     // Schedule `AnkleCommand` when the Xbox controller's X button is pressed,
     // cancelling on release.
-    m_driverController.x().whileTrue(new AnkleCommand(m_IntakeSubsystem, m_driverController));
-    m_driverController.y().whileTrue(new IntakeCommand(m_IntakeSubsystem, m_driverController));
-    m_driverController.a().whileTrue(new ElevatorCommand(m_ElevatorSubsystem, m_driverController));
-    m_driverController.b().whileTrue(new AimCommand(m_AimSubsystem, m_driverController));
-    m_driverController.leftBumper().whileTrue(new IndexCommand(m_IndexSubsystem, m_driverController));
+    m_driverController.x().onTrue(new MoveElevatorToPosCommand(m_ElevatorSubsystem, 20.0));
+    // m_driverController.y().whileTrue(new IntakeCommand(m_IntakeSubsystem, m_driverController));
+    m_driverController.a().onTrue(new MoveElevatorToPosCommand(m_ElevatorSubsystem, 0.0));
+    // m_driverController.b().whileTrue(new AimCommand(m_AimSubsystem, m_driverController));
+    // m_driverController.leftBumper().whileTrue(new IndexCommand(m_IndexSubsystem, m_driverController));
     //m_driverController.rightBumper().whileTrue(new LaunchCommand(m_ShootSubsystem, m_driverController));
 
 
-   m_driverController2.rightBumper().whileTrue(new LaunchCommand(m_ShootSubsystem, m_driverController2, 0.8));
-   m_driverController2.leftBumper().whileTrue(new LaunchCommand(m_ShootSubsystem, m_driverController2, 0.1));
+  //  m_driverController2.rightBumper().whileTrue(new LaunchCommand(m_ShootSubsystem, m_driverController2, 0.8));
+  //  m_driverController2.leftBumper().whileTrue(new LaunchCommand(m_ShootSubsystem, m_driverController2, 0.1));
     // m_driverController.x().onTrue(new FullIntakeCommand(m_IntakeSubsystem));
     //Laser laser
     m_driverController.rightBumper().onTrue(Commands.runOnce(() ->m_LightySubsystem.SetLEDsToRed()));
