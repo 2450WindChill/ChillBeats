@@ -6,6 +6,9 @@ package frc.robot.commands;
 
 import frc.robot.subsystems.ElevatorSubsystem;
 import frc.robot.subsystems.ExampleSubsystem;
+
+import com.revrobotics.CANSparkBase.ControlType;
+
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 
@@ -47,9 +50,9 @@ public class MoveElevatorToPosCommand extends Command {
   public void execute() {
      System.out.println("executing move to elavator");
     if (isGoingUp) {
-      m_subsystem.elevatorMotor.set(0.1);
+      m_subsystem.elevatorController.setReference(rotationTarget, ControlType.kPosition);
     } else {
-      m_subsystem.elevatorMotor.set(-0.1);
+          m_subsystem.elevatorController.setReference(rotationTarget, ControlType.kPosition);
     }
   }
 
