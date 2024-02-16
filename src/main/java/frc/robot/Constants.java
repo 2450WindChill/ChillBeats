@@ -4,10 +4,12 @@
 
 package frc.robot;
 
+import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.math.kinematics.SwerveDriveKinematics;
 import edu.wpi.first.math.util.Units;
+import frc.robot.libs.ModuleConfiguration;
 
 /**
  * The Constants class provides a convenient place for teams to hold robot-wide numerical or boolean
@@ -49,11 +51,12 @@ public final class Constants {
   
 
   public static final double rotationsPerOneFoot = 0.33;
-
   public static final double feetToMeters = 0.3048;
 
   public static final double driveGearRatio = (8.14 / 1.0); // 6.75:1
   public static final double angleGearRatio = (150 / 7); // 12.8:1
+
+  public static final double driveBaseRadius = (Math.sqrt((trackWidth * trackWidth) + (trackWidth * trackWidth)))/2;
 
   public static final SwerveDriveKinematics swerveKinematics = new SwerveDriveKinematics(
       // Front Left
@@ -160,5 +163,39 @@ public final class Constants {
   }
   public static class OperatorConstants {
     public static final int kDriverControllerPort = 0;
+  }
+
+
+  // TODO: get feedforward and feedback gains from the identification tool.
+  public static final double ksVolts = 0.22;
+  public static final double kvVoltSecondsPerMeter = 1.98;
+  public static final double kaVoltSecondsSquaredPerMeter = 0.2;
+  public static final double kPDriveVel = 8.5;
+
+  // TODO: figure out
+  public static final double autoVoltageConstraint = 0;
+
+  // TODO: must on a nominal max acceleration and max velocity for the robot during path-following
+  public static final double kMaxSpeedMetersPerSecond = 3;
+  public static final double kMaxAccelerationMetersPerSecondSquared = 1;
+
+  // Reasonable baseline values for a RAMSETE follower in units of meters and seconds
+  public static final double kRamseteB = 2;
+  public static final double kRamseteZeta = 0.7;
+
+  public static final double kPThetaController = 1;
+  public static final double moveToPoseSpeed = 0.1;
+  public static final double moveToPoseRotationSpeed = 0.5;
+
+  public static final class BlueAllianceFieldElementsPoses {
+    public static Pose2d source;
+    public static Pose2d amp;
+    public static Pose2d speaker;
+  }
+
+  public static final class RedAllianceFieldElementsPoses {
+    public static Pose2d source;
+    public static Pose2d amp;
+    public static Pose2d speaker;
   }
 }

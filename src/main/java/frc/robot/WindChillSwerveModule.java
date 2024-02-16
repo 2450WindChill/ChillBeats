@@ -20,14 +20,17 @@ import com.revrobotics.CANSparkMax;
 import com.revrobotics.RelativeEncoder;
 import com.revrobotics.SparkPIDController;
 
+import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.kinematics.SwerveModulePosition;
 import edu.wpi.first.math.kinematics.SwerveModuleState;
 import edu.wpi.first.wpilibj.Timer;
+import frc.robot.libs.ModuleConfiguration;
 // import frc.lib.util.CANCoderUtil;
 // import frc.lib.util.CANSparkMaxUtil;
 // import frc.lib.util.CANCoderUtil.CCUsage;
 // import frc.lib.util.CANSparkMaxUtil.Usage;
+import frc.robot.libs.OnboardModuleState;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 
 public class WindChillSwerveModule {
@@ -191,7 +194,20 @@ public class WindChillSwerveModule {
     driveMotor.restoreFactoryDefaults();
     // CANSparkMaxUtil.setCANSparkMaxBusUsage(driveMotor, Usage.kAll);
     driveMotor.setSmartCurrentLimit(Constants.driveContinuousCurrentLimit);
-    driveMotor.setInverted(Constants.driveInvert);
+    // if (this.moduleNumber == 0) {
+    //   driveMotor.setInverted(true);
+    // }
+    // else {
+       //driveMotor.setInverted(Constants.driveInvert);
+    //}
+
+    // if (this.moduleNumber == 1 || this.moduleNumber == 3) {
+    //   driveMotor.setInverted(true);
+    // }
+    // else {
+    //   driveMotor.setInverted(Constants.driveInvert);
+    // }
+
     // driveMotor.setIdleMode(Constants.driveNeutralMode);
     driveEncoder.setVelocityConversionFactor(Constants.driveConversionVelocityFactor);
     driveEncoder.setPositionConversionFactor(Constants.driveConversionPositionFactor);
@@ -222,5 +238,14 @@ public class WindChillSwerveModule {
 
   public void setPosition(double position) {
     integratedAngleEncoder.setPosition(position);
+  }
+
+  public void setSpeedFromDouble(double speed) {
+    // double percentOutput = speed / Constants.maxSpeed;
+    driveMotor.set(speed);
+  }
+
+  public void setAngleFromDegrees(double angle) {
+    angleController.setReference(angle, CANSparkMax.ControlType.kPosition);  
   }
 }
