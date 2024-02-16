@@ -13,8 +13,8 @@ import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 
 public class LauncherSubsystem extends SubsystemBase {
-  public final CANSparkFlex leftMotor = new CANSparkFlex(18, MotorType.kBrushless);
-  public final CANSparkFlex rightMotor = new CANSparkFlex(19, MotorType.kBrushless);
+  public final CANSparkFlex bottomMotor = new CANSparkFlex(18, MotorType.kBrushless);
+  public final CANSparkFlex topMotor = new CANSparkFlex(19, MotorType.kBrushless);
 
   /** Creates a new LauncherSubsystem. */
   public LauncherSubsystem() {
@@ -33,6 +33,20 @@ public class LauncherSubsystem extends SubsystemBase {
         () -> {
           /* one-time action goes here */
         });
+  }
+  
+  public void turnOnLauncher() {
+    System.out.println("turn on");
+    topMotor.set(0.7);
+    bottomMotor.set(-0.7);
+
+
+  }
+
+  public void turnOffLauncher() {
+    System.out.println("turn off");
+    topMotor.set(0);
+    bottomMotor.set(0);
   }
 
   /**

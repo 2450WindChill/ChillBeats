@@ -12,19 +12,17 @@ import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 
 /** An example command that uses an example subsystem. */
-public class LaunchCommand extends Command {
+public class LaunchForDurationCommand extends Command {
   @SuppressWarnings({ "PMD.UnusedPrivateField", "PMD.SingularField" })
   private final LauncherSubsystem m_subsystem;
-private final CommandXboxController m_controller;
 private final double m_speed;
   /**
    * Creates a new ShootCommand.
    *
    * @param subsystem The subsystem used by this command.
    */
-  public LaunchCommand(LauncherSubsystem subsystem,CommandXboxController controller, double speed) {
+  public LaunchForDurationCommand(LauncherSubsystem subsystem, double speed) {
     m_subsystem = subsystem;
-    m_controller = controller;
     m_speed = speed;
    
 
@@ -42,25 +40,15 @@ private final double m_speed;
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-    if (m_controller.getLeftX() > 0 ) {
-      m_subsystem.bottomMotor.set(m_speed);
-      m_subsystem.topMotor.set(-m_speed);
-    }
-    else if (m_controller.getLeftX() < 0 ) {
-      m_subsystem.bottomMotor.set(-m_speed);
-      m_subsystem.topMotor.set(m_speed);
-    }
-    else {
-      m_subsystem.bottomMotor.set(0.);
-      m_subsystem.topMotor.set(0);
-    }
+    m_subsystem.bottomMotor.set(m_speed);
+    m_subsystem.topMotor.set(-m_speed);
   }
 
   // Called once the command ends or is interrupted.
   @Override
   public void end(boolean interrupted) {
     m_subsystem.bottomMotor.set(0);
-      m_subsystem.topMotor.set(0);
+    m_subsystem.topMotor.set(0);
   }
 
   // Returns true when the command should end.

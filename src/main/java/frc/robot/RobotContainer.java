@@ -29,6 +29,7 @@ import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.Commands;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
+import edu.wpi.first.wpilibj2.command.WaitCommand;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import edu.wpi.first.wpilibj2.command.button.Trigger;
 
@@ -53,12 +54,11 @@ public class RobotContainer {
   public DriverStation.Alliance teamColor;
   private final LightySubsystem m_LightySubsystem = new LightySubsystem(teamColor);
 
-
   // Replace with CommandPS4Controller or CommandJoystick if needed
   private final CommandXboxController m_driverController = new CommandXboxController(
-   OperatorConstants.kDriverControllerPort);
-   private final CommandXboxController m_driverController2 = new CommandXboxController(
-   OperatorConstants.kDriverControllerPort2);
+      OperatorConstants.kDriverControllerPort);
+  private final CommandXboxController m_driverController2 = new CommandXboxController(
+      OperatorConstants.kDriverControllerPort2);
 
   /**
    * The container for the robot. Contains subsystems, OI devices, and commands.
@@ -89,10 +89,14 @@ public class RobotContainer {
 
     // Schedule `AnkleCommand` when the Xbox controller's X button is pressed,
     // cancelling on release.
-    m_driverController.x().onTrue(new MoveElevatorToPosCommand(m_ElevatorSubsystem, 20.0));
+    //m_driverController.x().onTrue(new MoveElevatorToPosCommand(m_ElevatorSubsystem, 20.0));
     // m_driverController.y().whileTrue(new IntakeCommand(m_IntakeSubsystem, m_driverController));
-    m_driverController.a().onTrue(new MoveElevatorToPosCommand(m_ElevatorSubsystem, 0.0));
-    // m_driverController.b().whileTrue(new AimCommand(m_AimSubsystem, m_driverController));
+    //m_driverController.a().onTrue(new MoveElevatorToPosCommand(m_ElevatorSubsystem, 0.0));
+
+
+    m_driverController.b().onTrue(autoLaunch());
+
+
     // m_driverController.leftBumper().whileTrue(new IndexCommand(m_IndexSubsystem, m_driverController));
     //m_driverController.rightBumper().whileTrue(new LaunchCommand(m_ShootSubsystem, m_driverController));
 
@@ -104,21 +108,30 @@ public class RobotContainer {
     m_driverController.rightBumper().onTrue(Commands.runOnce(() ->m_LightySubsystem.SetLEDsToRed()));
    
   }
-    public void setLEDsToAlliance() {
-      teamColor = DriverStation.getAlliance().get();
-      if (teamColor == DriverStation.Alliance.Red) {
-        System.err.println("Alliance RED");
-        m_LightySubsystem.SetLEDsToRed();
-      } else {
-        System.err.println("Alliance BLUE");
-        m_LightySubsystem.SetLEDsToBlue();
-      }
+
+  public Command autoLaunch() {
+    return (Commands.runOnce(() -> m_ShootSubsystem.turnOnLauncher(), m_ShootSubsystem)
+    .andThen(Commands.runOnce(() -> m_IndexSubsystem.turnOnIndexer(), m_IndexSubsystem))
+    .andThen(new WaitCommand(2))
+    .andThen(Commands.runOnce(() -> m_IndexSubsystem.turnOffIndexer(), m_IndexSubsystem))
+    .andThen(Commands.runOnce(() -> m_ShootSubsystem.turnOffLauncher(), m_ShootSubsystem)));
     }
-    
-      public void rainbow(){
-      m_LightySubsystem.rainbow();
-      }
-    
+
+  public void setLEDsToAlliance() {
+    teamColor = DriverStation.getAlliance().get();
+    if (teamColor == DriverStation.Alliance.Red) {
+      System.err.println("Alliance RED");
+      m_LightySubsystem.SetLEDsToRed();
+    } else {
+      System.err.println("Alliance BLUE");
+      m_LightySubsystem.SetLEDsToBlue();
+    }
+  }
+
+  public void rainbow() {
+    m_LightySubsystem.rainbow();
+  }
+
   /**
    * Use this to pass the autonomous command to the main {@link Robot} class.
    *

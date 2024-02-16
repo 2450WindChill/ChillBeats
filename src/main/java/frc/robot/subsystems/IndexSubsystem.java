@@ -31,6 +31,16 @@ public class IndexSubsystem extends SubsystemBase {
         });
   }
 
+  public void turnOnIndexer() {
+    System.out.println("turn on");
+    indexMotor.set(-1);
+  }
+
+  public void turnOffIndexer() {
+      System.out.println("turn off");
+    indexMotor.set(0);
+  }
+
   /**
    * An example method querying a boolean state of the subsystem (for example, a digital sensor).
    *
