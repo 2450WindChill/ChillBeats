@@ -43,9 +43,12 @@ public class RobotContainer {
   public final JoystickButton drive_yButton = new JoystickButton(m_driverController, Button.kY.value);
   public final JoystickButton buttonA = new JoystickButton(m_driverController, Button.kA.value);
 
-  public Command moveForward;
+  public Command path1;
+  public Command path2;
+  public Command path3;
 
-  private SendableChooser<Command> autoChooser;
+  public Command moveForward;
+  public SendableChooser<Command> m_chooser;
 
   // Replace with CommandPS4Controller or CommandJoystick if needed
 
@@ -65,8 +68,8 @@ public class RobotContainer {
     configureBindings();
     configureAutoChooser();
 
-    autoChooser = AutoBuilder.buildAutoChooser(); // Default auto will be `Commands.none()`
-    SmartDashboard.putData("Auto Mode", autoChooser);
+    m_chooser = AutoBuilder.buildAutoChooser(); // Default auto will be `Commands.none()`
+    SmartDashboard.putData("Auto Mode", m_chooser);
 
     configureLimelight();
     }
@@ -84,10 +87,15 @@ public class RobotContainer {
     drive_yButton.onTrue(new MoveToPose(m_drivetrainSubsystem, m_poseEstimator, new Pose2d()));
   }
 
-  public void configureAutoChooser() {
-    autoChooser = new SendableChooser<>();
-    autoChooser.setDefaultOption("Test Auto", moveForward);
-  }
+  // public void configureAutoChooser() {
+  //   moveForward = Commands.runOnce(() -> new MoveToPose(m_drivetrainSubsystem, m_poseEstimator, new Pose2d(0.2, 0, new Rotation2d(0))));
+  //   // .andThen(new MoveToPose(m_drivetrainSubsystem, m_poseEstimator, new Pose2d(-0.2, 0, new Rotation2d(0))))
+  //   // .andThen(new MoveToPose(m_drivetrainSubsystem, m_poseEstimator, new Pose2d(0, -0.2, new Rotation2d(0))))
+  //   // .andThen(new MoveToPose(m_drivetrainSubsystem, m_poseEstimator, new Pose2d(0, 0.2, new Rotation2d(0)))));
+
+  //   m_chooser = new SendableChooser<>();
+  //   m_chooser.setDefaultOption("Test Auto", moveForward);
+  // }
                    
 
   /*
@@ -108,9 +116,34 @@ public class RobotContainer {
    *
    * @return the command to run in autonomous
    */   
+
+   //.andThen(new MoveToPositionNoPID(m_ArmSubsystem, Constants.midRowPlacingAngle))
+   public void configureAutoChooser() {
+    Station_1_Shoot_Moveout = Commands.run(() -> ).andThen(new PathPlannerAuto("Station_1_Shoot_Moveout_Auto"));
+    Station_2_Shoot_Moveout = Commands.run(() -> ).andThen(new PathPlannerAuto("Station_2_Shoot_Moveout_Auto"));
+    Station_3_Shoot_Moveout = Commands.run(() -> ).andThen(new PathPlannerAuto("Station_3_Shoot_Moveout_Auto"));
+
+    m_chooser = new SendableChooser<>();
+
+    m_chooser.setDefaultOption("Station 1", Station_1_Shoot_Moveout);
+    m_chooser.addOption("Station 2", Station_2_Shoot_Moveout);
+    m_chooser.addOption("Station 3", Station_3_Shoot_Moveout);
+   }
+
+
   public Command getAutonomousCommand() {
     System.out.println("AUTO IS RUNNING");
+     // return
+     // new TestAutoCommand(m_drivetrainSubsystem, m_poseEstimator, 5, 0);
+     // Commands.run(() -> m_drivetrainSubsystem.testAuto(.4, 0), m_drivetrainSubsystem);
+     // new MoveToPose(m_drivetrainSubsystem, m_poseEstimator, new Pose2d(0.2, 0, new Rotation2d(0)));
+    // .andThen(new MoveToPose(m_drivetrainSubsystem, m_poseEstimator, new Pose2d(-0.2, 0, new Rotation2d(0))))
+    // .andThen(new MoveToPose(m_drivetrainSubsystem, m_poseEstimator, new Pose2d(0, -0.2, new Rotation2d(0))))
+    // .andThen(new MoveToPose(m_drivetrainSubsystem, m_poseEstimator, new Pose2d(0, 0.2, new Rotation2d(0))));
     return new PathPlannerAuto("SwerveAuto");
     //return autoChooser.getSelected();
-    }
 }
+    // // Example auto which moves the robot forward 5 meters and then back to the origin without rotating
+    // return new MoveToPose(m_drivetrainSubsystem, m_poseEstimator, new Pose2d(5, 0, new Rotation2d(0)))
+    //           .andThen(new MoveToPose(m_drivetrainSubsystem, m_poseEstimator, new Pose2d()));
+  }

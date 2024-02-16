@@ -128,6 +128,20 @@ public class WindChillSwerveModule {
     driveMotor.restoreFactoryDefaults();
     // CANSparkMaxUtil.setCANSparkMaxBusUsage(driveMotor, Usage.kAll);
     driveMotor.setSmartCurrentLimit(Constants.driveContinuousCurrentLimit);
+    // if (this.moduleNumber == 0) {
+    //   driveMotor.setInverted(true);
+    // }
+    // else {
+       //driveMotor.setInverted(Constants.driveInvert);
+    //}
+
+    // if (this.moduleNumber == 1 || this.moduleNumber == 3) {
+    //   driveMotor.setInverted(true);
+    // }
+    // else {
+    //   driveMotor.setInverted(Constants.driveInvert);
+    // }
+
     // driveMotor.setIdleMode(Constants.driveNeutralMode);
     driveEncoder.setVelocityConversionFactor(Constants.driveConversionVelocityFactor);
     driveEncoder.setPositionConversionFactor(Constants.driveConversionPositionFactor);
