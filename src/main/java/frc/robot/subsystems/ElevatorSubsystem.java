@@ -19,6 +19,9 @@ public class ElevatorSubsystem extends SubsystemBase {
 
   public ElevatorSubsystem() {
     elevatorController.setP(.01);    
+    elevatorController.setI(.000001); 
+
+
   }
   /**
    * Example command factory method.

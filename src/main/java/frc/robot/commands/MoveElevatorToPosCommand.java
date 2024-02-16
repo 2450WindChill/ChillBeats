@@ -19,6 +19,7 @@ public class MoveElevatorToPosCommand extends Command {
   private double rotationTarget;
   private boolean isGoingUp;
 
+
   /**
    * Creates a new ExampleCommand.
    *
@@ -48,12 +49,17 @@ public class MoveElevatorToPosCommand extends Command {
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
+     double currentPosition = m_subsystem.elevatorMotor.getEncoder().getPosition();
+    SmartDashboard.putNumber("current position",currentPosition);
+      SmartDashboard.putNumber("target position",rotationTarget);
+      SmartDashboard.putBoolean("is going up",isGoingUp);
      System.out.println("executing move to elavator");
     if (isGoingUp) {
       m_subsystem.elevatorController.setReference(rotationTarget, ControlType.kPosition);
     } else {
-          m_subsystem.elevatorController.setReference(rotationTarget, ControlType.kPosition);
+      m_subsystem.elevatorController.setReference(rotationTarget, ControlType.kPosition);
     }
+
   }
 
   // Called once the command ends or is interrupted.
@@ -66,13 +72,8 @@ public class MoveElevatorToPosCommand extends Command {
   // Returns true when the command should end.
   @Override
   public boolean isFinished() {
-    double currentPosition = m_subsystem.elevatorMotor.getEncoder().getPosition();
-      SmartDashboard.putNumber("current position",currentPosition);
-      SmartDashboard.putNumber("target position",rotationTarget);
-      SmartDashboard.putBoolean("is going up",isGoingUp);
-
+     double currentPosition = m_subsystem.elevatorMotor.getEncoder().getPosition();
     if (isGoingUp) {
-
       if (currentPosition >= rotationTarget) {
         return true;
       } else {
@@ -89,3 +90,5 @@ public class MoveElevatorToPosCommand extends Command {
     
   }
 }
+
+      
