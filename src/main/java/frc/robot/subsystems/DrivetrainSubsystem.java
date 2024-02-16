@@ -4,34 +4,24 @@
 
 package frc.robot.subsystems;
 
-import java.util.function.Consumer;
-
-import com.ctre.phoenix.motorcontrol.can.WPI_TalonFX;
 import com.ctre.phoenix6.StatusCode;
-import com.ctre.phoenix6.configs.CANcoderConfiguration;
-import com.ctre.phoenix6.configs.Pigeon2Configuration;
 import com.ctre.phoenix6.hardware.CANcoder;
 import com.ctre.phoenix6.hardware.Pigeon2;
-import com.ctre.phoenix6.mechanisms.swerve.SwerveModule;
 import com.pathplanner.lib.util.HolonomicPathFollowerConfig;
 import com.pathplanner.lib.util.PIDConstants;
 import com.pathplanner.lib.util.ReplanningConfig;
 import com.revrobotics.CANSparkMax;
-import com.revrobotics.CANSparkLowLevel.MotorType;
 
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.math.kinematics.ChassisSpeeds;
-import edu.wpi.first.math.kinematics.DifferentialDriveWheelSpeeds;
 import edu.wpi.first.math.kinematics.SwerveDriveKinematics;
 import edu.wpi.first.math.kinematics.SwerveDriveOdometry;
 import edu.wpi.first.math.kinematics.SwerveModulePosition;
 import edu.wpi.first.math.kinematics.SwerveModuleState;
 import edu.wpi.first.wpilibj.DriverStation;
-import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
-import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants;
@@ -150,30 +140,6 @@ public class DrivetrainSubsystem extends SubsystemBase {
     return positions;
   }
 
-  // public void autonomousDrive(double xSpeed, double ySpeed, double rotation) {
-  //   SwerveModuleState[] swerveModuleStates = Constants.swerveKinematics.toSwerveModuleStates(
-  //       new ChassisSpeeds(xSpeed, ySpeed, rotation)
-  //     );
-
-  //   for (WindChillSwerveModule mod : swerveModules) {
-  //     mod.setDesiredState(swerveModuleStates[mod.moduleNumber]);
-  //   }
-  // }
-
-  // public void fieldCentricAutonomousDrive(double xSpeed, double ySpeed, double rotation) {
-  //   SwerveModuleState[] swerveModuleStates = Constants.swerveKinematics.toSwerveModuleStates(
-  //       ChassisSpeeds.fromFieldRelativeSpeeds(
-  //         xSpeed,
-  //         ySpeed,
-  //         rotation,
-  //         getGyroAsRotation2d())
-  //     );
-
-  //   for (WindChillSwerveModule mod : swerveModules) {
-  //     mod.setDesiredState(swerveModuleStates[mod.moduleNumber]);
-  //   }
-  // }
-
   public Rotation2d getGyroYaw() {
     Rotation2d rotation2d = Rotation2d.fromDegrees(gyro.getYaw().getValueAsDouble());
     return rotation2d;
@@ -185,7 +151,7 @@ public class DrivetrainSubsystem extends SubsystemBase {
         positions[mod.moduleNumber] = mod.getPosition();
     }
     return positions;
-}
+  }
 
  public SwerveModuleState[] getModuleStates(){
     SwerveModuleState[] states = new SwerveModuleState[4];
@@ -193,11 +159,11 @@ public class DrivetrainSubsystem extends SubsystemBase {
         states[mod.moduleNumber] = mod.getState();
     }
     return states;
-}
+  }
 
  public WindChillSwerveModule[] getModules(){
     return swerveModules;
-}
+  }
 
 
 
@@ -237,7 +203,6 @@ public class DrivetrainSubsystem extends SubsystemBase {
   //   swerveOdometry.resetPosition(getGyroYaw(), getModulePositions(), getPose());
   // }
 
-  // TODO: Figure out how to actually connect to all cancoders
   public StatusCode resetCANcoder() {
     return canCoder.setPosition(0);
   }
@@ -299,13 +264,6 @@ public class DrivetrainSubsystem extends SubsystemBase {
     SmartDashboard.putNumber("Gyro Yaw", gyro.getYaw().getValueAsDouble());
     SmartDashboard.putNumber("Gyro Roll", gyro.getRoll().getValueAsDouble());
     SmartDashboard.putNumber("Gyro Pitch", gyro.getPitch().getValueAsDouble());
-  }
-
-  public void testAuto(double speed, double angle) {
-    for (WindChillSwerveModule mod : swerveModules) {
-      mod.setSpeedFromDouble(speed);
-      mod.setAngleFromDegrees(angle);
-    }
   }
 
   @Override

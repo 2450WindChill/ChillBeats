@@ -4,7 +4,6 @@ import edu.wpi.first.math.estimator.SwerveDrivePoseEstimator;
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Pose3d;
 import edu.wpi.first.math.geometry.Rotation2d;
-import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Commands;
@@ -33,9 +32,9 @@ public class PoseEstimatorSubsystem extends SubsystemBase{
                                         m_drivetrainSubsystem.getGyroYaw(),
                                         m_drivetrainSubsystem.getPositions());
         
-        // if (LimelightHelpers.getTV("limelight")) {
-        //     poseEstimate.addVisionMeasurement(getLimelightPose(), getTimeStamp());
-        // }
+        if (LimelightHelpers.getTV("limelight")) {
+            poseEstimate.addVisionMeasurement(getLimelightPose(), getTimeStamp());
+        }
 
         SmartDashboard.putNumber("Pose X", getBotX());
         SmartDashboard.putNumber("Pose Y", getBotY());
@@ -59,10 +58,6 @@ public class PoseEstimatorSubsystem extends SubsystemBase{
     public static Pose2d getBotPose() {
         return poseEstimate.getEstimatedPosition();
     }
-
-    // public void zeroPose() {
-    //     poseEstimate.resetPosition(m_drivetrainSubsystem.getGyroYaw(), m_drivetrainSubsystem.getModulePositions(), new Pose2d(0, 0, new Rotation2d(0)));
-    // }
 
     public void zeroPose() {
          poseEstimate = new SwerveDrivePoseEstimator(
