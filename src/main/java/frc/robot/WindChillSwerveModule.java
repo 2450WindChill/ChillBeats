@@ -109,7 +109,7 @@ public class WindChillSwerveModule {
   }
 
   private void configAngleMotor() {
-    angleMotor.restoreFactoryDefaults();
+    // angleMotor.restoreFactoryDefaults();
     // CANSparkMaxUtil.setCANSparkMaxBusUsage(angleMotor, Usage.kPositionOnly);
     angleMotor.setSmartCurrentLimit(Constants.angleContinuousCurrentLimit);
     angleMotor.setInverted(Constants.angleInvert);
@@ -125,15 +125,15 @@ public class WindChillSwerveModule {
   }
 
   private void configDriveMotor() {
-    driveMotor.restoreFactoryDefaults();
+    // driveMotor.restoreFactoryDefaults();
     // CANSparkMaxUtil.setCANSparkMaxBusUsage(driveMotor, Usage.kAll);
     driveMotor.setSmartCurrentLimit(Constants.driveContinuousCurrentLimit);
-    // if (this.moduleNumber == 0) {
-    //   driveMotor.setInverted(true);
-    // }
-    // else {
-       //driveMotor.setInverted(Constants.driveInvert);
-    //}
+    if (this.moduleNumber == 0) {
+      driveMotor.setInverted(true);
+    }
+    else {
+       driveMotor.setInverted(Constants.driveInvert);
+    }
 
     // if (this.moduleNumber == 1 || this.moduleNumber == 3) {
     //   driveMotor.setInverted(true);

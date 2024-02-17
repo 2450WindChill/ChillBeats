@@ -4,6 +4,8 @@
 
 package frc.robot;
 
+import com.revrobotics.CANSparkBase.IdleMode;
+
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.math.kinematics.SwerveDriveKinematics;
@@ -22,8 +24,9 @@ public final class Constants {
 
   public static class OperatorConstants {
     public static final int kDriverControllerPort = 0;
-     public static final int kDriverControllerPort2 = 1;
+     public static final int kOperatorControllerPort = 1;
   }
+  
   /**
    * The left-to-right distance between the drivetrain wheels
    *
@@ -50,6 +53,8 @@ public final class Constants {
 
   public static final double openLoopRamp = 0.25;
   public static final double closedLoopRamp = 0.0;
+  public static final double launchAngle = -10.819;
+  public static final double zeroLaunchAngle = -5.0;
   
 
   public static final double rotationsPerOneFoot = 0.33;
@@ -107,7 +112,7 @@ public final class Constants {
 
   /* Neutral Modes */
   // public static final IdleMode angleNeutralMode = IdleMode.kBrake;
-  // public static final IdleMode driveNeutralMode = IdleMode.kBrake;
+  public static final IdleMode angleBrakeMode = IdleMode.kBrake;
 
   /* Motor Inverts */
 
@@ -152,9 +157,7 @@ public final class Constants {
     public static final SwerveModuleConstants constants = new SwerveModuleConstants(driveMotorID, angleMotorID,
         canCoderID);
   }
-  public static class OperatorConstants {
-    public static final int kDriverControllerPort = 0;
-  }
+  
 
   public static final double ksVolts = 0.22;
   public static final double kvVoltSecondsPerMeter = 1.98;

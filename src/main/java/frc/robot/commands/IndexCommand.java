@@ -4,7 +4,6 @@
 
 package frc.robot.commands;
 
-import frc.robot.subsystems.ExampleSubsystem;
 import frc.robot.subsystems.IndexSubsystem;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
@@ -13,15 +12,17 @@ import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 public class IndexCommand extends Command {
   @SuppressWarnings({ "PMD.UnusedPrivateField", "PMD.SingularField" })
   private final IndexSubsystem m_subsystem;
-private final CommandXboxController m_controller;
+  private final double m_speed;
+
   /**
    * Creates a new IndexCommand.
    *
    * @param subsystem The subsystem used by this command.
    */
-  public IndexCommand(IndexSubsystem subsystem,CommandXboxController controller) {
+  public IndexCommand(IndexSubsystem subsystem, double speed) {
     m_subsystem = subsystem;
-    m_controller = controller;
+
+    m_speed = speed;
     // Use addRequirements() here to declare subsystem dependencies.
     addRequirements(subsystem);
   }
@@ -35,15 +36,7 @@ private final CommandXboxController m_controller;
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-    if (m_controller.getLeftX() > 0 ) {
-      m_subsystem.indexMotor.set(1);
-    }
-    else if (m_controller.getLeftX() < 0 ) {
-      m_subsystem.indexMotor.set(-1);
-    }
-    else {
-      m_subsystem.indexMotor.set(0);
-    }
+    m_subsystem.indexMotor.set(m_speed);
   }
 
   // Called once the command ends or is interrupted.
@@ -56,7 +49,7 @@ private final CommandXboxController m_controller;
   @Override
   public boolean isFinished() {
     return false;
-   
+
   }
-// GOAL FOR 1/31:: Make it stop at 4. !!
+  // GOAL FOR 1/31:: Make it stop at 4. !!
 }
