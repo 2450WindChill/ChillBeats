@@ -20,6 +20,10 @@ import frc.robot.libs.ModuleConfiguration;
  */
 public final class Constants {
 
+  public static class OperatorConstants {
+    public static final int kDriverControllerPort = 0;
+     public static final int kDriverControllerPort2 = 1;
+  }
   /**
    * The left-to-right distance between the drivetrain wheels
    *

@@ -34,6 +34,21 @@ public class RobotContainer {
   // The robot's subsystems and commands are defined here...
   private final DrivetrainSubsystem m_drivetrainSubsystem = new DrivetrainSubsystem();
   private final PoseEstimatorSubsystem m_poseEstimator = new PoseEstimatorSubsystem(m_drivetrainSubsystem);
+  private final ExampleSubsystem m_exampleSubsystem = new ExampleSubsystem();
+  // private final TestSubsystem m_TestSubsystem = new TestSubsystem();
+  private final IntakeSubsystem m_IntakeSubsystem = new IntakeSubsystem();
+  private final ElevatorSubsystem m_ElevatorSubsystem = new ElevatorSubsystem();
+  private final AimSubsystem m_AimSubsystem = new AimSubsystem();
+  private final LauncherSubsystem m_ShootSubsystem = new LauncherSubsystem();
+  private final IndexSubsystem m_IndexSubsystem = new IndexSubsystem();
+  public DriverStation.Alliance teamColor;
+  private final LightySubsystem m_LightySubsystem = new LightySubsystem(teamColor);
+
+  // Replace with CommandPS4Controller or CommandJoystick if needed
+  private final CommandXboxController m_driverController = new CommandXboxController(
+      OperatorConstants.kDriverControllerPort);
+  private final CommandXboxController m_driverController2 = new CommandXboxController(
+      OperatorConstants.kDriverControllerPort2);
   
 
    static XboxController m_driverController = new XboxController(0);
@@ -84,7 +99,33 @@ public class RobotContainer {
    * joysticks}.
    */
   private void configureBindings() {
-    drive_yButton.onTrue(new MoveToPose(m_drivetrainSubsystem, m_poseEstimator, new Pose2d()));
+    private void configureBindings() {
+      // Schedule `ExampleCommand` when `exampleCondition` changes to `true`
+      // new Trigger(m_exampleSubsystem::exampleCondition)
+      //     .onTrue(new ExampleCommand(m_exampleSubsystem));
+  
+      // Schedule `AnkleCommand` when the Xbox controller's X button is pressed,
+      // cancelling on release.
+      //m_driverController.x().onTrue(new MoveElevatorToPosCommand(m_ElevatorSubsystem, 20.0));
+      // m_driverController.y().whileTrue(new IntakeCommand(m_IntakeSubsystem, m_driverController));
+      //m_driverController.a().onTrue(new MoveElevatorToPosCommand(m_ElevatorSubsystem, 0.0));
+  
+  
+      m_driverController.b().onTrue(autoLaunch());
+  
+  
+      // m_driverController.leftBumper().whileTrue(new IndexCommand(m_IndexSubsystem, m_driverController));
+      //m_driverController.rightBumper().whileTrue(new LaunchCommand(m_ShootSubsystem, m_driverController));
+  
+  
+    //  m_driverController2.rightBumper().whileTrue(new LaunchCommand(m_ShootSubsystem, m_driverController2, 0.8));
+    //  m_driverController2.leftBumper().whileTrue(new LaunchCommand(m_ShootSubsystem, m_driverController2, 0.1));
+      // m_driverController.x().onTrue(new FullIntakeCommand(m_IntakeSubsystem));
+      //Laser laser
+      m_driverController.rightBumper().onTrue(Commands.runOnce(() ->m_LightySubsystem.SetLEDsToRed()));
+     
+    }
+    //drive_yButton.onTrue(new MoveToPose(m_drivetrainSubsystem, m_poseEstimator, new Pose2d()));
   }
 
   // public void configureAutoChooser() {
@@ -117,6 +158,27 @@ public class RobotContainer {
    * @return the command to run in autonomous
    */   
 
+  //  public void setLEDsToAlliance() {
+  //   teamColor = DriverStation.getAlliance().get();
+  //   if (teamColor == DriverStation.Alliance.Red) {
+  //     System.err.println("Alliance RED");
+  //     m_LightySubsystem.SetLEDsToRed();
+  //   } else {
+  //     System.err.println("Alliance BLUE");
+  //     m_LightySubsystem.SetLEDsToBlue();
+  //   }
+
+  // public void rainbow() {
+  //   m_LightySubsystem.rainbow();
+  // }
+
+   public Command autoLaunch() {
+    return (Commands.runOnce(() -> m_ShootSubsystem.turnOnLauncher(), m_ShootSubsystem)
+    .andThen(Commands.runOnce(() -> m_IndexSubsystem.turnOnIndexer(), m_IndexSubsystem))
+    .andThen(new WaitCommand(2))
+    .andThen(Commands.runOnce(() -> m_IndexSubsystem.turnOffIndexer(), m_IndexSubsystem))
+    .andThen(Commands.runOnce(() -> m_ShootSubsystem.turnOffLauncher(), m_ShootSubsystem)));
+    }
    //.andThen(new MoveToPositionNoPID(m_ArmSubsystem, Constants.midRowPlacingAngle))
    public void configureAutoChooser() {
     Station_1_Shoot_Moveout = Commands.run(() -> ).andThen(new PathPlannerAuto("Station_1_Shoot_Moveout_Auto"));
