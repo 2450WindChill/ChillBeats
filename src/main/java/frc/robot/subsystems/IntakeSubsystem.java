@@ -16,7 +16,7 @@ import edu.wpi.first.wpilibj2.command.SubsystemBase;
 
 public class IntakeSubsystem extends SubsystemBase {
     public final CANSparkFlex intakeMotor = new CANSparkFlex(13, MotorType.kBrushless);
-    //public final CANSparkFlex ankleMotor = new CANSparkFlex(14, MotorType.kBrushless);
+    public final CANSparkFlex ankleMotor = new CANSparkFlex(14, MotorType.kBrushless);
 
     public final DigitalInput notelimitSwitch = new DigitalInput(0);
     public final DigitalInput toplimitSwitch = new DigitalInput(1);
