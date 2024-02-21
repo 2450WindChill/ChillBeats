@@ -68,7 +68,7 @@ public class PoseEstimatorSubsystem extends SubsystemBase{
     }
 
     public static void resetPose(Pose2d newPose) {
-        poseEstimate.resetPosition(m_drivetrainSubsystem.getGyroYaw(), m_drivetrainSubsystem.getPositions(), newPose);
+        poseEstimate.resetPosition(m_drivetrainSubsystem.gyro.getRotation2d(), m_drivetrainSubsystem.getPositions(), newPose);
     }
 
     // Gets estimated bot x

@@ -184,14 +184,6 @@ public class RobotContainer {
   // }
 
   public Command autoLaunch() {
-    System.out.println("AUTO LAUNCH");
-    System.out.println("AUTO LAUNCH");
-    System.out.println("AUTO LAUNCH");
-    System.out.println("AUTO LAUNCH");
-    System.out.println("AUTO LAUNCH");
-    System.out.println("AUTO LAUNCH");
-    System.out.println("AUTO LAUNCH");
-    System.out.println("AUTO LAUNCH");
     return (new MoveWristToPoseCommand(m_AimSubsystem, Constants.launchAngle))
         .andThen(Commands.runOnce(() -> m_ShootSubsystem.turnOnLauncher(), m_ShootSubsystem))
         .andThen(new WaitCommand(3))
@@ -201,16 +193,8 @@ public class RobotContainer {
         .andThen(Commands.runOnce(() -> m_ShootSubsystem.turnOffLauncher(), m_ShootSubsystem));
   }
 
-  // .andThen(new MoveToPositionNoPID(m_ArmSubsystem,
-  // Constants.midRowPlacingAngle))
+  
   public void configureAutoChooser() {
-    // Station_1_Shoot_Moveout = autoLaunch()
-    // .andThen(new PathPlannerAuto("Station_1_Shoot_Moveout_Auto"));
-    // Station_2_Shoot_Moveout = autoLaunch()
-    // .andThen(new PathPlannerAuto("Station_2_Shoot_Moveout_Auto"));
-    // Station_3_Shoot_Moveout = autoLaunch()
-    // .andThen(new PathPlannerAuto("Station_3_Shoot_Moveout_Auto"));
-
     Station_1_Shoot_Moveout = autoLaunch();
     Station_2_Shoot_Moveout = autoLaunch();
     Station_3_Shoot_Moveout = autoLaunch();
