@@ -8,6 +8,7 @@ import frc.robot.Constants.OperatorConstants;
 import frc.robot.commands.DefaultDriveCommand;
 import frc.robot.commands.IndexCommand;
 import frc.robot.commands.LaunchCommand;
+import frc.robot.commands.MoveAnkleToPoseCommand;
 import frc.robot.commands.MoveToPose;
 import frc.robot.commands.MoveWristToPoseCommand;
 import frc.robot.libs.LimelightHelpers;
@@ -53,6 +54,7 @@ public class RobotContainer {
   // private final ElevatorSubsystem m_ElevatorSubsystem = new
   // ElevatorSubsystem();
   private final AimSubsystem m_AimSubsystem = new AimSubsystem();
+    private final IntakeSubsystem m_IntakeSubsystem = new IntakeSubsystem();
   private final LauncherSubsystem m_ShootSubsystem = new LauncherSubsystem();
   private final IndexSubsystem m_IndexSubsystem = new IndexSubsystem();
   public DriverStation.Alliance teamColor;
@@ -134,7 +136,7 @@ public class RobotContainer {
     m_operatorController.leftTrigger().whileTrue(new LaunchCommand(m_ShootSubsystem, 0.2));
 
     m_operatorController.a().onTrue(new MoveWristToPoseCommand(m_AimSubsystem, Constants.zeroLaunchAngle));
-    m_operatorController.y().onTrue(new MoveWristToPoseCommand(m_AimSubsystem, Constants.launchAngle));
+    m_operatorController.y().onTrue(new MoveAnkleToPoseCommand(m_IntakeSubsystem, 21.0));
 
     /*
      * B -> Index for shoot
