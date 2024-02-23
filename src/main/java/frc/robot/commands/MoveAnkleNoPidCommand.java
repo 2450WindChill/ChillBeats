@@ -14,7 +14,7 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 
 /** An example command that uses an example subsystem. */
-public class MoveAnkleToPoseCommand extends Command {
+public class MoveAnkleNoPidCommand extends Command {
   @SuppressWarnings({ "PMD.UnusedPrivateField", "PMD.SingularField" })
   private final IntakeSubsystem m_subsystem;
   private double rotationTarget;
@@ -25,7 +25,7 @@ public class MoveAnkleToPoseCommand extends Command {
    *
    * @param subsystem The subsystem used by this command.
    */
-  public MoveAnkleToPoseCommand(IntakeSubsystem subsystem, Double rotationTarget) {
+  public MoveAnkleNoPidCommand(IntakeSubsystem subsystem, Double rotationTarget) {
     m_subsystem = subsystem;
     this.rotationTarget = rotationTarget;
     // Use addRequirements() here to declare subsystem dependencies.
@@ -36,7 +36,7 @@ public class MoveAnkleToPoseCommand extends Command {
   @Override
   public void initialize() {
     System.out.println("initializing move Wrist");
-    double currentPosition = m_subsystem.ankleMotor.getEncoder().getPosition();
+    double currentPosition = m_subsystem.intakeMotor.getEncoder().getPosition();
 
     if (currentPosition < rotationTarget) {
       isGoingUp = true;
@@ -54,8 +54,11 @@ public class MoveAnkleToPoseCommand extends Command {
     SmartDashboard.putBoolean("Wrist is going up", isGoingUp);
     System.out.println("executing move to Wrist");
 
-      m_subsystem.ankleController.setReference(rotationTarget, ControlType.kPosition);
-   
+    if (isGoingUp) {
+      m_subsystem.intakeMotor.set(0.1);
+    } else {
+      m_subsystem.intakeMotor.set(-0.1);
+    }
 
   }
 
@@ -63,13 +66,13 @@ public class MoveAnkleToPoseCommand extends Command {
   @Override
   public void end(boolean interrupted) {
     System.out.println("ending move to Wrist");
-    m_subsystem.ankleMotor.set(0);
+    m_subsystem.intakeMotor.set(0);
   }
 
   // Returns true when the command should end.
   @Override
   public boolean isFinished() {
-    double currentPosition = m_subsystem.ankleMotor.getEncoder().getPosition();
+    double currentPosition = m_subsystem.intakeMotor.getEncoder().getPosition();
     if (isGoingUp) {
       if (currentPosition >= rotationTarget - 1.0) {
         return true;

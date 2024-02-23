@@ -8,6 +8,7 @@ import frc.robot.Constants.OperatorConstants;
 import frc.robot.commands.DefaultDriveCommand;
 import frc.robot.commands.IndexCommand;
 import frc.robot.commands.LaunchCommand;
+import frc.robot.commands.MoveAnkleNoPidCommand;
 import frc.robot.commands.MoveAnkleToPoseCommand;
 import frc.robot.commands.MoveToPose;
 import frc.robot.commands.MoveWristToPoseCommand;
@@ -49,14 +50,16 @@ import edu.wpi.first.wpilibj2.command.button.Trigger;
  */
 public class RobotContainer {
   // The robot's subsystems and commands are defined here...
-  public final DrivetrainSubsystem m_drivetrainSubsystem = new DrivetrainSubsystem();
-  private final PoseEstimatorSubsystem m_poseEstimator = new PoseEstimatorSubsystem(m_drivetrainSubsystem);
+  // public final DrivetrainSubsystem m_drivetrainSubsystem = new
+  // DrivetrainSubsystem();
+  // private final PoseEstimatorSubsystem m_poseEstimator = new
+  // PoseEstimatorSubsystem(m_drivetrainSubsystem);
   // private final ElevatorSubsystem m_ElevatorSubsystem = new
   // ElevatorSubsystem();
-  private final AimSubsystem m_AimSubsystem = new AimSubsystem();
-    private final IntakeSubsystem m_IntakeSubsystem = new IntakeSubsystem();
-  private final LauncherSubsystem m_ShootSubsystem = new LauncherSubsystem();
-  private final IndexSubsystem m_IndexSubsystem = new IndexSubsystem();
+  // private final AimSubsystem m_AimSubsystem = new AimSubsystem();
+  private final IntakeSubsystem m_IntakeSubsystem = new IntakeSubsystem();
+  // private final LauncherSubsystem m_ShootSubsystem = new LauncherSubsystem();
+  // private final IndexSubsystem m_IndexSubsystem = new IndexSubsystem();
   public DriverStation.Alliance teamColor;
   // private final LightySubsystem m_LightySubsystem = new
   // LightySubsystem(teamColor);
@@ -91,13 +94,13 @@ public class RobotContainer {
    */
   public RobotContainer() {
 
-    m_drivetrainSubsystem.setDefaultCommand(
-        new DefaultDriveCommand(
-            m_drivetrainSubsystem,
-            () -> m_driverController.getLeftY(),
-            () -> m_driverController.getLeftX(),
-            () -> m_driverController.getRightX(),
-            () -> false));
+    // m_drivetrainSubsystem.setDefaultCommand(
+    // new DefaultDriveCommand(
+    // m_drivetrainSubsystem,
+    // () -> m_driverController.getLeftY(),
+    // () -> m_driverController.getLeftX(),
+    // () -> m_driverController.getRightX(),
+    // () -> false));
 
     // Configure bindings and limelight
     configureBindings();
@@ -123,20 +126,24 @@ public class RobotContainer {
    * joysticks}.
    */
   private void configureBindings() {
-    // m_driverController.x().onTrue(new
-    // MoveElevatorToPosCommand(m_ElevatorSubsystem, 20.0));
     // m_driverController.a().onTrue(new
     // MoveElevatorToPosCommand(m_ElevatorSubsystem, 0.0));
     // m_driverController.b().onTrue(autoLaunch());
 
-    m_operatorController.b().whileTrue(new IndexCommand(m_IndexSubsystem, -1));
-    m_operatorController.x().whileTrue(new IndexCommand(m_IndexSubsystem, 1));
+    // m_operatorController.b().whileTrue(new IndexCommand(m_IndexSubsystem, -1));
+    // m_operatorController.x().whileTrue(new IndexCommand(m_IndexSubsystem, 1));
 
-    m_operatorController.rightTrigger().whileTrue(new LaunchCommand(m_ShootSubsystem, -0.8));
-    m_operatorController.leftTrigger().whileTrue(new LaunchCommand(m_ShootSubsystem, 0.2));
+    // m_operatorController.rightTrigger().whileTrue(new
+    // LaunchCommand(m_ShootSubsystem, -0.8));
+    // m_operatorController.leftTrigger().whileTrue(new
+    // LaunchCommand(m_ShootSubsystem, 0.2));
 
-    m_operatorController.a().onTrue(new MoveWristToPoseCommand(m_AimSubsystem, Constants.zeroLaunchAngle));
-    m_operatorController.y().onTrue(new MoveAnkleToPoseCommand(m_IntakeSubsystem, 21.0));
+    // m_operatorController.a().onTrue(new MoveWristToPoseCommand(m_AimSubsystem,
+    // Constants.zeroLaunchAngle));
+    m_driverController.y().onTrue(new MoveAnkleToPoseCommand(m_IntakeSubsystem, 21.0));
+    m_driverController.a().onTrue(new MoveAnkleToPoseCommand(m_IntakeSubsystem, 0.0));
+    m_driverController.x().onTrue(new MoveAnkleNoPidCommand(m_IntakeSubsystem, 21.0));
+    m_driverController.b().onTrue(new MoveAnkleNoPidCommand(m_IntakeSubsystem, 0.0));
 
     /*
      * B -> Index for shoot
@@ -185,23 +192,27 @@ public class RobotContainer {
   // m_LightySubsystem.rainbow();
   // }
 
-  public Command autoLaunch() {
-    System.out.println("AUTO LAUNCH");
-    System.out.println("AUTO LAUNCH");
-    System.out.println("AUTO LAUNCH");
-    System.out.println("AUTO LAUNCH");
-    System.out.println("AUTO LAUNCH");
-    System.out.println("AUTO LAUNCH");
-    System.out.println("AUTO LAUNCH");
-    System.out.println("AUTO LAUNCH");
-    return (new MoveWristToPoseCommand(m_AimSubsystem, Constants.launchAngle))
-        .andThen(Commands.runOnce(() -> m_ShootSubsystem.turnOnLauncher(), m_ShootSubsystem))
-        .andThen(new WaitCommand(3))
-        .andThen(Commands.runOnce(() -> m_IndexSubsystem.turnOnIndexer(), m_IndexSubsystem))
-        .andThen(new WaitCommand(2))
-        .andThen(Commands.runOnce(() -> m_IndexSubsystem.turnOffIndexer(), m_IndexSubsystem))
-        .andThen(Commands.runOnce(() -> m_ShootSubsystem.turnOffLauncher(), m_ShootSubsystem));
-  }
+  // public Command autoLaunch() {
+  // System.out.println("AUTO LAUNCH");
+  // System.out.println("AUTO LAUNCH");
+  // System.out.println("AUTO LAUNCH");
+  // System.out.println("AUTO LAUNCH");
+  // System.out.println("AUTO LAUNCH");
+  // System.out.println("AUTO LAUNCH");
+  // System.out.println("AUTO LAUNCH");
+  // System.out.println("AUTO LAUNCH");
+  // return (new MoveWristToPoseCommand(m_AimSubsystem, Constants.launchAngle))
+  // .andThen(Commands.runOnce(() -> m_ShootSubsystem.turnOnLauncher(),
+  // m_ShootSubsystem))
+  // .andThen(new WaitCommand(3))
+  // .andThen(Commands.runOnce(() -> m_IndexSubsystem.turnOnIndexer(),
+  // m_IndexSubsystem))
+  // .andThen(new WaitCommand(2))
+  // .andThen(Commands.runOnce(() -> m_IndexSubsystem.turnOffIndexer(),
+  // m_IndexSubsystem))
+  // .andThen(Commands.runOnce(() -> m_ShootSubsystem.turnOffLauncher(),
+  // m_ShootSubsystem));
+  // }
 
   // .andThen(new MoveToPositionNoPID(m_ArmSubsystem,
   // Constants.midRowPlacingAngle))
@@ -213,10 +224,10 @@ public class RobotContainer {
     // Station_3_Shoot_Moveout = autoLaunch()
     // .andThen(new PathPlannerAuto("Station_3_Shoot_Moveout_Auto"));
 
-    Station_1_Shoot_Moveout = autoLaunch();
-    Station_2_Shoot_Moveout = autoLaunch();
-    Station_3_Shoot_Moveout = autoLaunch();
-    test = new PathPlannerAuto("test_auto");
+    // Station_1_Shoot_Moveout = autoLaunch();
+    // Station_2_Shoot_Moveout = autoLaunch();
+    // Station_3_Shoot_Moveout = autoLaunch();
+    // test = new PathPlannerAuto("test_auto");
 
     m_chooser = new SendableChooser<>();
     m_chooser.setDefaultOption("Station 1", Station_1_Shoot_Moveout);

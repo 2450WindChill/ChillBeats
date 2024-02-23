@@ -7,6 +7,7 @@ package frc.robot.subsystems;
 import com.revrobotics.CANSparkLowLevel.MotorType;
 import com.revrobotics.SparkPIDController;
 import com.revrobotics.CANSparkFlex;
+import com.revrobotics.CANSparkMax;
 
 import edu.wpi.first.wpilibj.DigitalInput;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
@@ -15,8 +16,8 @@ import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants;
 
 public class IntakeSubsystem extends SubsystemBase {
-  public final CANSparkFlex intakeMotor = new CANSparkFlex(13, MotorType.kBrushless);
-  public final CANSparkFlex ankleMotor = new CANSparkFlex(14, MotorType.kBrushless);
+  public final CANSparkMax intakeMotor = new CANSparkMax(14, MotorType.kBrushless);
+  public final CANSparkFlex ankleMotor = new CANSparkFlex(13, MotorType.kBrushless);
   public final SparkPIDController ankleController = ankleMotor.getPIDController();
 
   public final DigitalInput notelimitSwitch = new DigitalInput(0);
@@ -26,9 +27,11 @@ public class IntakeSubsystem extends SubsystemBase {
   /** Creates a new IntakeSubsystem. */
   public IntakeSubsystem() {
     ankleController.setP(.01);
-    ankleController.setOutputRange(-0.4, 0.4);
+    ankleController.setOutputRange(-0.2, 0.2);
     ankleController.setI(.00001);
     ankleMotor.setIdleMode(Constants.angleBrakeMode);
+    ankleMotor.setClosedLoopRampRate(1.0);
+    ankleMotor.setSmartCurrentLimit(40);
   }
 
   /**
@@ -59,33 +62,15 @@ public class IntakeSubsystem extends SubsystemBase {
   @Override
   public void periodic() {
     SmartDashboard.putBoolean("PewPew", notelimitSwitch.get());
+    SmartDashboard.putNumber("Kankle", ankleMotor.getEncoder().getPosition());
+   SmartDashboard.putNumber("intakeangle", intakeMotor.getEncoder().getPosition());
   }
+
 
   @Override
   public void simulationPeriodic() {
     // This method will be called once per scheduler run during simulation
   }
 
-  // public void setAnkleSpeed(double speed) {
-  // if (speed > 0) {
-  // if (toplimitSwitch.get()) {
-  // //stop motor if top limit is tripped
-  // ankleMotor.set(0);
-  // } else {
-  // //move motor if top limit is not tripped
-  // ankleMotor.set(speed);
-  // }
-  // } else if (speed < 0) {
-  // if (bottomlimitSwitch.get()) {
-  // //stop motor if bottom limit is reached
-  // ankleMotor.set(0);
-  // } else {
-  // //move motor if bottom limit is not reached
-  // ankleMotor.set(speed);
-  // }
-  // } else {
-  // //stop motor if 0 speed in inputed
-  // ankleMotor.set(0);
-  // }
-  // }
+ 
 }
