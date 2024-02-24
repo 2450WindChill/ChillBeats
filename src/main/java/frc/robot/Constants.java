@@ -53,7 +53,8 @@ public final class Constants {
 
   public static final double openLoopRamp = 0.25;
   public static final double closedLoopRamp = 0.0;
-  public static final double launchAngle = -10.819;
+  public static final double speakerAngle = -10.819;
+  public static final double ampAngle = -41.14;
   public static final double zeroLaunchAngle = -5.0;
   
 

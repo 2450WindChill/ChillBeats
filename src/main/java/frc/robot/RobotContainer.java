@@ -127,14 +127,18 @@ public class RobotContainer {
     // MoveElevatorToPosCommand(m_ElevatorSubsystem, 0.0));
     // m_driverController.b().onTrue(autoLaunch());
 
-    m_operatorController.b().whileTrue(new IndexCommand(m_IndexSubsystem, -1));
-    m_operatorController.x().whileTrue(new IndexCommand(m_IndexSubsystem, 1));
+    //TODO uncomment
+   // m_operatorController.b().whileTrue(new IndexCommand(m_IndexSubsystem, -1));
+    //m_operatorController.x().whileTrue(new IndexCommand(m_IndexSubsystem, 1));
 
     m_operatorController.rightTrigger().whileTrue(new LaunchCommand(m_ShootSubsystem, -0.8));
     m_operatorController.leftTrigger().whileTrue(new LaunchCommand(m_ShootSubsystem, 0.2));
 
     m_operatorController.a().onTrue(new MoveWristToPoseCommand(m_AimSubsystem, Constants.zeroLaunchAngle));
-    m_operatorController.y().onTrue(new MoveWristToPoseCommand(m_AimSubsystem, Constants.launchAngle));
+    m_operatorController.y().onTrue(new MoveWristToPoseCommand(m_AimSubsystem, Constants.speakerAngle));
+
+    m_operatorController.x().onTrue(speakerLaunch());
+     m_operatorController.b().onTrue(ampLaunch());
 
     /*
      * B -> Index for shoot
@@ -183,21 +187,43 @@ public class RobotContainer {
   // m_LightySubsystem.rainbow();
   // }
 
-  public Command autoLaunch() {
-    return (new MoveWristToPoseCommand(m_AimSubsystem, Constants.launchAngle))
-        .andThen(Commands.runOnce(() -> m_ShootSubsystem.turnOnLauncher(), m_ShootSubsystem))
-        .andThen(new WaitCommand(3))
+  // public Command autoLaunch() {
+  //   return (new MoveWristToPoseCommand(m_AimSubsystem, Constants.launchAngle))
+  //       .HoldWristCommand()
+  //       .alongWith(Commands.runOnce(() -> m_ShootSubsystem.turnOnLauncher(), m_ShootSubsystem))
+  //       .andThen(new WaitCommand(3))
+  //       .andThen(Commands.runOnce(() -> m_IndexSubsystem.turnOnIndexer(), m_IndexSubsystem))
+  //       .andThen(new WaitCommand(2))
+  //       .stophold
+  //       .andThen(Commands.runOnce(() -> m_IndexSubsystem.turnOffIndexer(), m_IndexSubsystem))
+  //       .andThen(Commands.runOnce(() -> m_ShootSubsystem.turnOffLauncher(), m_ShootSubsystem));
+  // }
+
+  public Command speakerLaunch() {
+    return (Commands.runOnce(() -> m_ShootSubsystem.speakerTurnOnLauncher(), m_ShootSubsystem))
+        .andThen(new MoveWristToPoseCommand(m_AimSubsystem, Constants.speakerAngle))
+        .andThen(Commands.runOnce(() -> m_IndexSubsystem.turnOnIndexer(), m_IndexSubsystem))
+        .andThen(new WaitCommand(1))
+        .andThen(Commands.runOnce(() -> m_IndexSubsystem.turnOffIndexer(), m_IndexSubsystem))
+        .andThen(Commands.runOnce(() -> m_ShootSubsystem.turnOffLauncher(), m_ShootSubsystem))
+        .andThen(new MoveWristToPoseCommand(m_AimSubsystem, Constants.zeroLaunchAngle));
+  }
+
+    public Command ampLaunch() {
+    return (Commands.runOnce(() -> m_ShootSubsystem.ampTurnOnLauncher(), m_ShootSubsystem))
+        .andThen(new MoveWristToPoseCommand(m_AimSubsystem, Constants.ampAngle))
         .andThen(Commands.runOnce(() -> m_IndexSubsystem.turnOnIndexer(), m_IndexSubsystem))
         .andThen(new WaitCommand(2))
         .andThen(Commands.runOnce(() -> m_IndexSubsystem.turnOffIndexer(), m_IndexSubsystem))
-        .andThen(Commands.runOnce(() -> m_ShootSubsystem.turnOffLauncher(), m_ShootSubsystem));
+        .andThen(Commands.runOnce(() -> m_ShootSubsystem.turnOffLauncher(), m_ShootSubsystem))
+        .andThen(new MoveWristToPoseCommand(m_AimSubsystem, Constants.zeroLaunchAngle));
   }
 
   
   public void configureAutoChooser() {
-    Station_1_Shoot_Moveout = autoLaunch();
-    Station_2_Shoot_Moveout = autoLaunch();
-    Station_3_Shoot_Moveout = autoLaunch();
+    Station_1_Shoot_Moveout = speakerLaunch();
+    Station_2_Shoot_Moveout = speakerLaunch();
+    Station_3_Shoot_Moveout = speakerLaunch();
     test = new PathPlannerAuto("test_auto");
 
     m_chooser = new SendableChooser<>();
