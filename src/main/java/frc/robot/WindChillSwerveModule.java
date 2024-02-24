@@ -30,7 +30,7 @@ public class WindChillSwerveModule {
     this.moduleNumber = moduleNumber;
 
     /* Angle Encoder Config */
-    angleEncoder = new CANcoder(moduleConstants.cancoderID, "canivore");
+    angleEncoder = new CANcoder(moduleConstants.cancoderID);
 
     /* Angle Motor Config */
     angleMotor = new CANSparkMax(moduleConstants.angleMotorID, MotorType.kBrushless);
@@ -127,8 +127,8 @@ public class WindChillSwerveModule {
   private void configDriveMotor() {
     // driveMotor.restoreFactoryDefaults();
     // CANSparkMaxUtil.setCANSparkMaxBusUsage(driveMotor, Usage.kAll);
-    driveMotor.setSmartCurrentLimit(Constants.driveContinuousCurrentLimit);
-    // if (this.moduleNumber == 0) {
+    // driveMotor.setSmartCurrentLimit(Constants.driveContinuousCurrentLimit);
+    // if (this.moduleNumber == 1 || this.moduleNumber == 2) {
     //   driveMotor.setInverted(true);
     // }
     // else {

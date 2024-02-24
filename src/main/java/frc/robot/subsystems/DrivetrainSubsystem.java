@@ -82,7 +82,7 @@ public class DrivetrainSubsystem extends SubsystemBase {
         this // Reference to this subsystem to set requirements
     );
 
-    gyro = new Pigeon2(Constants.pigeonID, "canivore");
+    gyro = new Pigeon2(Constants.pigeonID);
     // gyro.getConfigurator().apply(new Pigeon2Configuration());
     zeroGyro();
 

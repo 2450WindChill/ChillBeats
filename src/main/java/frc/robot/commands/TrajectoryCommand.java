@@ -44,8 +44,8 @@ public class TrajectoryCommand extends Command {
 
         // Get the adjusted speeds. Here, we want the robot to be facing
         // 70 degrees (in the field-relative coordinate system).
-         adjustedSpeeds = m_drivetrainSubsystem.holonomicDriveController.calculate(
-                m_Estimator.getThisPose(), goal,  m_drivetrainSubsystem.getGyroYaw());
+        adjustedSpeeds = m_drivetrainSubsystem.holonomicDriveController.calculate(
+                m_Estimator.getThisPose(), goal, m_drivetrainSubsystem.getGyroYaw());
 
     }
 
@@ -54,6 +54,24 @@ public class TrajectoryCommand extends Command {
     public void initialize() {
         SwerveModuleState[] moduleStates = Constants.swerveKinematics.toSwerveModuleStates(adjustedSpeeds);
         m_driveSubsystem.setStates(moduleStates);
+        System.err.print("Ouptutting states");
+        System.err.print("Ouptutting states");
+
+        System.err.print("Ouptutting states");
+
+        System.err.print("Ouptutting states");
+
+        System.err.print("Ouptutting states");
+
+        System.err.print("Ouptutting states");
+
+        System.err.print("Ouptutting states");
+
+        System.err.print("Ouptutting states");
+        System.err.print("Ouptutting states");
+
+        System.err.print("Ouptutting states");
+
     }
 
     // Called every time the scheduler runs while the command is scheduled.
@@ -70,7 +88,7 @@ public class TrajectoryCommand extends Command {
     // Returns true when the command should end.
     @Override
     public boolean isFinished() {
-        return true;
+        return false;
     }
 
     public Trajectory generateTrajectory(Pose2d startPoint, Pose2d endPoint) {
