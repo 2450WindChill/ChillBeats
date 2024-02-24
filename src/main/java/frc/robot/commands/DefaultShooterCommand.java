@@ -1,10 +1,12 @@
 package frc.robot.commands;
 
 import edu.wpi.first.wpilibj2.command.Command;
+import frc.robot.subsystems.LauncherSubsystem;
 
 public class DefaultShooterCommand extends Command {
-    public DefaultShooterCommand() {
-
+    private LauncherSubsystem m_launcherSubsystem;
+    public DefaultShooterCommand(LauncherSubsystem launcherSubsystem) {
+        addRequirements(m_launcherSubsystem);
     }
 
     public void initialize() {
@@ -12,7 +14,8 @@ public class DefaultShooterCommand extends Command {
     }
 
     public void execute() {
-
+        m_launcherSubsystem.bottomMotor.set(-0.05);
+        m_launcherSubsystem.topMotor.set(0.05);
     }
 
     public boolean isFinished() {
@@ -20,6 +23,6 @@ public class DefaultShooterCommand extends Command {
     }
 
     public void end(boolean isFinished) {
-        
+
     }
 }

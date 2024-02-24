@@ -6,6 +6,7 @@ package frc.robot;
 
 import frc.robot.Constants.OperatorConstants;
 import frc.robot.commands.DefaultDriveCommand;
+import frc.robot.commands.DefaultShooterCommand;
 import frc.robot.commands.IndexCommand;
 import frc.robot.commands.LaunchCommand;
 import frc.robot.commands.MoveToPose;
@@ -52,9 +53,9 @@ public class RobotContainer {
   private final PoseEstimatorSubsystem m_poseEstimator = new PoseEstimatorSubsystem(m_drivetrainSubsystem);
   // private final ElevatorSubsystem m_ElevatorSubsystem = new
   // ElevatorSubsystem();
-  private final AimSubsystem m_AimSubsystem = new AimSubsystem();
-  private final LauncherSubsystem m_ShootSubsystem = new LauncherSubsystem();
-  private final IndexSubsystem m_IndexSubsystem = new IndexSubsystem();
+  private final AimSubsystem m_aimSubsystem = new AimSubsystem();
+  private final LauncherSubsystem m_launcherSubsystem = new LauncherSubsystem();
+  private final IndexSubsystem m_indexSubsystem = new IndexSubsystem();
   public DriverStation.Alliance teamColor;
   // private final LightySubsystem m_LightySubsystem = new
   // LightySubsystem(teamColor);
@@ -97,6 +98,8 @@ public class RobotContainer {
             () -> m_driverController.getRightX(),
             () -> false));
 
+    m_launcherSubsystem.setDefaultCommand(new DefaultShooterCommand(m_launcherSubsystem));
+
     // Configure bindings and limelight
     configureBindings();
 
@@ -131,11 +134,11 @@ public class RobotContainer {
    // m_operatorController.b().whileTrue(new IndexCommand(m_IndexSubsystem, -1));
     //m_operatorController.x().whileTrue(new IndexCommand(m_IndexSubsystem, 1));
 
-    m_operatorController.rightTrigger().whileTrue(new LaunchCommand(m_ShootSubsystem, -0.8));
-    m_operatorController.leftTrigger().whileTrue(new LaunchCommand(m_ShootSubsystem, 0.2));
+    m_operatorController.rightTrigger().whileTrue(new LaunchCommand(m_launcherSubsystem, -0.8));
+    m_operatorController.leftTrigger().whileTrue(new LaunchCommand(m_launcherSubsystem, 0.2));
 
-    m_operatorController.a().onTrue(new MoveWristToPoseCommand(m_AimSubsystem, Constants.zeroLaunchAngle));
-    m_operatorController.y().onTrue(new MoveWristToPoseCommand(m_AimSubsystem, Constants.speakerAngle));
+    m_operatorController.a().onTrue(new MoveWristToPoseCommand(m_aimSubsystem, Constants.zeroLaunchAngle));
+    m_operatorController.y().onTrue(new MoveWristToPoseCommand(m_aimSubsystem, Constants.speakerAngle));
 
     m_operatorController.x().onTrue(speakerLaunch());
      m_operatorController.b().onTrue(ampLaunch());
@@ -200,23 +203,23 @@ public class RobotContainer {
   // }
 
   public Command speakerLaunch() {
-    return (Commands.runOnce(() -> m_ShootSubsystem.speakerTurnOnLauncher(), m_ShootSubsystem))
-        .andThen(new MoveWristToPoseCommand(m_AimSubsystem, Constants.speakerAngle))
-        .andThen(Commands.runOnce(() -> m_IndexSubsystem.turnOnIndexer(), m_IndexSubsystem))
+    return (Commands.runOnce(() -> m_launcherSubsystem.speakerTurnOnLauncher(), m_launcherSubsystem))
+        .andThen(new MoveWristToPoseCommand(m_aimSubsystem, Constants.speakerAngle))
+        .andThen(Commands.runOnce(() -> m_indexSubsystem.turnOnIndexer(), m_indexSubsystem))
         .andThen(new WaitCommand(1))
-        .andThen(Commands.runOnce(() -> m_IndexSubsystem.turnOffIndexer(), m_IndexSubsystem))
-        .andThen(Commands.runOnce(() -> m_ShootSubsystem.turnOffLauncher(), m_ShootSubsystem))
-        .andThen(new MoveWristToPoseCommand(m_AimSubsystem, Constants.zeroLaunchAngle));
+        .andThen(Commands.runOnce(() -> m_indexSubsystem.turnOffIndexer(), m_indexSubsystem))
+        .andThen(Commands.runOnce(() -> m_launcherSubsystem.turnOffLauncher(), m_launcherSubsystem))
+        .andThen(new MoveWristToPoseCommand(m_aimSubsystem, Constants.zeroLaunchAngle));
   }
 
     public Command ampLaunch() {
-    return (Commands.runOnce(() -> m_ShootSubsystem.ampTurnOnLauncher(), m_ShootSubsystem))
-        .andThen(new MoveWristToPoseCommand(m_AimSubsystem, Constants.ampAngle))
-        .andThen(Commands.runOnce(() -> m_IndexSubsystem.turnOnIndexer(), m_IndexSubsystem))
+    return (Commands.runOnce(() -> m_launcherSubsystem.ampTurnOnLauncher(), m_launcherSubsystem))
+        .andThen(new MoveWristToPoseCommand(m_aimSubsystem, Constants.ampAngle))
+        .andThen(Commands.runOnce(() -> m_indexSubsystem.turnOnIndexer(), m_indexSubsystem))
         .andThen(new WaitCommand(2))
-        .andThen(Commands.runOnce(() -> m_IndexSubsystem.turnOffIndexer(), m_IndexSubsystem))
-        .andThen(Commands.runOnce(() -> m_ShootSubsystem.turnOffLauncher(), m_ShootSubsystem))
-        .andThen(new MoveWristToPoseCommand(m_AimSubsystem, Constants.zeroLaunchAngle));
+        .andThen(Commands.runOnce(() -> m_indexSubsystem.turnOffIndexer(), m_indexSubsystem))
+        .andThen(Commands.runOnce(() -> m_launcherSubsystem.turnOffLauncher(), m_launcherSubsystem))
+        .andThen(new MoveWristToPoseCommand(m_aimSubsystem, Constants.zeroLaunchAngle));
   }
 
   
