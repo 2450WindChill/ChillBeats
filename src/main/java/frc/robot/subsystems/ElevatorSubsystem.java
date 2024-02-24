@@ -14,7 +14,7 @@ import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 
 public class ElevatorSubsystem extends SubsystemBase {
-   public final CANSparkFlex elevatorMotor = new CANSparkFlex(16, MotorType.kBrushless);
+   public final CANSparkFlex elevatorMotor = new CANSparkFlex(17, MotorType.kBrushless);
    public final SparkPIDController elevatorController = elevatorMotor.getPIDController();
 
   public ElevatorSubsystem() {
@@ -49,7 +49,7 @@ public class ElevatorSubsystem extends SubsystemBase {
 
   @Override
   public void periodic() {
-     SmartDashboard.putNumber("2pew",elevatorMotor.getEncoder().getPosition());
+     SmartDashboard.putNumber("Elevator ",elevatorMotor.getEncoder().getPosition());
     // This method will be called once per scheduler run
   }
 

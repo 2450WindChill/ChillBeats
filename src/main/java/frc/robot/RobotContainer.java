@@ -9,8 +9,10 @@ import frc.robot.commands.DefaultDriveCommand;
 import frc.robot.commands.DefaultShooterCommand;
 import frc.robot.commands.IndexCommand;
 import frc.robot.commands.LaunchCommand;
+import frc.robot.commands.MoveElevatorToPosCommand;
 import frc.robot.commands.MoveToPose;
 import frc.robot.commands.MoveWristToPoseCommand;
+import frc.robot.commands.TrajectoryCommand;
 import frc.robot.libs.LimelightHelpers;
 import frc.robot.subsystems.AimSubsystem;
 import frc.robot.subsystems.DrivetrainSubsystem;
@@ -24,6 +26,7 @@ import com.pathplanner.lib.commands.PathPlannerAuto;
 
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
+import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj.XboxController.Button;
@@ -51,11 +54,12 @@ public class RobotContainer {
   // The robot's subsystems and commands are defined here...
   public final DrivetrainSubsystem m_drivetrainSubsystem = new DrivetrainSubsystem();
   private final PoseEstimatorSubsystem m_poseEstimator = new PoseEstimatorSubsystem(m_drivetrainSubsystem);
-  // private final ElevatorSubsystem m_ElevatorSubsystem = new
-  // ElevatorSubsystem();
+  private final ElevatorSubsystem m_ElevatorSubsystem = new
+  ElevatorSubsystem();
   private final AimSubsystem m_aimSubsystem = new AimSubsystem();
   private final LauncherSubsystem m_launcherSubsystem = new LauncherSubsystem();
   private final IndexSubsystem m_indexSubsystem = new IndexSubsystem();
+  private final PoseEstimatorSubsystem m_PoseEstimatorSubsystem = new PoseEstimatorSubsystem(m_drivetrainSubsystem);
   public DriverStation.Alliance teamColor;
   // private final LightySubsystem m_LightySubsystem = new
   // LightySubsystem(teamColor);
@@ -124,24 +128,24 @@ public class RobotContainer {
    * joysticks}.
    */
   private void configureBindings() {
-    // m_driverController.x().onTrue(new
-    // MoveElevatorToPosCommand(m_ElevatorSubsystem, 20.0));
-    // m_driverController.a().onTrue(new
-    // MoveElevatorToPosCommand(m_ElevatorSubsystem, 0.0));
-    // m_driverController.b().onTrue(autoLaunch());
+    m_driverController.a().onTrue(new MoveElevatorToPosCommand(m_ElevatorSubsystem, Constants.zeroElevator));
+    m_driverController.x().onTrue(new MoveElevatorToPosCommand(m_ElevatorSubsystem, Constants.ampElevator));
+
 
     //TODO uncomment
    // m_operatorController.b().whileTrue(new IndexCommand(m_IndexSubsystem, -1));
     //m_operatorController.x().whileTrue(new IndexCommand(m_IndexSubsystem, 1));
+    // m_operatorController.rightTrigger().whileTrue(new LaunchCommand(m_launcherSubsystem, -0.8));
 
-    m_operatorController.rightTrigger().whileTrue(new LaunchCommand(m_launcherSubsystem, -0.8));
     m_operatorController.leftTrigger().whileTrue(new LaunchCommand(m_launcherSubsystem, 0.2));
 
-    m_operatorController.a().onTrue(new MoveWristToPoseCommand(m_aimSubsystem, Constants.zeroLaunchAngle));
-    m_operatorController.y().onTrue(new MoveWristToPoseCommand(m_aimSubsystem, Constants.speakerAngle));
+    m_driverController.a().onTrue(new MoveWristToPoseCommand(m_aimSubsystem, Constants.zeroLaunchAngle));
+    m_driverController.y().onTrue(new MoveWristToPoseCommand(m_aimSubsystem, Constants.speakerAngle));
 
+    // Test buttons
     m_operatorController.x().onTrue(speakerLaunch());
-     m_operatorController.b().onTrue(ampLaunch());
+    m_operatorController.b().onTrue(ampLaunch());
+    m_operatorController.rightTrigger().whileTrue(new TrajectoryCommand(m_drivetrainSubsystem, m_PoseEstimatorSubsystem, new Translation2d(1, 0)));
 
     /*
      * B -> Index for shoot

@@ -11,7 +11,7 @@ import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants;
 import frc.robot.libs.LimelightHelpers;
 
-public class PoseEstimatorSubsystem extends SubsystemBase{
+public class PoseEstimatorSubsystem extends SubsystemBase {
 
     public static SwerveDrivePoseEstimator poseEstimate;
     public static DrivetrainSubsystem m_drivetrainSubsystem;
@@ -20,18 +20,18 @@ public class PoseEstimatorSubsystem extends SubsystemBase{
         m_drivetrainSubsystem = drivetrainSubsystem;
 
         poseEstimate = new SwerveDrivePoseEstimator(
-            Constants.swerveKinematics,
-            m_drivetrainSubsystem.getGyroYaw(),
-            m_drivetrainSubsystem.getPositions(),
-            new Pose2d());
-            SmartDashboard.putData("Reset pose", Commands.runOnce(() -> zeroPose()));
+                Constants.swerveKinematics,
+                m_drivetrainSubsystem.getGyroYaw(),
+                m_drivetrainSubsystem.getPositions(),
+                new Pose2d());
+        SmartDashboard.putData("Reset pose", Commands.runOnce(() -> zeroPose()));
     }
 
     public void periodic() {
-        Pose2d currentPoseEstimate = poseEstimate.update(
-                                        m_drivetrainSubsystem.getGyroYaw(),
-                                        m_drivetrainSubsystem.getPositions());
-        
+        poseEstimate.update(
+                m_drivetrainSubsystem.getGyroYaw(),
+                m_drivetrainSubsystem.getPositions());
+
         if (LimelightHelpers.getTV("limelight")) {
             poseEstimate.addVisionMeasurement(getLimelightPose(), getTimeStamp());
         }
@@ -48,9 +48,9 @@ public class PoseEstimatorSubsystem extends SubsystemBase{
 
     // Gets gametime and then subtracts the latency of the pose
     public double getTimeStamp() {
-         return Timer.getFPGATimestamp()
-                -((LimelightHelpers.getLatency_Capture("limelight")
-                    + LimelightHelpers.getLatency_Pipeline("limelight"))
+        return Timer.getFPGATimestamp()
+                - ((LimelightHelpers.getLatency_Capture("limelight")
+                        + LimelightHelpers.getLatency_Pipeline("limelight"))
                         / 1000.0);
     }
 
@@ -59,16 +59,21 @@ public class PoseEstimatorSubsystem extends SubsystemBase{
         return poseEstimate.getEstimatedPosition();
     }
 
+    public Pose2d getThisPose() {
+        return poseEstimate.getEstimatedPosition();
+    }
+
     public void zeroPose() {
-         poseEstimate = new SwerveDrivePoseEstimator(
-            Constants.swerveKinematics,
-            m_drivetrainSubsystem.getGyroYaw(),
-            m_drivetrainSubsystem.getModulePositions(),
-            new Pose2d(0, 0, new Rotation2d(0)));
+        poseEstimate = new SwerveDrivePoseEstimator(
+                Constants.swerveKinematics,
+                m_drivetrainSubsystem.getGyroYaw(),
+                m_drivetrainSubsystem.getModulePositions(),
+                new Pose2d(0, 0, new Rotation2d(0)));
     }
 
     public static void resetPose(Pose2d newPose) {
-        poseEstimate.resetPosition(m_drivetrainSubsystem.gyro.getRotation2d(), m_drivetrainSubsystem.getPositions(), newPose);
+        poseEstimate.resetPosition(m_drivetrainSubsystem.gyro.getRotation2d(), m_drivetrainSubsystem.getPositions(),
+                newPose);
     }
 
     // Gets estimated bot x
@@ -91,13 +96,16 @@ public class PoseEstimatorSubsystem extends SubsystemBase{
         return LimelightHelpers.getFiducialID("limelight");
     }
 
-    // Get the 3d bot pose of the primary apriltag in the limelights view relative to the robots pose
+    // Get the 3d bot pose of the primary apriltag in the limelights view relative
+    // to the robots pose
     public Pose3d getAprilTagPoseToBot3d() {
         return LimelightHelpers.getTargetPose3d_RobotSpace("limelight");
     }
 
-    // Get the 2d bot pose of the primary apriltag in the limelights view relative to the robots pose
+    // Get the 2d bot pose of the primary apriltag in the limelights view relative
+    // to the robots pose
     public Pose2d getAprilTagPoseToBot2d() {
-        return new Pose2d(getAprilTagPoseToBot3d().getX(), getAprilTagPoseToBot3d().getY(), getAprilTagPoseToBot3d().getRotation().toRotation2d());
+        return new Pose2d(getAprilTagPoseToBot3d().getX(), getAprilTagPoseToBot3d().getY(),
+                getAprilTagPoseToBot3d().getRotation().toRotation2d());
     }
-} 
+}

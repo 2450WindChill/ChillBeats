@@ -6,6 +6,7 @@ import frc.robot.subsystems.LauncherSubsystem;
 public class DefaultShooterCommand extends Command {
     private LauncherSubsystem m_launcherSubsystem;
     public DefaultShooterCommand(LauncherSubsystem launcherSubsystem) {
+        m_launcherSubsystem = launcherSubsystem;
         addRequirements(m_launcherSubsystem);
     }
 

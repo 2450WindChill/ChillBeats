@@ -12,6 +12,9 @@ import com.pathplanner.lib.util.PIDConstants;
 import com.pathplanner.lib.util.ReplanningConfig;
 import com.revrobotics.CANSparkMax;
 
+import edu.wpi.first.math.controller.HolonomicDriveController;
+import edu.wpi.first.math.controller.PIDController;
+import edu.wpi.first.math.controller.ProfiledPIDController;
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.geometry.Translation2d;
@@ -20,6 +23,7 @@ import edu.wpi.first.math.kinematics.SwerveDriveKinematics;
 import edu.wpi.first.math.kinematics.SwerveDriveOdometry;
 import edu.wpi.first.math.kinematics.SwerveModulePosition;
 import edu.wpi.first.math.kinematics.SwerveModuleState;
+import edu.wpi.first.math.trajectory.TrapezoidProfile;
 import edu.wpi.first.math.util.Units;
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
@@ -27,56 +31,66 @@ import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants;
 import frc.robot.WindChillSwerveModule;
+import frc.robot.commands.TrajectoryCommand;
+
 import com.pathplanner.lib.auto.AutoBuilder;
 import com.pathplanner.lib.commands.FollowPathHolonomic;
 import com.pathplanner.lib.path.PathPlannerPath;
-  
+
 public class DrivetrainSubsystem extends SubsystemBase {
   public final Pigeon2 gyro;
   private WindChillSwerveModule[] swerveModules;
   public SwerveDriveOdometry swerveOdometry;
   public CANSparkMax testMotor;
   public CANcoder canCoder;
+  public HolonomicDriveController holonomicDriveController;
+  public TrajectoryCommand m_TrajectoryGeneratorSubsystem;
 
   /** Creates a new ExampleSubsystem. */
   public DrivetrainSubsystem() {
+    holonomicDriveController = new HolonomicDriveController(
+        new PIDController(1, 0, 0), new PIDController(1, 0, 0),
+        new ProfiledPIDController(1, 0, 0,
+        new TrapezoidProfile.Constraints(6.28, 3.14)));
 
     // Configure AutoBuilder last
     AutoBuilder.configureHolonomic(
-            PoseEstimatorSubsystem::getBotPose, // Robot pose supplier
-            PoseEstimatorSubsystem::resetPose, // Method to reset odometry (will be called if your auto has a starting pose)
-            this::getSpeeds, // ChassisSpeeds supplier. MUST BE ROBOT RELATIVE
-            this::driveRobotRelative, // Method that will drive the robot given ROBOT RELATIVE ChassisSpeeds
-            new HolonomicPathFollowerConfig( // HolonomicPathFollowerConfig, this should likely live in your Constants class
-                    new PIDConstants(5.0, 0.0, 0.0), // Translation PID constants
-                    new PIDConstants(5.0, 0.0, 0.0), // Rotation PID constants
-                    4.5, // Max module speed, in m/s
-                    Units.inchesToMeters(15.6875), // Drive base radius in meters. Distance from robot center to furthest module.
-                    new ReplanningConfig() // Default path replanning config. See the API for the options here
-            ),
-            () -> {
-                // Boolean supplier that controls when the path will be mirrored for the red alliance
-                // This will flip the path being followed to the red side of the field.
-                // THE ORIGIN WILL REMAIN ON THE BLUE SIDE
+        PoseEstimatorSubsystem::getBotPose, // Robot pose supplier
+        PoseEstimatorSubsystem::resetPose, // Method to reset odometry (will be called if your auto has a starting pose)
+        this::getSpeeds, // ChassisSpeeds supplier. MUST BE ROBOT RELATIVE
+        this::driveRobotRelative, // Method that will drive the robot given ROBOT RELATIVE ChassisSpeeds
+        new HolonomicPathFollowerConfig( // HolonomicPathFollowerConfig, this should likely live in your Constants class
+            new PIDConstants(0.5, 0.0, 0.0), // Translation PID constants
+            new PIDConstants(0.5, 0.0, 0.0), // Rotation PID constants
+            4.5, // Max module speed, in m/s
+            Units.inchesToMeters(15.6875), // Drive base radius in meters. Distance from robot center to furthest
+                                           // module.
+            new ReplanningConfig() // Default path replanning config. See the API for the options here
+        ),
+        () -> {
+          // Boolean supplier that controls when the path will be mirrored for the red
+          // alliance
+          // This will flip the path being followed to the red side of the field.
+          // THE ORIGIN WILL REMAIN ON THE BLUE SIDE
 
-                var alliance = DriverStation.getAlliance();
-                if (alliance.isPresent()) {
-                    return alliance.get() == DriverStation.Alliance.Red;
-                }
-                return false;
-            },
-            this // Reference to this subsystem to set requirements
-        );
-    
+          var alliance = DriverStation.getAlliance();
+          if (alliance.isPresent()) {
+            return alliance.get() == DriverStation.Alliance.Red;
+          }
+          return false;
+        },
+        this // Reference to this subsystem to set requirements
+    );
+
     gyro = new Pigeon2(Constants.pigeonID, "canivore");
     // gyro.getConfigurator().apply(new Pigeon2Configuration());
     zeroGyro();
 
     swerveModules = new WindChillSwerveModule[] {
-      new WindChillSwerveModule(0, Constants.FrontLeftModule.constants),
-      new WindChillSwerveModule(1, Constants.FrontRightModule.constants),
-      new WindChillSwerveModule(2, Constants.BackLeftModule.constants),
-      new WindChillSwerveModule(3, Constants.BackRightModule.constants)
+        new WindChillSwerveModule(0, Constants.FrontLeftModule.constants),
+        new WindChillSwerveModule(1, Constants.FrontRightModule.constants),
+        new WindChillSwerveModule(2, Constants.BackLeftModule.constants),
+        new WindChillSwerveModule(3, Constants.BackRightModule.constants)
     };
   }
 
@@ -86,17 +100,15 @@ public class DrivetrainSubsystem extends SubsystemBase {
     if (isRobotCentric) {
       // System.out.println("Angle value: " + translation.getY());
       swerveModuleStates = Constants.swerveKinematics.toSwerveModuleStates(
-        new ChassisSpeeds(translation.getX(), translation.getY(), rotation)
-      );
+          new ChassisSpeeds(translation.getX(), translation.getY(), rotation));
     } else {
       // System.out.println("Angle value: " + translation.getY());
       swerveModuleStates = Constants.swerveKinematics.toSwerveModuleStates(
-        ChassisSpeeds.fromFieldRelativeSpeeds(
-          translation.getX(), 
-          translation.getY(), 
-          rotation, 
-          getGyroYaw())
-      );
+          ChassisSpeeds.fromFieldRelativeSpeeds(
+              translation.getX(),
+              translation.getY(),
+              rotation,
+              getGyroYaw()));
     }
 
     for (WindChillSwerveModule mod : swerveModules) {
@@ -105,34 +117,36 @@ public class DrivetrainSubsystem extends SubsystemBase {
   }
 
   public Command followPathCommand(String pathName) {
-      PathPlannerPath path = PathPlannerPath.fromPathFile(pathName);
+    PathPlannerPath path = PathPlannerPath.fromPathFile(pathName);
 
-        return new FollowPathHolonomic(
-                path,
-                PoseEstimatorSubsystem::getBotPose, // Robot pose supplier
-                this::getSpeeds, // ChassisSpeeds supplier. MUST BE ROBOT RELATIVE
-                this::driveRobotRelative, // Method that will drive the robot given ROBOT RELATIVE ChassisSpeeds
-                new HolonomicPathFollowerConfig( // HolonomicPathFollowerConfig, this should likely live in your Constants class
-                        new PIDConstants(Constants.driveKP, Constants.driveKI, Constants.driveKD), // Translation PID constants
-                        new PIDConstants(Constants.angleKP, Constants.angleKI, Constants.angleKD), // Rotation PID constants
-                        Constants.maxSpeed, // Max module speed, in m/s
-                        Constants.driveBaseRadius, // Drive base radius in meters. Distance from robot center to furthest module.
-                        new ReplanningConfig() // Default path replanning config. See the API for the options here
-                ),
-                () -> {
-                    // Boolean supplier that controls when the path will be mirrored for the red alliance
-                    // This will flip the path being followed to the red side of the field.
-                    // THE ORIGIN WILL REMAIN ON THE BLUE SIDE
+    return new FollowPathHolonomic(
+        path,
+        PoseEstimatorSubsystem::getBotPose, // Robot pose supplier
+        this::getSpeeds, // ChassisSpeeds supplier. MUST BE ROBOT RELATIVE
+        this::driveRobotRelative, // Method that will drive the robot given ROBOT RELATIVE ChassisSpeeds
+        new HolonomicPathFollowerConfig( // HolonomicPathFollowerConfig, this should likely live in your Constants class
+            new PIDConstants(Constants.driveKP, Constants.driveKI, Constants.driveKD), // Translation PID constants
+            new PIDConstants(Constants.angleKP, Constants.angleKI, Constants.angleKD), // Rotation PID constants
+            Constants.maxSpeed, // Max module speed, in m/s
+            Constants.driveBaseRadius, // Drive base radius in meters. Distance from robot center to furthest module.
+            new ReplanningConfig() // Default path replanning config. See the API for the options here
+        ),
+        () -> {
+          // Boolean supplier that controls when the path will be mirrored for the red
+          // alliance
+          // This will flip the path being followed to the red side of the field.
+          // THE ORIGIN WILL REMAIN ON THE BLUE SIDE
 
-                    var alliance = DriverStation.getAlliance();
-                    if (alliance.isPresent()) {
-                        return alliance.get() == DriverStation.Alliance.Red;
-                    }
-                    return false;
-                },
-                this // Reference to this subsystem to set requirements
-        );
-              }
+          var alliance = DriverStation.getAlliance();
+          if (alliance.isPresent()) {
+            return alliance.get() == DriverStation.Alliance.Red;
+          }
+          return false;
+        },
+        this // Reference to this subsystem to set requirements
+    );
+  }
+
   public SwerveModulePosition[] getPositions() {
     SwerveModulePosition[] positions = new SwerveModulePosition[swerveModules.length];
     for (int i = 0; i < swerveModules.length; i++) {
@@ -146,23 +160,23 @@ public class DrivetrainSubsystem extends SubsystemBase {
     return rotation2d;
   }
 
-  public SwerveModulePosition[] getModulePositions(){
+  public SwerveModulePosition[] getModulePositions() {
     SwerveModulePosition[] positions = new SwerveModulePosition[4];
-    for(WindChillSwerveModule mod : swerveModules){
-        positions[mod.moduleNumber] = mod.getPosition();
+    for (WindChillSwerveModule mod : swerveModules) {
+      positions[mod.moduleNumber] = mod.getPosition();
     }
     return positions;
   }
 
- public SwerveModuleState[] getModuleStates(){
+  public SwerveModuleState[] getModuleStates() {
     SwerveModuleState[] states = new SwerveModuleState[4];
-    for(WindChillSwerveModule mod : swerveModules){
-        states[mod.moduleNumber] = mod.getState();
+    for (WindChillSwerveModule mod : swerveModules) {
+      states[mod.moduleNumber] = mod.getState();
     }
     return states;
   }
 
- public WindChillSwerveModule[] getModules(){
+  public WindChillSwerveModule[] getModules() {
     return swerveModules;
   }
 
@@ -172,12 +186,10 @@ public class DrivetrainSubsystem extends SubsystemBase {
     }
   }
 
+  public double getFrontLeftEncoderVal() {
+    double frontLeftEncoderVal = swerveModules[0].getDriveEncoder();
 
-
-  public double getFrontLeftEncoderVal(){
-      double frontLeftEncoderVal = swerveModules[0].getDriveEncoder();
-      
-      return frontLeftEncoderVal;
+    return frontLeftEncoderVal;
   }
 
   public void zeroGyro() {
@@ -188,8 +200,8 @@ public class DrivetrainSubsystem extends SubsystemBase {
 
   // Pathplanning methods:
 
-    /**
-    //Returns the heading of the robot.
+  /**
+   * //Returns the heading of the robot.
    *
    * @return the robot's heading in degrees, from -180 to 180
    */
@@ -197,17 +209,17 @@ public class DrivetrainSubsystem extends SubsystemBase {
     return gyro.getRotation2d().getDegrees();
   }
 
-    /**
+  /**
    * Returns the currently-estimated pose of the robot.
    *
    * @return The pose.
    */
   // public Pose2d getPose() {
-  //   return swerveOdometry.getPoseMeters();
+  // return swerveOdometry.getPoseMeters();
   // }
 
   // public void resetPose(Pose2d pose2d) {
-  //   swerveOdometry.resetPosition(getGyroYaw(), getModulePositions(), getPose());
+  // swerveOdometry.resetPosition(getGyroYaw(), getModulePositions(), getPose());
   // }
 
   public StatusCode resetCANcoder() {
@@ -223,7 +235,7 @@ public class DrivetrainSubsystem extends SubsystemBase {
   public ChassisSpeeds getSpeeds() {
     return Constants.swerveKinematics.toChassisSpeeds(getModuleStates());
   }
-  
+
   public void setStates(SwerveModuleState[] targetStates) {
     SwerveDriveKinematics.desaturateWheelSpeeds(targetStates, Constants.maxSpeed);
     var modules = getModules();
@@ -232,16 +244,16 @@ public class DrivetrainSubsystem extends SubsystemBase {
     }
   }
 
-
   public void driveRobotRelative(ChassisSpeeds robotRelativeSpeeds) {
     SwerveModuleState[] modStates = Constants.swerveKinematics.toSwerveModuleStates(robotRelativeSpeeds);
 
-     for (WindChillSwerveModule mod : swerveModules) {
+    for (WindChillSwerveModule mod : swerveModules) {
       mod.setDesiredState(modStates[mod.moduleNumber]);
     }
-}
-// -----------------------------------------------------------------------------------------------
+  }
+  // -----------------------------------------------------------------------------------------------
 
+  
   public void setPosition(double position) {
     swerveModules[0].setPosition(position);
     System.err.println("Setting position to 0");
@@ -267,7 +279,7 @@ public class DrivetrainSubsystem extends SubsystemBase {
       SmartDashboard.putNumber(
           "Mod " + mod.moduleNumber + " Velocity", mod.getState().speedMetersPerSecond);
     }
-    
+
     SmartDashboard.putNumber("Gyro Yaw", gyro.getYaw().getValueAsDouble());
     SmartDashboard.putNumber("Gyro Roll", gyro.getRoll().getValueAsDouble());
     SmartDashboard.putNumber("Gyro Pitch", gyro.getPitch().getValueAsDouble());

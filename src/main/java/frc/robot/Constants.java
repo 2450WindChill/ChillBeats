@@ -56,6 +56,8 @@ public final class Constants {
   public static final double speakerAngle = -10.819;
   public static final double ampAngle = -41.14;
   public static final double zeroLaunchAngle = -5.0;
+  public static final double zeroElevator = -2.6;
+  public static final double ampElevator = 41.99;
   
 
   public static final double rotationsPerOneFoot = 0.33;
