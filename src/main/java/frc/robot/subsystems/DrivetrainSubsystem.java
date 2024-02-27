@@ -39,7 +39,7 @@ import com.pathplanner.lib.path.PathPlannerPath;
 
 public class DrivetrainSubsystem extends SubsystemBase {
   public final Pigeon2 gyro;
-  private WindChillSwerveModule[] swerveModules;
+  public WindChillSwerveModule[] swerveModules;
   public SwerveDriveOdometry swerveOdometry;
   public CANSparkMax testMotor;
   public CANcoder canCoder;

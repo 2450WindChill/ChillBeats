@@ -145,7 +145,7 @@ public class RobotContainer {
     // Test buttons
     m_operatorController.x().onTrue(speakerLaunch());
     m_operatorController.b().onTrue(ampLaunch());
-    m_operatorController.rightTrigger().whileTrue(new TrajectoryCommand(m_drivetrainSubsystem, m_PoseEstimatorSubsystem, new Translation2d(1, 0)));
+    m_driverController.b().onTrue(new TrajectoryCommand(m_drivetrainSubsystem, m_PoseEstimatorSubsystem, new Pose2d()));
 
     /*
      * B -> Index for shoot

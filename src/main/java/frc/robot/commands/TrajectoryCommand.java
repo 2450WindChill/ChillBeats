@@ -2,75 +2,73 @@ package frc.robot.commands;
 
 import java.util.ArrayList;
 
-import edu.wpi.first.math.controller.HolonomicDriveController;
-import edu.wpi.first.math.controller.PIDController;
-import edu.wpi.first.math.controller.ProfiledPIDController;
 import edu.wpi.first.math.geometry.Pose2d;
-import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.math.kinematics.ChassisSpeeds;
 import edu.wpi.first.math.kinematics.SwerveModuleState;
 import edu.wpi.first.math.trajectory.Trajectory;
 import edu.wpi.first.math.trajectory.TrajectoryConfig;
 import edu.wpi.first.math.trajectory.TrajectoryGenerator;
-import edu.wpi.first.math.trajectory.TrapezoidProfile;
+import edu.wpi.first.math.trajectory.Trajectory.State;
 import edu.wpi.first.math.util.Units;
+import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj2.command.Command;
-import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants;
+import frc.robot.WindChillSwerveModule;
 import frc.robot.subsystems.DrivetrainSubsystem;
-import frc.robot.subsystems.ElevatorSubsystem;
-import frc.robot.subsystems.LightySubsystem;
 import frc.robot.subsystems.PoseEstimatorSubsystem;
 
 public class TrajectoryCommand extends Command {
     private final DrivetrainSubsystem m_driveSubsystem;
-    private final PoseEstimatorSubsystem m_Estimator;
-    private final ChassisSpeeds adjustedSpeeds;
+    private final PoseEstimatorSubsystem m_poseEstimator;
+    private final Timer timer;
+    private final Trajectory trajectory;
+    private final Pose2d m_targetPose;
 
-    public TrajectoryCommand(DrivetrainSubsystem m_drivetrainSubsystem,
-            PoseEstimatorSubsystem m_EstimatorSubsystem,
-            Translation2d translation2d) {
-        m_driveSubsystem = m_drivetrainSubsystem;
-        m_Estimator = m_EstimatorSubsystem;
+    public TrajectoryCommand(DrivetrainSubsystem drivetrainSubsystem, PoseEstimatorSubsystem poseEstimatorSubsystem, Pose2d targetPose) {
+        
+        m_driveSubsystem = drivetrainSubsystem;
+        m_poseEstimator = poseEstimatorSubsystem;
+        timer = new Timer();
+        m_targetPose = targetPose;
+        trajectory = generateTrajectory(m_poseEstimator.getThisPose(), m_targetPose);
+
         // Use addRequirements() here to declare subsystem dependencies.
         addRequirements(m_driveSubsystem);
-        Pose2d startPoint = m_Estimator.getThisPose();
-        Pose2d endPoint = new Pose2d(translation2d, m_drivetrainSubsystem.getGyroYaw());
-
-        Trajectory trajectory = generateTrajectory(startPoint, endPoint);
-        // Sample the trajectory at 3.4 seconds from the beginning.
-        Trajectory.State goal = trajectory.sample(3.4);
-
-        // Get the adjusted speeds. Here, we want the robot to be facing
-        // 70 degrees (in the field-relative coordinate system).
-         adjustedSpeeds = m_drivetrainSubsystem.holonomicDriveController.calculate(
-                m_Estimator.getThisPose(), goal,  m_drivetrainSubsystem.getGyroYaw());
-
     }
 
     // Called when the command is initially scheduled.
     @Override
     public void initialize() {
-        SwerveModuleState[] moduleStates = Constants.swerveKinematics.toSwerveModuleStates(adjustedSpeeds);
-        m_driveSubsystem.setStates(moduleStates);
+        timer.restart();
     }
 
     // Called every time the scheduler runs while the command is scheduled.
     @Override
     public void execute() {
+        double currentTime = timer.get();
+        State desiredState = trajectory.sample(currentTime);
 
+        ChassisSpeeds targetChassisSpeeds =
+            m_driveSubsystem.holonomicDriveController.calculate(m_poseEstimator.getThisPose(), desiredState, m_targetPose.getRotation());
+
+        SwerveModuleState[] targetModuleStates = Constants.swerveKinematics.toSwerveModuleStates(targetChassisSpeeds);
+
+        for (WindChillSwerveModule mod : m_driveSubsystem.swerveModules) {
+            mod.setDesiredState(targetModuleStates[mod.moduleNumber]);
+        }
     }
 
     // Called once the command ends or is interrupted.
     @Override
     public void end(boolean interrupted) {
+        timer.stop();
     }
 
     // Returns true when the command should end.
     @Override
     public boolean isFinished() {
-        return true;
+        return timer.hasElapsed(trajectory.getTotalTimeSeconds());
     }
 
     public Trajectory generateTrajectory(Pose2d startPoint, Pose2d endPoint) {
