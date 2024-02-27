@@ -57,7 +57,9 @@ public final class Constants {
   public static final double ampAngle = -41.14;
   public static final double zeroLaunchAngle = -5.0;
   public static final double zeroElevator = -2.6;
-  public static final double ampElevator = 41.99;
+  public static final double ampElevator = 55;
+  public static final double sourceAngle = 0.0;
+  public static final double sourceHeight = 0.0;
   
 
   public static final double rotationsPerOneFoot = 0.33;
@@ -116,6 +118,7 @@ public final class Constants {
   /* Neutral Modes */
   // public static final IdleMode angleNeutralMode = IdleMode.kBrake;
   public static final IdleMode angleBrakeMode = IdleMode.kBrake;
+  public static final IdleMode elevatorBrakeMode = IdleMode.kBrake;
 
   /* Motor Inverts */
 

@@ -49,15 +49,11 @@ public class MoveElevatorToPosCommand extends Command {
   @Override
   public void execute() {
      double currentPosition = m_subsystem.elevatorMotor.getEncoder().getPosition();
-    SmartDashboard.putNumber("current position",currentPosition);
-      SmartDashboard.putNumber("target position",rotationTarget);
-      SmartDashboard.putBoolean("is going up",isGoingUp);
-     System.out.println("executing move to elavator");
-    if (isGoingUp) {
+    SmartDashboard.putNumber("current elevator position",currentPosition);
+      SmartDashboard.putNumber("target elevator position",rotationTarget);
+      SmartDashboard.putBoolean("is going up (elevator)",isGoingUp);
+      System.out.println("executing move to elavator");
       m_subsystem.elevatorController.setReference(rotationTarget, ControlType.kPosition);
-    } else {
-      m_subsystem.elevatorController.setReference(rotationTarget, ControlType.kPosition);
-    }
 
   }
 
@@ -73,14 +69,14 @@ public class MoveElevatorToPosCommand extends Command {
   public boolean isFinished() {
      double currentPosition = m_subsystem.elevatorMotor.getEncoder().getPosition();
     if (isGoingUp) {
-      if (currentPosition >= rotationTarget) {
+      if (currentPosition >= rotationTarget - 0.5) {
         return true;
       } else {
         return false;
       }
     } else {
 
-      if (currentPosition <= rotationTarget) {
+      if (currentPosition <= rotationTarget + 0.5) {
         return true;
       } else {
         return false;

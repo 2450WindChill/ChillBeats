@@ -11,7 +11,7 @@ import frc.robot.commands.IndexCommand;
 import frc.robot.commands.LaunchCommand;
 import frc.robot.commands.MoveElevatorToPosCommand;
 import frc.robot.commands.MoveToPose;
-import frc.robot.commands.MoveWristToPoseCommand;
+import frc.robot.commands.MoveWristToPosCommand;
 import frc.robot.commands.TrajectoryCommand;
 import frc.robot.libs.LimelightHelpers;
 import frc.robot.subsystems.AimSubsystem;
@@ -54,8 +54,7 @@ public class RobotContainer {
   // The robot's subsystems and commands are defined here...
   public final DrivetrainSubsystem m_drivetrainSubsystem = new DrivetrainSubsystem();
   private final PoseEstimatorSubsystem m_poseEstimator = new PoseEstimatorSubsystem(m_drivetrainSubsystem);
-  private final ElevatorSubsystem m_ElevatorSubsystem = new
-  ElevatorSubsystem();
+  private final ElevatorSubsystem m_elevatorSubsystem = new ElevatorSubsystem();
   private final AimSubsystem m_aimSubsystem = new AimSubsystem();
   private final LauncherSubsystem m_launcherSubsystem = new LauncherSubsystem();
   private final IndexSubsystem m_indexSubsystem = new IndexSubsystem();
@@ -128,19 +127,21 @@ public class RobotContainer {
    * joysticks}.
    */
   private void configureBindings() {
-    m_driverController.a().onTrue(new MoveElevatorToPosCommand(m_ElevatorSubsystem, Constants.zeroElevator));
-    m_driverController.x().onTrue(new MoveElevatorToPosCommand(m_ElevatorSubsystem, Constants.ampElevator));
-
-
-    //TODO uncomment
-   // m_operatorController.b().whileTrue(new IndexCommand(m_IndexSubsystem, -1));
-    //m_operatorController.x().whileTrue(new IndexCommand(m_IndexSubsystem, 1));
-    // m_operatorController.rightTrigger().whileTrue(new LaunchCommand(m_launcherSubsystem, -0.8));
-
+    // m_operatorController.a().onTrue(new MoveElevatorToPosCommand(m_elevatorSubsystem, Constants.zeroElevator));
+    // m_operatorController.rightTrigger().onTrue(new MoveElevatorToPosCommand(m_elevatorSubsystem, Constants.ampElevator));
+    m_operatorController.a().onTrue(moveWristToSource());
+    //m_operatorController.rightTrigger().whileTrue(new TrajectoryCommand(m_drivetrainSubsystem, m_PoseEstimatorSubsystem, new Translation2d(1, 0)));
+    m_operatorController.x().onTrue(ampLaunch());
+    m_operatorController.y().onTrue(speakerLaunch());
+    m_operatorController.rightTrigger().whileTrue(new LaunchCommand(m_launcherSubsystem, -0.8));
+    // Intake
     m_operatorController.leftTrigger().whileTrue(new LaunchCommand(m_launcherSubsystem, 0.2));
-
-    m_driverController.a().onTrue(new MoveWristToPoseCommand(m_aimSubsystem, Constants.zeroLaunchAngle));
-    m_driverController.y().onTrue(new MoveWristToPoseCommand(m_aimSubsystem, Constants.speakerAngle));
+    m_operatorController.b().onTrue(new MoveWristToPosCommand(m_aimSubsystem, Constants.zeroLaunchAngle));
+  
+   //m_operatorController.leftBumper().whileTrue(new IndexCommand(m_indexSubsystem, -1));
+    //m_operatorController.x().whileTrue(new IndexCommand(m_IndexSubsystem, 1));
+    
+    //m_driverController.y().onTrue(new MoveWristToPosCommand(m_aimSubsystem, Constants.speakerAngle));
 
     // Test buttons
     m_operatorController.x().onTrue(speakerLaunch());
@@ -208,22 +209,32 @@ public class RobotContainer {
 
   public Command speakerLaunch() {
     return (Commands.runOnce(() -> m_launcherSubsystem.speakerTurnOnLauncher(), m_launcherSubsystem))
-        .andThen(new MoveWristToPoseCommand(m_aimSubsystem, Constants.speakerAngle))
+        .andThen(new MoveWristToPosCommand(m_aimSubsystem, Constants.speakerAngle))
         .andThen(Commands.runOnce(() -> m_indexSubsystem.turnOnIndexer(), m_indexSubsystem))
+        // TODO: Check wait time
         .andThen(new WaitCommand(1))
         .andThen(Commands.runOnce(() -> m_indexSubsystem.turnOffIndexer(), m_indexSubsystem))
         .andThen(Commands.runOnce(() -> m_launcherSubsystem.turnOffLauncher(), m_launcherSubsystem))
-        .andThen(new MoveWristToPoseCommand(m_aimSubsystem, Constants.zeroLaunchAngle));
+        .andThen(new MoveWristToPosCommand(m_aimSubsystem, Constants.zeroLaunchAngle));
   }
 
     public Command ampLaunch() {
-    return (Commands.runOnce(() -> m_launcherSubsystem.ampTurnOnLauncher(), m_launcherSubsystem))
-        .andThen(new MoveWristToPoseCommand(m_aimSubsystem, Constants.ampAngle))
+        return new MoveElevatorToPosCommand(m_elevatorSubsystem, Constants.ampElevator)
+        .andThen(Commands.runOnce(() -> m_launcherSubsystem.ampTurnOnLauncher(), m_launcherSubsystem))
+        .andThen(new MoveWristToPosCommand(m_aimSubsystem, Constants.ampAngle))
         .andThen(Commands.runOnce(() -> m_indexSubsystem.turnOnIndexer(), m_indexSubsystem))
-        .andThen(new WaitCommand(2))
+        // TODO: Check wait time
+        .andThen(new WaitCommand(.5))
         .andThen(Commands.runOnce(() -> m_indexSubsystem.turnOffIndexer(), m_indexSubsystem))
         .andThen(Commands.runOnce(() -> m_launcherSubsystem.turnOffLauncher(), m_launcherSubsystem))
-        .andThen(new MoveWristToPoseCommand(m_aimSubsystem, Constants.zeroLaunchAngle));
+        .andThen(new MoveWristToPosCommand(m_aimSubsystem, Constants.zeroLaunchAngle))
+        .andThen(new MoveElevatorToPosCommand(m_elevatorSubsystem, Constants.zeroElevator));
+        
+  }
+
+  public Command moveWristToSource() {
+    return new MoveElevatorToPosCommand(m_elevatorSubsystem, Constants.sourceHeight)
+        .alongWith(new MoveWristToPosCommand(m_aimSubsystem, Constants.sourceAngle));
   }
 
   

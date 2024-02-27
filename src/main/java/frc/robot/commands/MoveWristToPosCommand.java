@@ -13,7 +13,7 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 
 /** An example command that uses an example subsystem. */
-public class MoveWristToPoseCommand extends Command {
+public class MoveWristToPosCommand extends Command {
   @SuppressWarnings({ "PMD.UnusedPrivateField", "PMD.SingularField" })
   private final AimSubsystem m_subsystem;
   private double rotationTarget;
@@ -24,7 +24,7 @@ public class MoveWristToPoseCommand extends Command {
    *
    * @param subsystem The subsystem used by this command.
    */
-  public MoveWristToPoseCommand(AimSubsystem subsystem, Double rotationTarget) {
+  public MoveWristToPosCommand(AimSubsystem subsystem, Double rotationTarget) {
     m_subsystem = subsystem;
     this.rotationTarget = rotationTarget;
     // Use addRequirements() here to declare subsystem dependencies.

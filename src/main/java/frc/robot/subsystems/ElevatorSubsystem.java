@@ -12,15 +12,16 @@ import com.revrobotics.SparkPIDController;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
+import frc.robot.Constants;
 
 public class ElevatorSubsystem extends SubsystemBase {
-   public final CANSparkFlex elevatorMotor = new CANSparkFlex(17, MotorType.kBrushless);
+   public final CANSparkMax elevatorMotor = new CANSparkMax(17, MotorType.kBrushless);
    public final SparkPIDController elevatorController = elevatorMotor.getPIDController();
 
   public ElevatorSubsystem() {
-    elevatorController.setP(.01);    
-    elevatorController.setI(.000001); 
-
+    elevatorController.setP(.015);    
+    elevatorController.setI(.00001); 
+    elevatorMotor.setIdleMode(Constants.angleBrakeMode);
 
   }
   /**
