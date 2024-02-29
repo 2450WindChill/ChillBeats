@@ -108,4 +108,12 @@ public class PoseEstimatorSubsystem extends SubsystemBase {
         return new Pose2d(getAprilTagPoseToBot3d().getX(), getAprilTagPoseToBot3d().getY(),
                 getAprilTagPoseToBot3d().getRotation().toRotation2d());
     }
+
+    // Gets distance to primary april tag
+    public double getDistanceToAprilTag2d() {
+        return Math.sqrt(
+            Math.pow(getAprilTagPoseToBot2d().getX(), 2)
+             + Math.pow(getAprilTagPoseToBot2d().getY(), 2)
+        );
+    }
 }
