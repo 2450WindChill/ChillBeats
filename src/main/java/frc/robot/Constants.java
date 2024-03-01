@@ -194,4 +194,11 @@ public final class Constants {
     public static Pose2d amp;
     public static Pose2d speaker;
   }
+
+  // In meters
+  public static final int[] distancesFromSpeaker = {0,1,2,3,4,5,6};
+
+  // In encoder values
+  // IDS HERE MATCH WITH IDS IN DISTANCESfROMsPEAKER
+  public static final double[] angleToShootInSpeaker = {};
 }

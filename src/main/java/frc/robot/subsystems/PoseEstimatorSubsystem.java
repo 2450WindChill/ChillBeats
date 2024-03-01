@@ -110,6 +110,7 @@ public class PoseEstimatorSubsystem extends SubsystemBase {
     }
 
     // Gets distance to primary april tag
+    // Returns in meters
     public double getDistanceToAprilTag2d() {
         return Math.sqrt(
             Math.pow(getAprilTagPoseToBot2d().getX(), 2)

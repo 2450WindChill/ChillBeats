@@ -169,7 +169,7 @@ public class RobotContainer {
    * -Pose relative to robot center (Meters and Degrees)
    */
   private void configureLimelight() {
-    LimelightHelpers.setPipelineIndex("limelights", 0);
+    LimelightHelpers.setPipelineIndex("limelight", 0);
     LimelightHelpers.setLEDMode_ForceOff("limelight");
     LimelightHelpers.setCameraMode_Processor("limelight");
     LimelightHelpers.setCameraPose_RobotSpace("limelight", 0, 0, 0, 0, 0, 0);
