@@ -94,7 +94,7 @@ public class DrivetrainSubsystem extends SubsystemBase {
     };
   }
 
-  public void drive(Translation2d translation, double rotation, boolean isRobotCentric) {
+  public void drive(Translation2d translation, double rotation, boolean isRobotCentric, boolean isSlowMode) {
     SwerveModuleState[] swerveModuleStates;
     // System.err.println("CALLING DRIVE");
     if (isRobotCentric) {
@@ -112,7 +112,7 @@ public class DrivetrainSubsystem extends SubsystemBase {
     }
 
     for (WindChillSwerveModule mod : swerveModules) {
-      mod.setDesiredState(swerveModuleStates[mod.moduleNumber]);
+      mod.setDesiredState(swerveModuleStates[mod.moduleNumber], isSlowMode);
     }
   }
 
@@ -240,7 +240,7 @@ public class DrivetrainSubsystem extends SubsystemBase {
     SwerveDriveKinematics.desaturateWheelSpeeds(targetStates, Constants.maxSpeed);
     var modules = getModules();
     for (int i = 0; i < modules.length; i++) {
-      modules[i].setDesiredState(targetStates[i]);
+      modules[i].setDesiredState(targetStates[i], false);
     }
   }
 
@@ -248,7 +248,7 @@ public class DrivetrainSubsystem extends SubsystemBase {
     SwerveModuleState[] modStates = Constants.swerveKinematics.toSwerveModuleStates(robotRelativeSpeeds);
 
     for (WindChillSwerveModule mod : swerveModules) {
-      mod.setDesiredState(modStates[mod.moduleNumber]);
+      mod.setDesiredState(modStates[mod.moduleNumber], false);
     }
   }
   // -----------------------------------------------------------------------------------------------
@@ -261,12 +261,12 @@ public class DrivetrainSubsystem extends SubsystemBase {
 
   public void motorAuto() {
     System.err.println("Motor Auto go");
-    drive(new Translation2d(-0.8, 0), gyro.getYaw().getValue(), true);
+    drive(new Translation2d(-0.8, 0), gyro.getYaw().getValue(), true, false);
   }
 
   public void stopAuto() {
     System.err.println("Motor auto stop");
-    drive(new Translation2d(0, 0), gyro.getYaw().getValue(), true);
+    drive(new Translation2d(0, 0), gyro.getYaw().getValue(), true, false);
   }
 
   @Override

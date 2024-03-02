@@ -48,19 +48,23 @@ public class WindChillSwerveModule {
 
   }
 
-  public void setDesiredState(SwerveModuleState desiredState) {
+  public void setDesiredState(SwerveModuleState desiredState, boolean isSlowMode) {
     desiredState = OnboardModuleState.optimize(desiredState, getState().angle);
 
-    setAngle(desiredState);
-    setSpeed(desiredState);
+    setAngle(desiredState, isSlowMode);
+    setSpeed(desiredState, isSlowMode);
   }
 
-  private void setSpeed(SwerveModuleState desiredState) {
+  private void setSpeed(SwerveModuleState desiredState, boolean isSlowMode) {
     double percentOutput = desiredState.speedMetersPerSecond / Constants.maxSpeed;
-    driveMotor.set(percentOutput);
+    if (!isSlowMode) {
+      driveMotor.set(percentOutput);
+    } else {
+      driveMotor.set(percentOutput * (1/3));
+    }
   }
 
-  private void setAngle(SwerveModuleState desiredState) {
+  private void setAngle(SwerveModuleState desiredState, boolean isSlowMode) {
     // Prevent rotating module if speed is less then 1%. Prevents jittering.
     Rotation2d angle = (Math.abs(desiredState.speedMetersPerSecond) <= (Constants.maxSpeed * 0.01))
         ? lastAngle

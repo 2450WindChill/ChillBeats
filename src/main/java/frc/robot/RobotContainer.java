@@ -99,7 +99,9 @@ public class RobotContainer {
             () -> m_driverController.getLeftY(),
             () -> m_driverController.getLeftX(),
             () -> m_driverController.getRightX(),
-            () -> false));
+            () -> false,
+            m_driverController.rightTrigger().getAsBoolean()
+          ));
 
     m_launcherSubsystem.setDefaultCommand(new DefaultShooterCommand(m_launcherSubsystem));
 

@@ -22,6 +22,7 @@ public class DefaultDriveCommand extends Command {
   private DoubleSupplier strafeSupplier;
   private DoubleSupplier rotationSupplier;
   private BooleanSupplier isRobotCentricSupplier;
+  private boolean isSlowMode;
   private SlewRateLimiter translationLimiter = new SlewRateLimiter(3.0);
   private SlewRateLimiter strafeLimiter = new SlewRateLimiter(3.0);
   private SlewRateLimiter rotationLimiter = new SlewRateLimiter(3.0);
@@ -36,7 +37,8 @@ public class DefaultDriveCommand extends Command {
       DoubleSupplier translationSupplier,
       DoubleSupplier strafeSupplier,
       DoubleSupplier rotationSupplier,
-      BooleanSupplier isRobotCentricSupplier
+      BooleanSupplier isRobotCentricSupplier,
+      boolean isSlowMode
     ) {
 
     m_driveTrainSubSystem = subsystem;
@@ -47,6 +49,7 @@ public class DefaultDriveCommand extends Command {
     this.strafeSupplier = strafeSupplier;
     this.rotationSupplier = rotationSupplier;
     this.isRobotCentricSupplier = isRobotCentricSupplier;
+    this.isSlowMode = isSlowMode;
   }
 
   // Called when the command is initially scheduled.
@@ -72,6 +75,8 @@ public class DefaultDriveCommand extends Command {
     m_driveTrainSubSystem.drive(
         new Translation2d(translationVal, strafeVal).times(Constants.maxSpeed),
         rotationVal * Constants.maxAngularVelocity,
-        isRobotCentricSupplier.getAsBoolean());
+        isRobotCentricSupplier.getAsBoolean(),
+        isSlowMode
+      );
   }
 }

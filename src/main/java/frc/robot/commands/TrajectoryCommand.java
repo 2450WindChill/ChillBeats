@@ -55,7 +55,7 @@ public class TrajectoryCommand extends Command {
         SwerveModuleState[] targetModuleStates = Constants.swerveKinematics.toSwerveModuleStates(targetChassisSpeeds);
 
         for (WindChillSwerveModule mod : m_driveSubsystem.swerveModules) {
-            mod.setDesiredState(targetModuleStates[mod.moduleNumber]);
+            mod.setDesiredState(targetModuleStates[mod.moduleNumber], false);
         }
     }
 

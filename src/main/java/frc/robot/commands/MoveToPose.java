@@ -108,6 +108,7 @@ public class MoveToPose extends Command {
     m_drivetrainSubsystem.drive(
       new Translation2d(0, 0),
       0,
+      false,
       false
     );
   }
