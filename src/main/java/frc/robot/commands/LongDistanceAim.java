@@ -8,14 +8,23 @@ import frc.robot.subsystems.AimSubsystem;
 import frc.robot.subsystems.PoseEstimatorSubsystem;
 
 public class LongDistanceAim extends Command {
+
     private AimSubsystem m_aimSubsystem;
     private PoseEstimatorSubsystem m_poseEstimatorSubsystem;
+
+
     private double distanceToTarget;
     private int roundedDistanceToTarget;
     private boolean roundedUp;
-    private int idOfClosestMeasuedDistance;
+    private double percentError;
+
+    private int closestID;
     private double estiamtedAngle;
+
     private boolean isGoingUp;
+
+    private double[] angles = Constants.anglesToShootInSpeaker;
+    private int[] distances = Constants.distancesFromSpeaker;
     
     public LongDistanceAim(AimSubsystem aimSubsystem, PoseEstimatorSubsystem poseEstimatorSubsystem) {
         m_aimSubsystem = aimSubsystem;
@@ -25,24 +34,41 @@ public class LongDistanceAim extends Command {
     }
 
     public void initialize() {
+        // Gets distance (in meters) to an april tag and then rounds it to nearest integer
         distanceToTarget = m_poseEstimatorSubsystem.getDistanceToAprilTag2d();
         roundedDistanceToTarget = (int) (distanceToTarget + 0.5);
         roundedUp = (distanceToTarget < roundedDistanceToTarget);
+
+        // Percent error is used to find a more accurate value between two known poitns
+        percentError = distanceToTarget - (int) distanceToTarget;
         
-        for (int i = 0; i < Constants.distancesFromSpeaker.length; i++) {
-            if (roundedDistanceToTarget == Constants.distancesFromSpeaker[i]) {
-                idOfClosestMeasuedDistance = i;
+        // Finds the known angle that matches with the closest known distance
+        for (int i = 0; i < distances.length; i++) {
+            if (roundedDistanceToTarget == distances[i]) {
+                closestID = i;
             }
         }
 
+        // Finds average of closest values
+        // if (roundedUp) {
+        //     estiamtedAngle = ((angles[closestID] 
+        //                         + angles[closestID - 1])
+        //                             /2);
+        // } else {
+        //     estiamtedAngle = ((angles[closestID] 
+        //                         + angles[closestID + 1])
+        //                             /2);
+        // }
+
+        // Estimates a value proportionally between closest value
         if (roundedUp) {
-            estiamtedAngle = ((Constants.angleToShootInSpeaker[idOfClosestMeasuedDistance] 
-                                + Constants.angleToShootInSpeaker[idOfClosestMeasuedDistance - 1])
-                                    /2);
+            estiamtedAngle = (angles[closestID - 1]
+                                + (angles[closestID] - angles[closestID - 1] * percentError)
+                            );
         } else {
-            estiamtedAngle = ((Constants.angleToShootInSpeaker[idOfClosestMeasuedDistance] 
-                                + Constants.angleToShootInSpeaker[idOfClosestMeasuedDistance + 1])
-                                    /2);
+            estiamtedAngle = (angles[closestID]
+                                + (angles[closestID + 1] - angles[closestID] * percentError)
+                            );
         }
 
         double currentPosition = m_aimSubsystem.wristMotor.getEncoder().getPosition();

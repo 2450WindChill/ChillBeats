@@ -200,5 +200,5 @@ public final class Constants {
 
   // In encoder values
   // IDS HERE MATCH WITH IDS IN DISTANCESfROMsPEAKER
-  public static final double[] angleToShootInSpeaker = {};
+  public static final double[] anglesToShootInSpeaker = {};
 }
