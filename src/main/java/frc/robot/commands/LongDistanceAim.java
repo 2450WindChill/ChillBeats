@@ -14,11 +14,12 @@ public class LongDistanceAim extends Command {
 
 
     private double distanceToTarget;
-    private int roundedDistanceToTarget;
-    private boolean roundedUp;
+    private int roundedUpDistance;
+    private int roundedDownDistance;
     private double percentError;
 
-    private int closestID;
+    private int lowerID;
+    private int higherID;
     private double estiamtedAngle;
 
     private boolean isGoingUp;
@@ -34,20 +35,24 @@ public class LongDistanceAim extends Command {
     }
 
     public void initialize() {
-        // Gets distance (in meters) to an april tag and then rounds it to nearest integer
+        // Gets distance (in meters) to an april tag and then rounds distance down and up to create bounds
         distanceToTarget = m_poseEstimatorSubsystem.getDistanceToAprilTag2d();
-        roundedDistanceToTarget = (int) (distanceToTarget + 0.5);
-        roundedUp = (distanceToTarget < roundedDistanceToTarget);
+        roundedDownDistance = (int) distanceToTarget;
+        roundedUpDistance = roundedDownDistance + 1;
 
         // Percent error is used to find a more accurate value between two known poitns
-        percentError = distanceToTarget - (int) distanceToTarget;
+        percentError = distanceToTarget - roundedDownDistance;
         
         // Finds the known angle that matches with the closest known distance
         for (int i = 0; i < distances.length; i++) {
-            if (roundedDistanceToTarget == distances[i]) {
-                closestID = i;
+            if (roundedDownDistance == distances[i]) {
+                lowerID = i;
+                higherID = i + 1;
             }
         }
+
+        // Estimates a value proportionally between closest value
+        estiamtedAngle = angles[lowerID] + ((angles[higherID] - angles[lowerID]) * percentError);
 
         // Finds average of closest values
         // if (roundedUp) {
@@ -59,17 +64,6 @@ public class LongDistanceAim extends Command {
         //                         + angles[closestID + 1])
         //                             /2);
         // }
-
-        // Estimates a value proportionally between closest value
-        if (roundedUp) {
-            estiamtedAngle = (angles[closestID - 1]
-                                + (angles[closestID] - angles[closestID - 1] * percentError)
-                            );
-        } else {
-            estiamtedAngle = (angles[closestID]
-                                + (angles[closestID + 1] - angles[closestID] * percentError)
-                            );
-        }
 
         double currentPosition = m_aimSubsystem.wristMotor.getEncoder().getPosition();
 
