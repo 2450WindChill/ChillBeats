@@ -35,7 +35,6 @@ public class MoveElevatorToPosCommand extends Command {
   // Called when the command is initially scheduled.
   @Override
   public void initialize() {
-    System.out.println("initializing move elavator");
     double currentPosition = m_subsystem.elevatorMotor.getEncoder().getPosition();
 
     if (currentPosition < rotationTarget) {
@@ -52,7 +51,6 @@ public class MoveElevatorToPosCommand extends Command {
     SmartDashboard.putNumber("current elevator position",currentPosition);
       SmartDashboard.putNumber("target elevator position",rotationTarget);
       SmartDashboard.putBoolean("is going up (elevator)",isGoingUp);
-      System.out.println("executing move to elavator");
       m_subsystem.elevatorController.setReference(rotationTarget, ControlType.kPosition);
 
   }

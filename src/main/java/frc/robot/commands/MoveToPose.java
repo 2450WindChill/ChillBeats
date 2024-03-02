@@ -68,38 +68,39 @@ public class MoveToPose extends Command {
     SmartDashboard.putNumber("Calculated Rotation", calculatedRotation);
 
     // Finds if the X component of the translation is +, -, or 0
-    if (calculatedX > 0) {
+    if (calculatedX > 0.1) {
       finalXSpeed = Constants.moveToPoseSpeed;
-    } else if (calculatedX < 0) {
+    } else if (calculatedX < 0.1) {
       finalXSpeed = -Constants.moveToPoseSpeed;
     } else {
       finalXSpeed = 0;
     }
 
     // Finds if the Y component of the translation is +, -, or 0
-    if (calculatedY > 0) {
+    if (calculatedY > 0.1) {
       finalYSpeed = Constants.moveToPoseSpeed;
-    } else if (calculatedY < 0) {
+    } else if (calculatedY < 0.1) {
       finalYSpeed = -Constants.moveToPoseSpeed;
     } else {
       finalYSpeed = 0;
     }
 
     // Finds if the rotation component of the translation is +, -, or 0
-    if (calculatedRotation > 0) {
+    if (calculatedRotation > 5) {
       finalRotation = Constants.moveToPoseRotationSpeed;
-    } else if (calculatedRotation < 0) {
+    } else if (calculatedRotation < -5) {
       finalRotation = -Constants.moveToPoseRotationSpeed;
     } else {
       finalRotation = 0;
     }
 
     // Calls .drive() with speeds and rotations towards desired pose
-    // m_drivetrainSubsystem.drive(
-    //   new Translation2d(finalXSpeed, finalYSpeed),
-    //   finalRotation,
-    //   false
-    // );
+    m_drivetrainSubsystem.drive(
+      new Translation2d(finalXSpeed, finalYSpeed),
+      finalRotation,
+      false,
+      false
+    );
   }
 
   // Called once the command ends or is interrupted.

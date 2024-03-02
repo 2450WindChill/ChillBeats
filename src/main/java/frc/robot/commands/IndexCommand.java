@@ -30,18 +30,20 @@ public class IndexCommand extends Command {
   // Called when the command is initially scheduled.
   @Override
   public void initialize() {
-
+     System.out.println("INDEX INITIALIZE");
   }
 
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
+    System.out.println("INDEX EXECUTING");
     m_subsystem.indexMotor.set(m_speed);
   }
 
   // Called once the command ends or is interrupted.
   @Override
   public void end(boolean interrupted) {
+     System.out.println("INDEX END");
     m_subsystem.indexMotor.set(0);
   }
 

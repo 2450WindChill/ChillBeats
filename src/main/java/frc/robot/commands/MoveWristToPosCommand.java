@@ -34,7 +34,6 @@ public class MoveWristToPosCommand extends Command {
   // Called when the command is initially scheduled.
   @Override
   public void initialize() {
-    System.out.println("initializing move Wrist");
     double currentPosition = m_subsystem.wristMotor.getEncoder().getPosition();
 
     if (currentPosition < rotationTarget) {
@@ -51,7 +50,7 @@ public class MoveWristToPosCommand extends Command {
     SmartDashboard.putNumber("current Wrist position", currentPosition);
     SmartDashboard.putNumber("target Wrist position", rotationTarget);
     SmartDashboard.putBoolean("Wrist is going up", isGoingUp);
-    System.out.println("executing move to Wrist");
+
 
       m_subsystem.wristController.setReference(rotationTarget, ControlType.kPosition);
    

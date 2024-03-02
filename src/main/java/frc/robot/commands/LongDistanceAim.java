@@ -14,7 +14,6 @@ public class LongDistanceAim extends Command {
 
 
     private double distanceToTarget;
-    private int roundedUpDistance;
     private int roundedDownDistance;
     private double percentError;
 
@@ -38,7 +37,6 @@ public class LongDistanceAim extends Command {
         // Gets distance (in meters) to an april tag and then rounds distance down and up to create bounds
         distanceToTarget = m_poseEstimatorSubsystem.getDistanceToAprilTag2d();
         roundedDownDistance = (int) distanceToTarget;
-        roundedUpDistance = roundedDownDistance + 1;
 
         // Percent error is used to find a more accurate value between two known poitns
         percentError = distanceToTarget - roundedDownDistance;

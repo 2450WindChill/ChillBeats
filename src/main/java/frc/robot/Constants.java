@@ -53,12 +53,12 @@ public final class Constants {
 
   public static final double openLoopRamp = 0.25;
   public static final double closedLoopRamp = 0.0;
-  public static final double speakerAngle = -10.819;
+  public static final double speakerAngle = -8.0;
   public static final double ampAngle = -41.14;
-  public static final double zeroLaunchAngle = -5.0;
-  public static final double zeroElevator = -2.6;
-  public static final double ampElevator = 55;
-  public static final double sourceAngle = 0.0;
+  public static final double zeroLaunchAngle = -1.5;
+  public static final double zeroElevator = 0.0;
+  public static final double ampElevator = 60;
+  public static final double sourceAngle = -17.1;
   public static final double sourceHeight = 0.0;
   
 
@@ -109,7 +109,7 @@ public final class Constants {
   //public static final double maxSpeed = 3.6576; // meters per second
 
   // Max speed is 4.630
-  public static final double maxSpeed = 6380 / 60 * ModuleConfiguration.MK4I_L2.getDriveReduction() * ModuleConfiguration.MK4I_L2.getWheelDiameter() * Math.PI; 
+  public static final double maxSpeed = 6380 / 60 * ModuleConfiguration.MK4I_L1.getDriveReduction() * ModuleConfiguration.MK4I_L1.getWheelDiameter() * Math.PI; 
 
   public static final double maxAngularVelocity = maxSpeed / Math.hypot(wheelBase / 2.0, trackWidth / 2.0);;
 
@@ -118,6 +118,7 @@ public final class Constants {
   /* Neutral Modes */
   // public static final IdleMode angleNeutralMode = IdleMode.kBrake;
   public static final IdleMode angleBrakeMode = IdleMode.kBrake;
+  public static final IdleMode driveBrakeMode = IdleMode.kBrake;
   public static final IdleMode elevatorBrakeMode = IdleMode.kBrake;
 
   /* Motor Inverts */
@@ -180,7 +181,7 @@ public final class Constants {
   public static final double kRamseteZeta = 0.7;
 
   public static final double kPThetaController = 1;
-  public static final double moveToPoseSpeed = 0.1;
+  public static final double moveToPoseSpeed = 0.5;
   public static final double moveToPoseRotationSpeed = 0.5;
 
   public static final class BlueAllianceFieldElementsPoses {
@@ -200,5 +201,5 @@ public final class Constants {
 
   // In encoder values
   // IDS HERE MATCH WITH IDS IN DISTANCESfROMsPEAKER
-  public static final double[] anglesToShootInSpeaker = {};
+  public static final double[] anglesToShootInSpeaker = {0, 0, -13.85};
 }

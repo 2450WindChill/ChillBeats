@@ -60,7 +60,7 @@ public class WindChillSwerveModule {
     if (!isSlowMode) {
       driveMotor.set(percentOutput);
     } else {
-      driveMotor.set(percentOutput * (1/3));
+      driveMotor.set(percentOutput * 0.15);
     }
   }
 
@@ -146,7 +146,7 @@ public class WindChillSwerveModule {
     //   driveMotor.setInverted(Constants.driveInvert);
     // }
 
-    // driveMotor.setIdleMode(Constants.driveNeutralMode);
+    driveMotor.setIdleMode(Constants.driveBrakeMode);
     driveMotor.setInverted(Constants.driveInvert);
     driveEncoder.setVelocityConversionFactor(Constants.driveConversionVelocityFactor);
     driveEncoder.setPositionConversionFactor(Constants.driveConversionPositionFactor);
