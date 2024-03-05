@@ -23,6 +23,7 @@ import frc.robot.subsystems.LauncherSubsystem;
 import com.pathplanner.lib.commands.PathPlannerAuto;
 
 import edu.wpi.first.wpilibj.DriverStation;
+import edu.wpi.first.wpilibj.GenericHID;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import frc.robot.subsystems.PoseEstimatorSubsystem;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
@@ -66,7 +67,8 @@ public class RobotContainer {
             () -> m_driverController.getLeftX(),
             () -> m_driverController.getRightX(),
             () -> Constants.isRobotCentric,
-            m_driverController.rightTrigger().getAsBoolean()));
+            m_driverController.rightStick().getAsBoolean()
+        ));
 
     m_launcherSubsystem.setDefaultCommand(new DefaultShooterCommand(m_launcherSubsystem));
     m_elevatorSubsystem.setDefaultCommand(new ElevatorCommand(m_elevatorSubsystem, m_operatorController));
