@@ -52,6 +52,7 @@ public class DrivetrainSubsystem extends SubsystemBase {
         new PIDController(1, 0, 0), new PIDController(1, 0, 0),
         new ProfiledPIDController(1, 0, 0,
         new TrapezoidProfile.Constraints(6.28, 3.14)));
+        //SmartDashboard.putData("Reset pose", Commands.runOnce(() -> getX()));
 
     // Configure AutoBuilder last
     AutoBuilder.configureHolonomic(
@@ -60,7 +61,7 @@ public class DrivetrainSubsystem extends SubsystemBase {
         this::getSpeeds, // ChassisSpeeds supplier. MUST BE ROBOT RELATIVE
         this::driveRobotRelative, // Method that will drive the robot given ROBOT RELATIVE ChassisSpeeds
         new HolonomicPathFollowerConfig( // HolonomicPathFollowerConfig, this should likely live in your Constants class
-            new PIDConstants(0.5, 0.0, 0.0), // Translation PID constants
+            new PIDConstants(1, 0.2, 0.0), // Translation PID constants
             new PIDConstants(0.5, 0.0, 0.0), // Rotation PID constants
             4.5, // Max module speed, in m/s
             Units.inchesToMeters(15.6875), // Drive base radius in meters. Distance from robot center to furthest

@@ -11,6 +11,7 @@ import com.revrobotics.SparkPIDController;
 
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
+import edu.wpi.first.wpilibj2.command.Commands;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants;
 
@@ -24,6 +25,7 @@ public class AimSubsystem extends SubsystemBase {
     wristController.setOutputRange(-0.4, 0.4);
     wristController.setI(.00001);
     wristMotor.setIdleMode(Constants.angleBrakeMode);
+    //SmartDashboard.putData("Reset pose", Commands.runOnce(() -> resetWrist()));
   }
 
 
@@ -40,6 +42,10 @@ public class AimSubsystem extends SubsystemBase {
           /* one-time action goes here */
         });
   }
+
+  // public Command resetWrist() {
+  //   wristMotor.get
+  // }
 
   /**
    * An example method querying a boolean state of the subsystem (for example, a

@@ -32,9 +32,9 @@ public class PoseEstimatorSubsystem extends SubsystemBase {
                 m_drivetrainSubsystem.getGyroYaw(),
                 m_drivetrainSubsystem.getPositions());
 
-        if (LimelightHelpers.getTV("limelight")) {
-            poseEstimate.addVisionMeasurement(getLimelightPose(), getTimeStamp());
-        }
+        // if (LimelightHelpers.getTV("limelight")) {
+        //     poseEstimate.addVisionMeasurement(getLimelightPose(), getTimeStamp());
+        // }
 
         SmartDashboard.putNumber("Pose X", getBotX());
         SmartDashboard.putNumber("Pose Y", getBotY());

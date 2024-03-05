@@ -137,8 +137,8 @@ public class RobotContainer {
   private void configureBindings() {
     // m_operatorController.a().onTrue(new
     // MoveElevatorToPosCommand(m_elevatorSubsystem, Constants.zeroElevator));
-    // m_operatorController.rightTrigger().onTrue(new
-    // MoveElevatorToPosCommand(m_elevatorSubsystem, Constants.ampElevator));
+    m_driverController.rightTrigger().onTrue(new
+    MoveElevatorToPosCommand(m_elevatorSubsystem, Constants.zeroElevator));
 
     // m_operatorController.rightTrigger().whileTrue(new
     // TrajectoryCommand(m_drivetrainSubsystem, m_PoseEstimatorSubsystem, new
@@ -276,17 +276,15 @@ public class RobotContainer {
   // }
 
   public void configureAutoChooser() {
-    Station_1_Shoot_Moveout = speakerLaunch();
-    Station_2_Shoot_Moveout = speakerLaunch();
-    Station_3_Shoot_Moveout = speakerLaunch();
-    test = new PathPlannerAuto("test_auto");
+    Station_1_Shoot_Moveout = speakerLaunch().andThen(new PathPlannerAuto("Station_1_Shoot_Moveout_Auto"));
+    Station_2_Shoot_Moveout = speakerLaunch().andThen(new PathPlannerAuto("Station_2_Shoot_Moveout_Auto"));
+    Station_3_Shoot_Moveout = speakerLaunch().andThen(new PathPlannerAuto("Station_3_Shoot_Moveout_Auto"));
+  
 
     m_chooser = new SendableChooser<>();
     m_chooser.setDefaultOption("Station 1", Station_1_Shoot_Moveout);
     m_chooser.addOption("Station 2", Station_2_Shoot_Moveout);
     m_chooser.addOption("Station 3", Station_3_Shoot_Moveout);
-
-    m_chooser.addOption("Test Auto", test);
   }
 
   public Command getAutonomousCommand() {
