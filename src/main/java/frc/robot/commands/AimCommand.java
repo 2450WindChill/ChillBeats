@@ -33,12 +33,12 @@ private final CommandXboxController m_controller;
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-    if (m_controller.getLeftX() > 0 ) {
+    if (m_controller.getRightX() > 0 ) {
       
-      m_subsystem.wristMotor.set(.5);
+      m_subsystem.wristMotor.set(.1);
     }
-    else if (m_controller.getLeftX() < 0 ) {
-     m_subsystem.wristMotor.set(-.5);
+    else if (m_controller.getRightX() < 0 ) {
+     m_subsystem.wristMotor.set(-.1);
     }
     else {
       m_subsystem.wristMotor.set(0);

@@ -53,13 +53,19 @@ public final class Constants {
 
   public static final double openLoopRamp = 0.25;
   public static final double closedLoopRamp = 0.0;
+
   public static final double speakerAngle = -8.0;
   public static final double ampAngle = -41.14;
   public static final double zeroLaunchAngle = -1.5;
+
   public static final double zeroElevator = 0.0;
   public static final double ampElevator = 60;
+
   public static final double sourceAngle = -17.1;
   public static final double sourceHeight = 0.0;
+
+  public static final double climbingHeight = 132;
+  public static final double climbingAngle = -24.6;
   
 
   public static final double rotationsPerOneFoot = 0.33;

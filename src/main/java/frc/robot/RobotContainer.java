@@ -5,8 +5,11 @@
 package frc.robot;
 
 import frc.robot.Constants.OperatorConstants;
+import frc.robot.commands.AimCommand;
 import frc.robot.commands.DefaultDriveCommand;
 import frc.robot.commands.DefaultShooterCommand;
+import frc.robot.commands.ElevatorCommand;
+import frc.robot.commands.FullIntakeCommand;
 import frc.robot.commands.IndexCommand;
 import frc.robot.commands.LaunchCommand;
 import frc.robot.commands.MoveElevatorToPosCommand;
@@ -104,6 +107,8 @@ public class RobotContainer {
           ));
 
     m_launcherSubsystem.setDefaultCommand(new DefaultShooterCommand(m_launcherSubsystem));
+    m_elevatorSubsystem.setDefaultCommand(new ElevatorCommand(m_elevatorSubsystem, m_operatorController));
+    m_aimSubsystem.setDefaultCommand(new AimCommand(m_aimSubsystem, m_operatorController));
   
   
     // Configure bindings and limelight
@@ -149,9 +154,12 @@ public class RobotContainer {
     m_operatorController.rightBumper().whileTrue(new IndexCommand(m_indexSubsystem, 0.2));
     
     // Intake
-    m_operatorController.rightTrigger().whileTrue(new IndexCommand(m_indexSubsystem, 0.2));
-    m_operatorController.rightTrigger().whileTrue(new LaunchCommand(m_launcherSubsystem, 0.4));
+    // m_operatorController.rightTrigger().whileTrue(new IndexCommand(m_indexSubsystem, 0.2));
+    // m_operatorController.rightTrigger().whileTrue(new LaunchCommand(m_launcherSubsystem, 0.4));
+    m_operatorController.rightTrigger().onTrue(new FullIntakeCommand(m_indexSubsystem, m_launcherSubsystem));
     m_operatorController.leftTrigger().onTrue(new MoveWristToPosCommand(m_aimSubsystem, Constants.sourceAngle));
+
+    m_operatorController.a().onTrue(climbSequence());
 
    m_driverController.x().onTrue(Commands.runOnce(() -> m_drivetrainSubsystem.zeroGyro(), m_drivetrainSubsystem));
 
@@ -250,6 +258,13 @@ public class RobotContainer {
         .andThen(new MoveWristToPosCommand(m_aimSubsystem, Constants.zeroLaunchAngle))
         .andThen(new MoveElevatorToPosCommand(m_elevatorSubsystem, Constants.zeroElevator));
 
+  }
+
+  public Command climbSequence() {
+    return new MoveWristToPosCommand(m_aimSubsystem, Constants.ampAngle)
+          .andThen(new MoveElevatorToPosCommand(m_elevatorSubsystem, Constants.climbingHeight))
+          .andThen(new MoveWristToPosCommand(m_aimSubsystem, Constants.climbingAngle)
+          .andThen(new MoveElevatorToPosCommand(m_elevatorSubsystem, Constants.zeroElevator)));
   }
 
   // public Command moveWristToSource() {
