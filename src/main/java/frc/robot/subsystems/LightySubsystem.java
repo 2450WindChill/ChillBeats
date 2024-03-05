@@ -124,3 +124,32 @@ public class LightySubsystem extends SubsystemBase {
   }
     }
 
+// public void setLEDsToAlliance() {
+  // teamColor = DriverStation.getAlliance().get();
+  // if (teamColor == DriverStation.Alliance.Red) {
+  // System.err.println("Alliance RED");
+  // m_LightySubsystem.SetLEDsToRed();
+  // } else {
+  // System.err.println("Alliance BLUE");
+  // m_LightySubsystem.SetLEDsToBlue();
+  // }
+
+  // public void rainbow() {
+  // m_LightySubsystem.rainbow();
+  // }
+
+  // public Command autoLaunch() {
+  // return (new MoveWristToPoseCommand(m_AimSubsystem, Constants.launchAngle))
+  // .HoldWristCommand()
+  // .alongWith(Commands.runOnce(() -> m_ShootSubsystem.turnOnLauncher(),
+  // m_ShootSubsystem))
+  // .andThen(new WaitCommand(3))
+  // .andThen(Commands.runOnce(() -> m_IndexSubsystem.turnOnIndexer(),
+  // m_IndexSubsystem))
+  // .andThen(new WaitCommand(2))
+  // .stophold
+  // .andThen(Commands.runOnce(() -> m_IndexSubsystem.turnOffIndexer(),
+  // m_IndexSubsystem))
+  // .andThen(Commands.runOnce(() -> m_ShootSubsystem.turnOffLauncher(),
+  // m_ShootSubsystem));
+  // }

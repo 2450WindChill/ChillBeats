@@ -5,14 +5,11 @@
 package frc.robot.commands;
 
 import frc.robot.subsystems.IndexSubsystem;
-import frc.robot.subsystems.IntakeSubsystem;
 import frc.robot.subsystems.LauncherSubsystem;
-import frc.robot.subsystems.TestSubsystem;
 import edu.wpi.first.wpilibj2.command.Command;
-import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 
 /** An example command that uses an example subsystem. */
-public class FullIntakeCommand extends Command {
+public class SourceIntakeCommand extends Command {
   @SuppressWarnings({ "PMD.UnusedPrivateField", "PMD.SingularField" })
   private final IndexSubsystem m_indexSubsystem;
   private final LauncherSubsystem m_launcherSubsystem;
@@ -24,7 +21,7 @@ public class FullIntakeCommand extends Command {
    *
    * @param subsystem The subsystem used by this command.
    */
-  public FullIntakeCommand(IndexSubsystem indexSubsystem, LauncherSubsystem launcherSubsystem) {
+  public SourceIntakeCommand(IndexSubsystem indexSubsystem, LauncherSubsystem launcherSubsystem) {
     m_indexSubsystem = indexSubsystem;
     m_launcherSubsystem = launcherSubsystem;
 

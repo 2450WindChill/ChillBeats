@@ -135,6 +135,9 @@ public final class Constants {
   /* Angle Encoder Invert */
   public static final boolean canCoderInvert = false;
 
+  /* Robot centric invert */
+  public static final boolean isRobotCentric = false;
+
   /* Front Left Module - Module 0 */
   public static final class FrontLeftModule {
     public static final int driveMotorID = 6;
