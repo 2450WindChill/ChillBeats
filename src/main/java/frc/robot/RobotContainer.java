@@ -7,10 +7,12 @@ package frc.robot;
 import frc.robot.Constants.OperatorConstants;
 import frc.robot.commands.AimCommand;
 import frc.robot.commands.DefaultDriveCommand;
+import frc.robot.commands.DefaultIndexCommand;
 import frc.robot.commands.DefaultShooterCommand;
 import frc.robot.commands.ElevatorCommand;
 import frc.robot.commands.SourceIntakeCommand;
 import frc.robot.commands.IndexCommand;
+import frc.robot.commands.LockMoveWristToPosCommand;
 import frc.robot.commands.MoveElevatorToPosCommand;
 import frc.robot.commands.MoveWristToPosCommand;
 import frc.robot.libs.LimelightHelpers;
@@ -19,10 +21,14 @@ import frc.robot.subsystems.DrivetrainSubsystem;
 import frc.robot.subsystems.ElevatorSubsystem;
 import frc.robot.subsystems.IndexSubsystem;
 import frc.robot.subsystems.LauncherSubsystem;
+import frc.robot.subsystems.LightySubsystem;
+
+import java.util.Optional;
 
 import com.pathplanner.lib.commands.PathPlannerAuto;
 
 import edu.wpi.first.wpilibj.DriverStation;
+import edu.wpi.first.wpilibj.DriverStation.Alliance;
 import edu.wpi.first.wpilibj.GenericHID;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import frc.robot.subsystems.PoseEstimatorSubsystem;
@@ -40,7 +46,8 @@ public class RobotContainer {
   private final AimSubsystem m_aimSubsystem = new AimSubsystem();
   private final LauncherSubsystem m_launcherSubsystem = new LauncherSubsystem();
   private final IndexSubsystem m_indexSubsystem = new IndexSubsystem();
-  public DriverStation.Alliance teamColor;
+  public Alliance teamColor = DriverStation.getAlliance().orElse(Alliance.Blue);
+  private final LightySubsystem m_ledSubsystem = new LightySubsystem(teamColor);
 
   // Replace with CommandPS4Controller or CommandJoystick if needed
   private final CommandXboxController m_driverController = new CommandXboxController(
@@ -73,6 +80,7 @@ public class RobotContainer {
     m_launcherSubsystem.setDefaultCommand(new DefaultShooterCommand(m_launcherSubsystem));
     m_elevatorSubsystem.setDefaultCommand(new ElevatorCommand(m_elevatorSubsystem, m_operatorController));
     m_aimSubsystem.setDefaultCommand(new AimCommand(m_aimSubsystem, m_operatorController));
+    m_indexSubsystem.setDefaultCommand(new DefaultIndexCommand(m_indexSubsystem, m_ledSubsystem));
 
     // Configure bindings and limelight
     configureBindings();
@@ -82,33 +90,26 @@ public class RobotContainer {
 
   }
 
+  /*
+   * x = amp
+   * y = speaker
+   * triggers = index
+   * a = source
+   * b = zero arm
+   */
+
   private void configureBindings() {
 
-    /*
-     * 
-     * TODO: Decide button bindings
-     * 
-     */
+    // Operator
+      // Sequences
+    m_operatorController.x().onTrue(ampLaunchPrep());
+    m_operatorController.rightTrigger().onTrue(shoot());
+    m_operatorController.y().whileTrue(new LockMoveWristToPosCommand(m_aimSubsystem, Constants.speakerAngle));
+    m_operatorController.a().onTrue(sourceIntake());
+    m_operatorController.b().onTrue(zeroArm());
 
-    // Scoring buttons
-    m_operatorController.x().onTrue(ampLaunch());
-    m_operatorController.y().onTrue(speakerLaunch());
-
-    // Elevator buttons
-    m_operatorController.a().onTrue(new MoveElevatorToPosCommand(m_elevatorSubsystem, Constants.zeroElevator));
-
-    // Wrist movement buttons
-    m_operatorController.b().onTrue(new MoveWristToPosCommand(m_aimSubsystem, Constants.zeroLaunchAngle));
-    m_operatorController.leftTrigger().onTrue(new MoveWristToPosCommand(m_aimSubsystem, Constants.sourceAngle));
-
-    // Index buttons
-    m_operatorController.leftBumper().whileTrue(new IndexCommand(m_indexSubsystem, -0.2));
-    m_operatorController.rightBumper().whileTrue(new IndexCommand(m_indexSubsystem, 0.2));
-
-    // Intake command
-    m_operatorController.rightTrigger().onTrue(new SourceIntakeCommand(m_indexSubsystem, m_launcherSubsystem));
-
-    // Zero gyro button
+    // Driver
+      // Zero Gyro
     m_driverController.x().onTrue(Commands.runOnce(() -> m_drivetrainSubsystem.zeroGyro(), m_drivetrainSubsystem));
   }
 
@@ -127,45 +128,59 @@ public class RobotContainer {
   }
 
   // Speaker launch sequential command
-  public Command speakerLaunch() {
+  public Command autoSpeakerLaunch() {
     return (Commands.runOnce(() -> m_launcherSubsystem.speakerTurnOnLauncher(), m_launcherSubsystem))
         .andThen(new MoveWristToPosCommand(m_aimSubsystem, Constants.speakerAngle))
         .andThen(Commands.runOnce(() -> m_indexSubsystem.turnOnIndexer(), m_indexSubsystem))
-        // TODO: Check wait time
         .andThen(new WaitCommand(1))
         .andThen(Commands.runOnce(() -> m_indexSubsystem.turnOffIndexer(), m_indexSubsystem))
         .andThen(Commands.runOnce(() -> m_launcherSubsystem.turnOffLauncher(), m_launcherSubsystem))
         .andThen(new MoveWristToPosCommand(m_aimSubsystem, Constants.zeroLaunchAngle));
   }
 
-  // Amp launch sequential command
-  public Command ampLaunch() {
-    return new MoveElevatorToPosCommand(m_elevatorSubsystem, Constants.ampElevator)
-        .andThen(Commands.runOnce(() -> m_launcherSubsystem.ampTurnOnLauncher(), m_launcherSubsystem))
-        .andThen(new MoveWristToPosCommand(m_aimSubsystem, Constants.ampAngle))
-        .andThen(Commands.runOnce(() -> m_indexSubsystem.turnOnIndexer(), m_indexSubsystem))
-        // TODO: Check wait time
+  public Command speakerLaunchPrep() {
+    return new MoveWristToPosCommand(m_aimSubsystem, Constants.speakerAngle);
+  }
+
+  public Command ampLaunchPrep() {
+    return (new MoveElevatorToPosCommand(m_elevatorSubsystem, Constants.ampElevator))
+        .andThen(new MoveWristToPosCommand(m_aimSubsystem, Constants.ampAngle));
+  }
+
+  public Command shoot() {
+    return (Commands.runOnce(() -> m_launcherSubsystem.speakerTurnOnLauncher(), m_launcherSubsystem))
         .andThen(new WaitCommand(1))
+        .andThen(Commands.runOnce(() -> m_indexSubsystem.turnOnIndexer(), m_indexSubsystem))
+        .andThen(new WaitCommand(.3))
         .andThen(Commands.runOnce(() -> m_indexSubsystem.turnOffIndexer(), m_indexSubsystem))
         .andThen(Commands.runOnce(() -> m_launcherSubsystem.turnOffLauncher(), m_launcherSubsystem))
-        .andThen(new MoveWristToPosCommand(m_aimSubsystem, Constants.zeroLaunchAngle))
-        .andThen(new MoveElevatorToPosCommand(m_elevatorSubsystem, Constants.zeroElevator));
+        .andThen(zeroArm());
+  }
 
+ 
+  public Command sourceIntake() {
+    return new MoveWristToPosCommand(m_aimSubsystem, Constants.sourceAngle)
+        .andThen(new SourceIntakeCommand(m_indexSubsystem, m_launcherSubsystem));
+  }
+
+  public Command zeroArm() {
+    return new MoveWristToPosCommand(m_aimSubsystem, Constants.zeroLaunchAngle)
+        .andThen(new MoveElevatorToPosCommand(m_elevatorSubsystem, Constants.zeroElevator));
   }
 
   // Climb sequence sequential command
-  public Command climbSequence() {
-    return new MoveWristToPosCommand(m_aimSubsystem, Constants.ampAngle)
-        .andThen(new MoveElevatorToPosCommand(m_elevatorSubsystem, Constants.climbingHeight))
-        .andThen(new MoveWristToPosCommand(m_aimSubsystem, Constants.climbingAngle)
-            .andThen(new MoveElevatorToPosCommand(m_elevatorSubsystem, Constants.zeroElevator)));
-  }
+  // public Command climbSequence() {
+  //   return new MoveWristToPosCommand(m_aimSubsystem, Constants.ampAngle)
+  //       .andThen(new MoveElevatorToPosCommand(m_elevatorSubsystem, Constants.climbingHeight))
+  //       .andThen(new MoveWristToPosCommand(m_aimSubsystem, Constants.climbingAngle)
+  //           .andThen(new MoveElevatorToPosCommand(m_elevatorSubsystem, Constants.zeroElevator)));
+  // }
 
   // Creating different options for auto
   public void configureAutoChooser() {
-    Station_1_Shoot_Moveout = speakerLaunch().andThen(new PathPlannerAuto("Station_1_Shoot_Moveout_Auto"));
-    Station_2_Shoot_Moveout = speakerLaunch().andThen(new PathPlannerAuto("Station_2_Shoot_Moveout_Auto"));
-    Station_3_Shoot_Moveout = speakerLaunch().andThen(new PathPlannerAuto("Station_3_Shoot_Moveout_Auto"));
+    Station_1_Shoot_Moveout = autoSpeakerLaunch()/*.andThen(new PathPlannerAuto("Station_1_Shoot_Moveout_Auto"))*/;
+    Station_2_Shoot_Moveout = autoSpeakerLaunch()/*.andThen(new PathPlannerAuto("Station_2_Shoot_Moveout_Auto"))*/;
+    Station_3_Shoot_Moveout = autoSpeakerLaunch()/*.andThen(new PathPlannerAuto("Station_3_Shoot_Moveout_Auto"))*/;
   
 
     m_chooser = new SendableChooser<>();

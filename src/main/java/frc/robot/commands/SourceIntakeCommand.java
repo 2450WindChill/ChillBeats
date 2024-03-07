@@ -7,6 +7,7 @@ package frc.robot.commands;
 import frc.robot.RobotContainer;
 import frc.robot.subsystems.IndexSubsystem;
 import frc.robot.subsystems.LauncherSubsystem;
+import frc.robot.subsystems.LightySubsystem;
 import edu.wpi.first.wpilibj2.command.Command;
 
 /** An example command that uses an example subsystem. */

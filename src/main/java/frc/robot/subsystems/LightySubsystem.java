@@ -8,6 +8,7 @@ import edu.wpi.first.wpilibj.AddressableLED;
 import edu.wpi.first.wpilibj.AddressableLEDBuffer;
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.Timer;
+import edu.wpi.first.wpilibj.DriverStation.Alliance;
 import edu.wpi.first.wpilibj2.command.CommandBase;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 
@@ -29,7 +30,7 @@ public class LightySubsystem extends SubsystemBase {
 
     // PWM port 9
     // Must be a PWM header, not MXP or DIO
-     m_led = new AddressableLED(9);
+     m_led = new AddressableLED(0);
 
   
     // Reuse buffer
@@ -42,7 +43,7 @@ public class LightySubsystem extends SubsystemBase {
     m_led.setData(m_ledBuffer);
     m_led.start();
 
-    SetLEDsToBlue();
+    // SetLEDsToAlliance(m_teamColor);
     
   }
 
@@ -87,6 +88,14 @@ public class LightySubsystem extends SubsystemBase {
    m_led.setData(m_ledBuffer);
 
   } 
+
+  public void SetLEDsToAlliance() {
+    if (m_teamColor == Alliance.Red) {
+      SetLEDsToRed();
+    } else {
+      SetLEDsToBlue();
+    }
+  }
   
   public void rainbow() {
 

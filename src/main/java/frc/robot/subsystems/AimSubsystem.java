@@ -23,7 +23,7 @@ public class AimSubsystem extends SubsystemBase {
   public AimSubsystem() {
     wristController.setP(.01);
     wristController.setOutputRange(-0.4, 0.4);
-    wristController.setI(.00001);
+    wristController.setI(.000003);
     wristMotor.setIdleMode(Constants.angleBrakeMode);
     //SmartDashboard.putData("Reset pose", Commands.runOnce(() -> resetWrist()));
   }
