@@ -197,6 +197,10 @@ public class DrivetrainSubsystem extends SubsystemBase {
     gyro.setYaw(0);
   }
 
+  public void setGyro(int angle) {
+    gyro.setYaw(angle);
+  }
+
   // --------------------------------------------------------------
 
   // Pathplanning methods:

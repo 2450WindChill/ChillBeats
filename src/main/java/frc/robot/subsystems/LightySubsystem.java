@@ -11,22 +11,24 @@ import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj.DriverStation.Alliance;
 import edu.wpi.first.wpilibj2.command.CommandBase;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
+import frc.robot.Robot;
+import frc.robot.RobotContainer;
 
 public class LightySubsystem extends SubsystemBase {
  
   AddressableLED m_led;
   AddressableLEDBuffer m_ledBuffer;
 
-  DriverStation.Alliance m_teamColor;
+  private RobotContainer m_robotContainer;
   private int m_rainbowFirstPixelValue = 0;
 
   private int m_snakeindex = 0;
   
   
   /** Creates a new LightySubsystem. */
-  public LightySubsystem(DriverStation.Alliance teamColor) { 
+  public LightySubsystem(RobotContainer robotContainer) { 
    m_rainbowFirstPixelValue = 0;
-    m_teamColor = teamColor;
+    m_robotContainer = robotContainer;
 
     // PWM port 9
     // Must be a PWM header, not MXP or DIO
@@ -90,7 +92,7 @@ public class LightySubsystem extends SubsystemBase {
   } 
 
   public void SetLEDsToAlliance() {
-    if (m_teamColor == Alliance.Red) {
+    if (m_robotContainer.getCurrentAliiance() == Alliance.Red) {
       SetLEDsToRed();
     } else {
       SetLEDsToBlue();

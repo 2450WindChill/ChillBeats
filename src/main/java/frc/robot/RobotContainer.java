@@ -29,6 +29,7 @@ import com.pathplanner.lib.commands.PathPlannerAuto;
 
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.DriverStation.Alliance;
+import edu.wpi.first.wpilibj.GenericHID.RumbleType;
 import edu.wpi.first.wpilibj.GenericHID;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import frc.robot.subsystems.PoseEstimatorSubsystem;
@@ -46,8 +47,8 @@ public class RobotContainer {
   private final AimSubsystem m_aimSubsystem = new AimSubsystem();
   private final LauncherSubsystem m_launcherSubsystem = new LauncherSubsystem();
   private final IndexSubsystem m_indexSubsystem = new IndexSubsystem();
-  public Alliance teamColor = DriverStation.getAlliance().orElse(Alliance.Blue);
-  private final LightySubsystem m_ledSubsystem = new LightySubsystem(teamColor);
+  public Alliance teamColor;
+  private final LightySubsystem m_ledSubsystem = new LightySubsystem(this);
 
   // Replace with CommandPS4Controller or CommandJoystick if needed
   private final CommandXboxController m_driverController = new CommandXboxController(
@@ -55,9 +56,9 @@ public class RobotContainer {
   private final CommandXboxController m_operatorController = new CommandXboxController(
       OperatorConstants.kOperatorControllerPort);
 
-  public Command Station_1_Shoot_Moveout;
-  public Command Station_2_Shoot_Moveout;
-  public Command Station_3_Shoot_Moveout;
+  public Command Left_Station;
+  public Command Middle_Station;
+  public Command Right_Station;
 
   public Command moveForward;
   public SendableChooser<Command> m_chooser;
@@ -74,7 +75,7 @@ public class RobotContainer {
             () -> m_driverController.getLeftX(),
             () -> m_driverController.getRightX(),
             () -> Constants.isRobotCentric,
-            m_driverController.rightStick().getAsBoolean()
+            m_driverController.leftTrigger().getAsBoolean()
         ));
 
     m_launcherSubsystem.setDefaultCommand(new DefaultShooterCommand(m_launcherSubsystem));
@@ -104,7 +105,7 @@ public class RobotContainer {
       // Sequences
     m_operatorController.x().onTrue(ampLaunchPrep());
     m_operatorController.rightTrigger().onTrue(shoot());
-    m_operatorController.y().whileTrue(new LockMoveWristToPosCommand(m_aimSubsystem, Constants.speakerAngle));
+    m_operatorController.y().onTrue(autoSpeakerLaunch());
     m_operatorController.a().onTrue(sourceIntake());
     m_operatorController.b().onTrue(zeroArm());
 
@@ -117,7 +118,7 @@ public class RobotContainer {
    * Configures limelight to:
    * -Pipeline 0
    * -LEDs Off
-   * -Proccesor Mode
+   * -Proccesor Mo
    * -Pose relative to robot center (Meters and Degrees)
    */
   private void configureLimelight() {
@@ -127,7 +128,7 @@ public class RobotContainer {
     LimelightHelpers.setCameraPose_RobotSpace("limelight", 0, 0, 0, 0, 0, 0);
   }
 
-  // Speaker launch sequential command
+  // Full speaker launch sequential command
   public Command autoSpeakerLaunch() {
     return (Commands.runOnce(() -> m_launcherSubsystem.speakerTurnOnLauncher(), m_launcherSubsystem))
         .andThen(new MoveWristToPosCommand(m_aimSubsystem, Constants.speakerAngle))
@@ -138,15 +139,18 @@ public class RobotContainer {
         .andThen(new MoveWristToPosCommand(m_aimSubsystem, Constants.zeroLaunchAngle));
   }
 
+  // Speaker launch w/ just wrist prep
   public Command speakerLaunchPrep() {
     return new MoveWristToPosCommand(m_aimSubsystem, Constants.speakerAngle);
   }
 
+  // Amp launch with just elevator and wrist prep
   public Command ampLaunchPrep() {
     return (new MoveElevatorToPosCommand(m_elevatorSubsystem, Constants.ampElevator))
         .andThen(new MoveWristToPosCommand(m_aimSubsystem, Constants.ampAngle));
   }
 
+  // Shoot command
   public Command shoot() {
     return (Commands.runOnce(() -> m_launcherSubsystem.speakerTurnOnLauncher(), m_launcherSubsystem))
         .andThen(new WaitCommand(1))
@@ -157,15 +161,29 @@ public class RobotContainer {
         .andThen(zeroArm());
   }
 
- 
+ // Source intake
   public Command sourceIntake() {
     return new MoveWristToPosCommand(m_aimSubsystem, Constants.sourceAngle)
-        .andThen(new SourceIntakeCommand(m_indexSubsystem, m_launcherSubsystem));
+        .andThen(new SourceIntakeCommand(m_indexSubsystem, m_launcherSubsystem))
+        .andThen(rumbleDriveController(0.7));
   }
 
+  // Brings wrist and elevator to zero
   public Command zeroArm() {
     return new MoveWristToPosCommand(m_aimSubsystem, Constants.zeroLaunchAngle)
         .andThen(new MoveElevatorToPosCommand(m_elevatorSubsystem, Constants.zeroElevator));
+  }
+
+  // Rumbles controller for a specified amount of time
+  public Command rumbleDriveController(double duration) {
+    return Commands.runOnce(() -> m_driverController.getHID().setRumble(RumbleType.kBothRumble, 1))
+        .andThen(new WaitCommand(duration))
+        .andThen(Commands.runOnce(() -> m_driverController.getHID().setRumble(RumbleType.kBothRumble, 0)));
+  }
+
+  // Returns our current alliance
+  public Alliance getCurrentAliiance() {
+    return DriverStation.getAlliance().orElse(Alliance.Blue);
   }
 
   // Climb sequence sequential command
@@ -178,15 +196,17 @@ public class RobotContainer {
 
   // Creating different options for auto
   public void configureAutoChooser() {
-    Station_1_Shoot_Moveout = autoSpeakerLaunch()/*.andThen(new PathPlannerAuto("Station_1_Shoot_Moveout_Auto"))*/;
-    Station_2_Shoot_Moveout = autoSpeakerLaunch()/*.andThen(new PathPlannerAuto("Station_2_Shoot_Moveout_Auto"))*/;
-    Station_3_Shoot_Moveout = autoSpeakerLaunch()/*.andThen(new PathPlannerAuto("Station_3_Shoot_Moveout_Auto"))*/;
-  
+    // From left station (from drivers pov)
+    Left_Station = Commands.runOnce(() -> m_drivetrainSubsystem.setGyro(230), m_drivetrainSubsystem).andThen(autoSpeakerLaunch()).andThen(new PathPlannerAuto("Left_Station_Auto"));
+    // From middle station
+    Middle_Station = Commands.runOnce(() -> m_drivetrainSubsystem.setGyro(180), m_drivetrainSubsystem).andThen(autoSpeakerLaunch()).andThen(new PathPlannerAuto("Middle_Station_Auto"));
+    // From right station (from drivers pov)
+    Right_Station = Commands.runOnce(() -> m_drivetrainSubsystem.setGyro(144), m_drivetrainSubsystem).andThen(autoSpeakerLaunch()).andThen(new PathPlannerAuto("Right_Station_Auto"));
 
     m_chooser = new SendableChooser<>();
-    m_chooser.setDefaultOption("Station 1", Station_1_Shoot_Moveout);
-    m_chooser.addOption("Station 2", Station_2_Shoot_Moveout);
-    m_chooser.addOption("Station 3", Station_3_Shoot_Moveout);
+    m_chooser.setDefaultOption("Station 1", Left_Station);
+    m_chooser.addOption("Station 2", Middle_Station);
+    m_chooser.addOption("Station 3", Right_Station);
   }
 
   // Auto command

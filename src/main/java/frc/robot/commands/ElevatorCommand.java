@@ -36,10 +36,10 @@ public class ElevatorCommand extends Command {
   @Override
   public void execute() {
     if (m_controller.getLeftX() > 0 ) {
-      m_subsystem.elevatorMotor.set(0.1);
+      m_subsystem.elevatorMotor.set(0.3);
     }
     else if (m_controller.getLeftX() < 0 ) {
-      m_subsystem.elevatorMotor.set(-0.1);
+      m_subsystem.elevatorMotor.set(-0.3);
     }
     else {
       m_subsystem.elevatorMotor.set(0);

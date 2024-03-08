@@ -4,6 +4,7 @@
 
 package frc.robot.commands;
 
+import frc.robot.Robot;
 import frc.robot.RobotContainer;
 import frc.robot.subsystems.IndexSubsystem;
 import frc.robot.subsystems.LauncherSubsystem;
