@@ -58,6 +58,7 @@ public class IndexSubsystem extends SubsystemBase {
   @Override
   public void periodic() {
          SmartDashboard.putNumber("rubikx",indexMotor.getEncoder().getPosition());
+         SmartDashboard.putBoolean("Beam Break", beamBreak.get());
     // This method will be called once per scheduler run
   }
 

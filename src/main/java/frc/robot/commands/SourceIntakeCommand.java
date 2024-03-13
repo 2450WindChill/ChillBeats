@@ -38,7 +38,6 @@ public class SourceIntakeCommand extends Command {
     m_indexSubsystem.indexMotor.set(0.2);
     m_launcherSubsystem.topMotor.set(-0.4);
     m_launcherSubsystem.bottomMotor.set(0.4);
-    System.err.println("Full Intake Init");
     currentBeamBreakState = m_indexSubsystem.beamBreak.get();
     stateChangeCounter = 0;
   }
@@ -46,11 +45,9 @@ public class SourceIntakeCommand extends Command {
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-    System.err.println(m_indexSubsystem.beamBreak.get());
     if (currentBeamBreakState != m_indexSubsystem.beamBreak.get()) {
       stateChangeCounter += 1;
       currentBeamBreakState = m_indexSubsystem.beamBreak.get();
-      System.err.println("Beam Break Changed");
     }
   }
 
@@ -60,7 +57,6 @@ public class SourceIntakeCommand extends Command {
     m_indexSubsystem.indexMotor.set(0);
     m_launcherSubsystem.topMotor.set(0);
     m_launcherSubsystem.bottomMotor.set(0);
-    System.err.println("Full Intake End");
   }
 
   // Returns true when the command should end.

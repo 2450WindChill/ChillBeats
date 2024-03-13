@@ -35,10 +35,10 @@ public class ElevatorCommand extends Command {
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-    if (m_controller.getLeftX() > 0 ) {
+    if (m_controller.getLeftX() > 0.1 ) {
       m_subsystem.elevatorMotor.set(0.3);
     }
-    else if (m_controller.getLeftX() < 0 ) {
+    else if (m_controller.getLeftX() < -0.1 ) {
       m_subsystem.elevatorMotor.set(-0.3);
     }
     else {

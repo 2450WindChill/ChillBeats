@@ -38,8 +38,8 @@ public class LaunchCommand extends Command {
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-    m_subsystem.bottomMotor.set(m_speed);
-    m_subsystem.topMotor.set(-m_speed);
+    m_subsystem.bottomMotor.set(-m_speed);
+    m_subsystem.topMotor.set(m_speed);
   }
 
   // Called once the command ends or is interrupted.

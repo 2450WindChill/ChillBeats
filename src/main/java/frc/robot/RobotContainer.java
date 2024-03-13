@@ -10,8 +10,10 @@ import frc.robot.commands.DefaultDriveCommand;
 import frc.robot.commands.DefaultIndexCommand;
 import frc.robot.commands.DefaultShooterCommand;
 import frc.robot.commands.ElevatorCommand;
+import frc.robot.commands.FieldCentricAutoDrive;
 import frc.robot.commands.SourceIntakeCommand;
 import frc.robot.commands.IndexCommand;
+import frc.robot.commands.LaunchCommand;
 import frc.robot.commands.LockMoveWristToPosCommand;
 import frc.robot.commands.MoveElevatorToPosCommand;
 import frc.robot.commands.MoveWristToPosCommand;
@@ -27,6 +29,7 @@ import java.util.Optional;
 
 import com.pathplanner.lib.commands.PathPlannerAuto;
 
+import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.DriverStation.Alliance;
 import edu.wpi.first.wpilibj.GenericHID.RumbleType;
@@ -56,9 +59,13 @@ public class RobotContainer {
   private final CommandXboxController m_operatorController = new CommandXboxController(
       OperatorConstants.kOperatorControllerPort);
 
-  public Command Left_Station;
-  public Command Middle_Station;
-  public Command Right_Station;
+  public Command Blue_Short_Side;
+  public Command Blue_Middle_Side;
+  public Command Blue_Long_Side;
+
+  public Command Red_Short_Side;
+  public Command Red_Middle_Side;
+  public Command Red_Long_Side;
 
   public Command moveForward;
   public SendableChooser<Command> m_chooser;
@@ -75,8 +82,7 @@ public class RobotContainer {
             () -> m_driverController.getLeftX(),
             () -> m_driverController.getRightX(),
             () -> Constants.isRobotCentric,
-            m_driverController.leftTrigger().getAsBoolean()
-        ));
+            m_driverController.a().getAsBoolean()));
 
     m_launcherSubsystem.setDefaultCommand(new DefaultShooterCommand(m_launcherSubsystem));
     m_elevatorSubsystem.setDefaultCommand(new ElevatorCommand(m_elevatorSubsystem, m_operatorController));
@@ -102,16 +108,19 @@ public class RobotContainer {
   private void configureBindings() {
 
     // Operator
-      // Sequences
+    // Sequences
     m_operatorController.x().onTrue(ampLaunchPrep());
     m_operatorController.rightTrigger().onTrue(shoot());
     m_operatorController.y().onTrue(autoSpeakerLaunch());
     m_operatorController.a().onTrue(sourceIntake());
     m_operatorController.b().onTrue(zeroArm());
+    m_operatorController.leftTrigger().whileTrue(new LaunchCommand(m_launcherSubsystem, -0.3));
+    m_operatorController.leftTrigger().whileTrue(new IndexCommand(m_indexSubsystem, .1));
 
     // Driver
-      // Zero Gyro
+    // Zero Gyro
     m_driverController.x().onTrue(Commands.runOnce(() -> m_drivetrainSubsystem.zeroGyro(), m_drivetrainSubsystem));
+    m_driverController.b().onTrue(new MoveElevatorToPosCommand(m_elevatorSubsystem, Constants.maxHeight));
   }
 
   /*
@@ -147,7 +156,8 @@ public class RobotContainer {
   // Amp launch with just elevator and wrist prep
   public Command ampLaunchPrep() {
     return (new MoveElevatorToPosCommand(m_elevatorSubsystem, Constants.ampElevator))
-        .andThen(new MoveWristToPosCommand(m_aimSubsystem, Constants.ampAngle));
+        .andThen(new MoveWristToPosCommand(m_aimSubsystem, Constants.ampAngle))
+        .andThen(rumbleOperatorController(0.7));
   }
 
   // Shoot command
@@ -158,14 +168,16 @@ public class RobotContainer {
         .andThen(new WaitCommand(.3))
         .andThen(Commands.runOnce(() -> m_indexSubsystem.turnOffIndexer(), m_indexSubsystem))
         .andThen(Commands.runOnce(() -> m_launcherSubsystem.turnOffLauncher(), m_launcherSubsystem))
-        .andThen(zeroArm());
+        .andThen(zeroArm())
+        .andThen(Commands.runOnce(() -> m_operatorController.getHID().setRumble(RumbleType.kBothRumble, 0)));
   }
 
- // Source intake
+  // Source intake
   public Command sourceIntake() {
     return new MoveWristToPosCommand(m_aimSubsystem, Constants.sourceAngle)
         .andThen(new SourceIntakeCommand(m_indexSubsystem, m_launcherSubsystem))
-        .andThen(rumbleDriveController(0.7));
+        .andThen(rumbleDriveController(0.7))
+        .andThen(zeroArm());
   }
 
   // Brings wrist and elevator to zero
@@ -181,6 +193,12 @@ public class RobotContainer {
         .andThen(Commands.runOnce(() -> m_driverController.getHID().setRumble(RumbleType.kBothRumble, 0)));
   }
 
+  public Command rumbleOperatorController(double duration) {
+    return Commands.runOnce(() -> m_operatorController.getHID().setRumble(RumbleType.kBothRumble, 1))
+        .andThen(new WaitCommand(duration))
+        .andThen(Commands.runOnce(() -> m_operatorController.getHID().setRumble(RumbleType.kBothRumble, 0)));
+  }
+
   // Returns our current alliance
   public Alliance getCurrentAliiance() {
     return DriverStation.getAlliance().orElse(Alliance.Blue);
@@ -188,25 +206,69 @@ public class RobotContainer {
 
   // Climb sequence sequential command
   // public Command climbSequence() {
-  //   return new MoveWristToPosCommand(m_aimSubsystem, Constants.ampAngle)
-  //       .andThen(new MoveElevatorToPosCommand(m_elevatorSubsystem, Constants.climbingHeight))
-  //       .andThen(new MoveWristToPosCommand(m_aimSubsystem, Constants.climbingAngle)
-  //           .andThen(new MoveElevatorToPosCommand(m_elevatorSubsystem, Constants.zeroElevator)));
+  // return new MoveWristToPosCommand(m_aimSubsystem, Constants.ampAngle)
+  // .andThen(new MoveElevatorToPosCommand(m_elevatorSubsystem,
+  // Constants.climbingHeight))
+  // .andThen(new MoveWristToPosCommand(m_aimSubsystem, Constants.climbingAngle)
+  // .andThen(new MoveElevatorToPosCommand(m_elevatorSubsystem,
+  // Constants.zeroElevator)));
   // }
 
   // Creating different options for auto
   public void configureAutoChooser() {
-    // From left station (from drivers pov)
-    Left_Station = Commands.runOnce(() -> m_drivetrainSubsystem.setGyro(230), m_drivetrainSubsystem).andThen(autoSpeakerLaunch()).andThen(new PathPlannerAuto("Left_Station_Auto"));
-    // From middle station
-    Middle_Station = Commands.runOnce(() -> m_drivetrainSubsystem.setGyro(180), m_drivetrainSubsystem).andThen(autoSpeakerLaunch()).andThen(new PathPlannerAuto("Middle_Station_Auto"));
-    // From right station (from drivers pov)
-    Right_Station = Commands.runOnce(() -> m_drivetrainSubsystem.setGyro(144), m_drivetrainSubsystem).andThen(autoSpeakerLaunch()).andThen(new PathPlannerAuto("Right_Station_Auto"));
+
+    Blue_Short_Side = Commands.runOnce(() -> m_drivetrainSubsystem.setGyro(230), m_drivetrainSubsystem)
+        .andThen(autoSpeakerLaunch())
+        .andThen(new WaitCommand(4))
+        .andThen(new FieldCentricAutoDrive(m_drivetrainSubsystem, new Translation2d(0, -1.5), 0))
+        .andThen(new WaitCommand(.5))
+        .andThen(new FieldCentricAutoDrive(m_drivetrainSubsystem, new Translation2d(-1.5, 0), 0))
+        .andThen(new WaitCommand(5))
+        .andThen(new FieldCentricAutoDrive(m_drivetrainSubsystem, new Translation2d(0, 0), 0));
+
+    Blue_Middle_Side = Commands.runOnce(() -> m_drivetrainSubsystem.setGyro(180), m_drivetrainSubsystem)
+        .andThen(autoSpeakerLaunch())
+        .andThen(new FieldCentricAutoDrive(m_drivetrainSubsystem, new Translation2d(-1.5, 0), 0))
+        .andThen(new WaitCommand(2))
+        .andThen(new FieldCentricAutoDrive(m_drivetrainSubsystem, new Translation2d(0, 0), 0));
+
+    Blue_Long_Side = Commands.runOnce(() -> m_drivetrainSubsystem.setGyro(144), m_drivetrainSubsystem)
+        .andThen(autoSpeakerLaunch())
+        .andThen(new WaitCommand(3.5))
+        .andThen(new FieldCentricAutoDrive(m_drivetrainSubsystem, new Translation2d(0, 1.5), 0))
+        .andThen(new WaitCommand(1))
+        .andThen(new FieldCentricAutoDrive(m_drivetrainSubsystem, new Translation2d(-1.5, 0), 0))
+        .andThen(new WaitCommand(5))
+        .andThen(new FieldCentricAutoDrive(m_drivetrainSubsystem, new Translation2d(0, 0), 0));
+
+
+    Red_Short_Side = Commands.runOnce(() -> m_drivetrainSubsystem.setGyro(230), m_drivetrainSubsystem)
+        .andThen(autoSpeakerLaunch())
+        .andThen(new FieldCentricAutoDrive(m_drivetrainSubsystem, new Translation2d(0, -1.5), 0))
+        .andThen(new WaitCommand(.5))
+        .andThen(new FieldCentricAutoDrive(m_drivetrainSubsystem, new Translation2d(1.5, 0), 0))
+        .andThen(new WaitCommand(5))
+        .andThen(new FieldCentricAutoDrive(m_drivetrainSubsystem, new Translation2d(0, 0), 0));
+
+    Red_Middle_Side = Commands.runOnce(() -> m_drivetrainSubsystem.setGyro(180), m_drivetrainSubsystem)
+        .andThen(autoSpeakerLaunch())
+        .andThen(new FieldCentricAutoDrive(m_drivetrainSubsystem, new Translation2d(-1.5, 0), 0))
+        .andThen(new WaitCommand(2))
+        .andThen(new FieldCentricAutoDrive(m_drivetrainSubsystem, new Translation2d(0, 0), 0));
+
+    Red_Long_Side = Commands.runOnce(() -> m_drivetrainSubsystem.setGyro(144), m_drivetrainSubsystem)
+        .andThen(autoSpeakerLaunch())
+        .andThen(new FieldCentricAutoDrive(m_drivetrainSubsystem, new Translation2d(-1.5, 0), 0))
+        .andThen(new WaitCommand(1.85))
+        .andThen(new FieldCentricAutoDrive(m_drivetrainSubsystem, new Translation2d(0, 0), 0));
 
     m_chooser = new SendableChooser<>();
-    m_chooser.setDefaultOption("Station 1", Left_Station);
-    m_chooser.addOption("Station 2", Middle_Station);
-    m_chooser.addOption("Station 3", Right_Station);
+    m_chooser.setDefaultOption("Blue Stage Side", Blue_Middle_Side);
+    m_chooser.addOption("Blue Amp Side", Blue_Short_Side);
+    m_chooser.addOption("Blue Source Side", Blue_Long_Side);
+     m_chooser.addOption("Red Amp Side", Red_Short_Side);
+    m_chooser.addOption("Red Stage Side", Red_Middle_Side);
+    m_chooser.addOption("Red Source Side", Red_Long_Side);
   }
 
   // Auto command
