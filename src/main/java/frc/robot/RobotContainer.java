@@ -128,6 +128,12 @@ public class RobotContainer {
     // Zero Gyro
     m_driverController.x().onTrue(Commands.runOnce(() -> m_drivetrainSubsystem.zeroGyro(), m_drivetrainSubsystem));
     m_driverController.b().onTrue(new MoveElevatorToPosCommand(m_elevatorSubsystem, Constants.maxHeight));
+
+    // TEMPORARY TESTING
+    m_driverController.leftTrigger().whileTrue(Commands.runOnce(() -> m_intakeSubsystem.intakeOn(), m_intakeSubsystem)
+    .finallyDo(() -> m_intakeSubsystem.intakeOff()));
+    m_driverController.rightTrigger().whileTrue(Commands.runOnce(() -> m_indexSubsystem.indexOn(), m_indexSubsystem)
+    .finallyDo(() -> m_indexSubsystem.indexOff()));
   }
 
   /*
