@@ -8,13 +8,18 @@ import com.revrobotics.CANSparkLowLevel.MotorType;
 import com.revrobotics.CANSparkFlex;
 import com.revrobotics.CANSparkMax;
 
+import edu.wpi.first.wpilibj.DigitalInput;
 import edu.wpi.first.wpilibj.Preferences;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 
 public class LauncherSubsystem extends SubsystemBase {
   public final CANSparkFlex bottomMotor = new CANSparkFlex(18, MotorType.kBrushless);
   public final CANSparkFlex topMotor = new CANSparkFlex(19, MotorType.kBrushless);
+  
+   public final CANSparkMax feederMotor = new CANSparkMax(15, MotorType.kBrushless);
+   public final DigitalInput wristBeamBreak = new DigitalInput(0);
 
   /** Creates a new LauncherSubsystem. */
   public LauncherSubsystem() {
@@ -33,6 +38,16 @@ public class LauncherSubsystem extends SubsystemBase {
         () -> {
           /* one-time action goes here */
         });
+  }
+
+  public void turnOnIndexer() {
+    System.out.println("turn on");
+    feederMotor.set(-1);
+  }
+
+  public void turnOffIndexer() {
+      System.out.println("turn off");
+    feederMotor.set(0);
   }
   
   public void speakerTurnOnLauncher() {
@@ -66,6 +81,8 @@ public class LauncherSubsystem extends SubsystemBase {
 
   @Override
   public void periodic() {
+     SmartDashboard.putNumber("rubikx",feederMotor.getEncoder().getPosition());
+     SmartDashboard.putBoolean("Beam Break", wristBeamBreak.get());
     // This method will be called once per scheduler run
   }
 

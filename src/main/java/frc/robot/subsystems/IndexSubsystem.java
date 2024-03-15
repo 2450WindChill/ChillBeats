@@ -5,6 +5,7 @@
 package frc.robot.subsystems;
 
 import com.revrobotics.CANSparkLowLevel.MotorType;
+import com.revrobotics.CANSparkFlex;
 import com.revrobotics.CANSparkMax;
 
 import edu.wpi.first.wpilibj.DigitalInput;
@@ -14,7 +15,7 @@ import edu.wpi.first.wpilibj2.command.SubsystemBase;
 
 public class IndexSubsystem extends SubsystemBase {
     public final CANSparkMax indexMotor = new CANSparkMax(15, MotorType.kBrushless);
-    public final DigitalInput beamBreak = new DigitalInput(0);
+    public final DigitalInput indexBeamBreak = new DigitalInput(1);
 
   /** Creates a new IndexSubsystem. */
   public IndexSubsystem() {
@@ -24,7 +25,7 @@ public class IndexSubsystem extends SubsystemBase {
   /**
    * Example command factory method.
    *
-   * @return a command
+   * @return a command 
    */
   public Command exampleMethodCommand() {
     // Inline construction of command goes here.
@@ -35,15 +36,15 @@ public class IndexSubsystem extends SubsystemBase {
         });
   }
 
-  public void turnOnIndexer() {
-    System.out.println("turn on");
-    indexMotor.set(-1);
-  }
+  // public void turnOnIndexer() {
+  //   System.out.println("turn on");
+  //   indexMotor.set(-1);
+  // }
 
-  public void turnOffIndexer() {
-      System.out.println("turn off");
-    indexMotor.set(0);
-  }
+  // public void turnOffIndexer() {
+  //     System.out.println("turn off");
+  //   indexMotor.set(0);
+  // }
 
   /**
    * An example method querying a boolean state of the subsystem (for example, a digital sensor).
@@ -57,8 +58,8 @@ public class IndexSubsystem extends SubsystemBase {
 
   @Override
   public void periodic() {
-         SmartDashboard.putNumber("rubikx",indexMotor.getEncoder().getPosition());
-         SmartDashboard.putBoolean("Beam Break", beamBreak.get());
+        //  SmartDashboard.putNumber("rubikx",indexMotor.getEncoder().getPosition());
+        //  SmartDashboard.putBoolean("Beam Break", beamBreak.get());
     // This method will be called once per scheduler run
   }
 
@@ -66,4 +67,15 @@ public class IndexSubsystem extends SubsystemBase {
   public void simulationPeriodic() {
     // This method will be called once per scheduler run during simulation
   }
+
+  public void indexOn() {
+    System.out.println("index turn on");
+    indexMotor.set(0.1);
+  }
+
+  public void indexOff() {
+    System.out.println("index turn off");
+    indexMotor.set(0);
+  }
+
 }

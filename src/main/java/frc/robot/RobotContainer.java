@@ -7,21 +7,24 @@ package frc.robot;
 import frc.robot.Constants.OperatorConstants;
 import frc.robot.commands.AimCommand;
 import frc.robot.commands.DefaultDriveCommand;
-import frc.robot.commands.DefaultIndexCommand;
+import frc.robot.commands.DefaultLEDCommand;
 import frc.robot.commands.DefaultShooterCommand;
 import frc.robot.commands.ElevatorCommand;
 import frc.robot.commands.FieldCentricAutoDrive;
+import frc.robot.commands.IndexBeamBreakCommand;
 import frc.robot.commands.SourceIntakeCommand;
 import frc.robot.commands.IndexCommand;
 import frc.robot.commands.LaunchCommand;
 import frc.robot.commands.LockMoveWristToPosCommand;
 import frc.robot.commands.MoveElevatorToPosCommand;
+import frc.robot.commands.MoveIntakeToPosCommand;
 import frc.robot.commands.MoveWristToPosCommand;
 import frc.robot.libs.LimelightHelpers;
 import frc.robot.subsystems.AimSubsystem;
 import frc.robot.subsystems.DrivetrainSubsystem;
 import frc.robot.subsystems.ElevatorSubsystem;
 import frc.robot.subsystems.IndexSubsystem;
+import frc.robot.subsystems.IntakeSubsystem;
 import frc.robot.subsystems.LauncherSubsystem;
 import frc.robot.subsystems.LightySubsystem;
 
@@ -52,6 +55,7 @@ public class RobotContainer {
   private final IndexSubsystem m_indexSubsystem = new IndexSubsystem();
   public Alliance teamColor;
   private final LightySubsystem m_ledSubsystem = new LightySubsystem(this);
+  private final IntakeSubsystem m_intakeSubsystem = new IntakeSubsystem();
 
   // Replace with CommandPS4Controller or CommandJoystick if needed
   private final CommandXboxController m_driverController = new CommandXboxController(
@@ -82,12 +86,14 @@ public class RobotContainer {
             () -> m_driverController.getLeftX(),
             () -> m_driverController.getRightX(),
             () -> Constants.isRobotCentric,
-            m_driverController.a().getAsBoolean()));
+            () -> m_driverController.rightStick().getAsBoolean()));
 
     m_launcherSubsystem.setDefaultCommand(new DefaultShooterCommand(m_launcherSubsystem));
     m_elevatorSubsystem.setDefaultCommand(new ElevatorCommand(m_elevatorSubsystem, m_operatorController));
     m_aimSubsystem.setDefaultCommand(new AimCommand(m_aimSubsystem, m_operatorController));
-    m_indexSubsystem.setDefaultCommand(new DefaultIndexCommand(m_indexSubsystem, m_ledSubsystem));
+    m_ledSubsystem.setDefaultCommand(new DefaultLEDCommand(m_launcherSubsystem, m_ledSubsystem));
+    // m_indexSubsystem.setDefaultCommand(new DefaultIndexCommand(m_indexSubsystem,
+    // m_ledSubsystem));
 
     // Configure bindings and limelight
     configureBindings();
@@ -115,7 +121,8 @@ public class RobotContainer {
     m_operatorController.a().onTrue(sourceIntake());
     m_operatorController.b().onTrue(zeroArm());
     m_operatorController.leftTrigger().whileTrue(new LaunchCommand(m_launcherSubsystem, -0.3));
-    m_operatorController.leftTrigger().whileTrue(new IndexCommand(m_indexSubsystem, .1));
+    m_operatorController.leftTrigger().whileTrue(new IndexCommand(m_launcherSubsystem, .1));
+    m_operatorController.leftBumper().onTrue(groundIntake());
 
     // Driver
     // Zero Gyro
@@ -141,11 +148,28 @@ public class RobotContainer {
   public Command autoSpeakerLaunch() {
     return (Commands.runOnce(() -> m_launcherSubsystem.speakerTurnOnLauncher(), m_launcherSubsystem))
         .andThen(new MoveWristToPosCommand(m_aimSubsystem, Constants.speakerAngle))
-        .andThen(Commands.runOnce(() -> m_indexSubsystem.turnOnIndexer(), m_indexSubsystem))
+        .andThen(Commands.runOnce(() -> m_launcherSubsystem.turnOnIndexer(), m_indexSubsystem))
         .andThen(new WaitCommand(1))
-        .andThen(Commands.runOnce(() -> m_indexSubsystem.turnOffIndexer(), m_indexSubsystem))
+        .andThen(Commands.runOnce(() -> m_launcherSubsystem.turnOffIndexer(), m_indexSubsystem))
         .andThen(Commands.runOnce(() -> m_launcherSubsystem.turnOffLauncher(), m_launcherSubsystem))
         .andThen(new MoveWristToPosCommand(m_aimSubsystem, Constants.zeroLaunchAngle));
+  }
+
+  public Command groundIntake() {
+
+    return Commands.parallel(
+        Commands.runOnce(() -> m_intakeSubsystem.intakeOn(), m_intakeSubsystem),
+        Commands.runOnce(() -> m_indexSubsystem.indexOn(), m_indexSubsystem),
+        // CHANGE THIS NUMBER LATER IT SHOULDNT BE 5 TEST IT
+        new MoveIntakeToPosCommand(m_intakeSubsystem, 5.1))
+
+        .andThen(new IndexBeamBreakCommand(m_indexSubsystem))
+
+        .andThen(Commands.parallel(
+            Commands.runOnce(() -> m_intakeSubsystem.intakeOff(), m_intakeSubsystem),
+            Commands.runOnce(() -> m_indexSubsystem.indexOff(), m_indexSubsystem),
+            // CHANGE THIS NUMBER LATER IT SHOULDNT BE 5 TEST IT
+            new MoveIntakeToPosCommand(m_intakeSubsystem, 0.0)));
   }
 
   // Speaker launch w/ just wrist prep
@@ -164,9 +188,9 @@ public class RobotContainer {
   public Command shoot() {
     return (Commands.runOnce(() -> m_launcherSubsystem.speakerTurnOnLauncher(), m_launcherSubsystem))
         .andThen(new WaitCommand(1))
-        .andThen(Commands.runOnce(() -> m_indexSubsystem.turnOnIndexer(), m_indexSubsystem))
+        .andThen(Commands.runOnce(() -> m_launcherSubsystem.turnOnIndexer(), m_indexSubsystem))
         .andThen(new WaitCommand(.3))
-        .andThen(Commands.runOnce(() -> m_indexSubsystem.turnOffIndexer(), m_indexSubsystem))
+        .andThen(Commands.runOnce(() -> m_launcherSubsystem.turnOffIndexer(), m_indexSubsystem))
         .andThen(Commands.runOnce(() -> m_launcherSubsystem.turnOffLauncher(), m_launcherSubsystem))
         .andThen(zeroArm())
         .andThen(Commands.runOnce(() -> m_operatorController.getHID().setRumble(RumbleType.kBothRumble, 0)));
@@ -175,7 +199,7 @@ public class RobotContainer {
   // Source intake
   public Command sourceIntake() {
     return new MoveWristToPosCommand(m_aimSubsystem, Constants.sourceAngle)
-        .andThen(new SourceIntakeCommand(m_indexSubsystem, m_launcherSubsystem))
+        .andThen(new SourceIntakeCommand(m_launcherSubsystem))
         .andThen(rumbleDriveController(0.7))
         .andThen(zeroArm());
   }
@@ -241,7 +265,6 @@ public class RobotContainer {
         .andThen(new WaitCommand(5))
         .andThen(new FieldCentricAutoDrive(m_drivetrainSubsystem, new Translation2d(0, 0), 0));
 
-
     Red_Short_Side = Commands.runOnce(() -> m_drivetrainSubsystem.setGyro(230), m_drivetrainSubsystem)
         .andThen(autoSpeakerLaunch())
         .andThen(new FieldCentricAutoDrive(m_drivetrainSubsystem, new Translation2d(0, -1.5), 0))
@@ -266,7 +289,7 @@ public class RobotContainer {
     m_chooser.setDefaultOption("Blue Stage Side", Blue_Middle_Side);
     m_chooser.addOption("Blue Amp Side", Blue_Short_Side);
     m_chooser.addOption("Blue Source Side", Blue_Long_Side);
-     m_chooser.addOption("Red Amp Side", Red_Short_Side);
+    m_chooser.addOption("Red Amp Side", Red_Short_Side);
     m_chooser.addOption("Red Stage Side", Red_Middle_Side);
     m_chooser.addOption("Red Source Side", Red_Long_Side);
   }

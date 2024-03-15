@@ -7,13 +7,13 @@ import frc.robot.subsystems.ElevatorSubsystem;
 import frc.robot.subsystems.IndexSubsystem;
 import frc.robot.subsystems.LauncherSubsystem;
 import frc.robot.subsystems.LightySubsystem;
-
-public class DefaultIndexCommand extends Command{
+// 
+public class IntakeCommand extends Command{
     private IndexSubsystem m_indexSubsystem;
     private AimSubsystem m_aimSubsystem;
     private ElevatorSubsystem m_elevatorSubsystem;
 
-    public DefaultIndexCommand(IndexSubsystem indexSubsystem, AimSubsystem aimSubsystem, ElevatorSubsystem elevatorSubsystem) {
+    public IntakeCommand(IndexSubsystem indexSubsystem, AimSubsystem aimSubsystem, ElevatorSubsystem elevatorSubsystem) {
         m_indexSubsystem = indexSubsystem;
         m_aimSubsystem = aimSubsystem;
         m_elevatorSubsystem = elevatorSubsystem;
