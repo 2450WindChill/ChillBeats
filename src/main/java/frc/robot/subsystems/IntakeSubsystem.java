@@ -28,7 +28,7 @@ public class IntakeSubsystem extends SubsystemBase {
   public IntakeSubsystem() {
     // CHANGE P AND I VALUES LATER RAAAAAH
     angleIntakeController.setP(.01);
-    angleIntakeController.setOutputRange(-0.4, 0.4);
+    angleIntakeController.setOutputRange(-0.6, 0.6);
     angleIntakeController.setI(.000003);
     angleIntakeMotor.setIdleMode(Constants.angleBrakeMode);
   }

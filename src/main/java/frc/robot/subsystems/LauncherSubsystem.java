@@ -18,7 +18,9 @@ public class LauncherSubsystem extends SubsystemBase {
   public final CANSparkFlex bottomMotor = new CANSparkFlex(18, MotorType.kBrushless);
   public final CANSparkFlex topMotor = new CANSparkFlex(19, MotorType.kBrushless);
   
-   public final CANSparkMax feederMotor = new CANSparkMax(15, MotorType.kBrushless);
+   
+  public final CANSparkMax feederMotor = new CANSparkMax(15, MotorType.kBrushless);
+  
    public final DigitalInput wristBeamBreak = new DigitalInput(0);
 
   /** Creates a new LauncherSubsystem. */

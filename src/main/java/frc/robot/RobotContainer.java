@@ -52,7 +52,7 @@ public class RobotContainer {
   private final ElevatorSubsystem m_elevatorSubsystem = new ElevatorSubsystem();
   private final AimSubsystem m_aimSubsystem = new AimSubsystem();
   private final LauncherSubsystem m_launcherSubsystem = new LauncherSubsystem();
-  private final IndexSubsystem m_indexSubsystem = new IndexSubsystem();
+  // private final IndexSubsystem m_indexSubsystem = new IndexSubsystem();
   public Alliance teamColor;
   private final LightySubsystem m_ledSubsystem = new LightySubsystem(this);
   private final IntakeSubsystem m_intakeSubsystem = new IntakeSubsystem();
@@ -122,7 +122,7 @@ public class RobotContainer {
     m_operatorController.b().onTrue(zeroArm());
     m_operatorController.leftTrigger().whileTrue(new LaunchCommand(m_launcherSubsystem, -0.3));
     m_operatorController.leftTrigger().whileTrue(new IndexCommand(m_launcherSubsystem, .1));
-    m_operatorController.leftBumper().onTrue(groundIntake());
+    // m_operatorController.leftBumper().onTrue(groundIntake());
 
     // Driver
     // Zero Gyro
@@ -130,10 +130,12 @@ public class RobotContainer {
     m_driverController.b().onTrue(new MoveElevatorToPosCommand(m_elevatorSubsystem, Constants.maxHeight));
 
     // TEMPORARY TESTING
-    m_driverController.leftTrigger().whileTrue(Commands.runOnce(() -> m_intakeSubsystem.intakeOn(), m_intakeSubsystem)
-    .finallyDo(() -> m_intakeSubsystem.intakeOff()));
-    m_driverController.rightTrigger().whileTrue(Commands.runOnce(() -> m_indexSubsystem.indexOn(), m_indexSubsystem)
-    .finallyDo(() -> m_indexSubsystem.indexOff()));
+    // m_driverController.leftTrigger().whileTrue(Commands.runOnce(() ->
+    // m_intakeSubsystem.intakeOn(), m_intakeSubsystem)
+    // .finallyDo(() -> m_intakeSubsystem.intakeOff()));
+    // m_driverController.rightTrigger().whileTrue(Commands.runOnce(() ->
+    // m_indexSubsystem.indexOn(), m_indexSubsystem)
+    // .finallyDo(() -> m_indexSubsystem.indexOff()));
   }
 
   /*
@@ -154,29 +156,31 @@ public class RobotContainer {
   public Command autoSpeakerLaunch() {
     return (Commands.runOnce(() -> m_launcherSubsystem.speakerTurnOnLauncher(), m_launcherSubsystem))
         .andThen(new MoveWristToPosCommand(m_aimSubsystem, Constants.speakerAngle))
-        .andThen(Commands.runOnce(() -> m_launcherSubsystem.turnOnIndexer(), m_indexSubsystem))
+        // .andThen(Commands.runOnce(() -> m_launcherSubsystem.turnOnIndexer(),
+        // m_indexSubsystem))
         .andThen(new WaitCommand(1))
-        .andThen(Commands.runOnce(() -> m_launcherSubsystem.turnOffIndexer(), m_indexSubsystem))
+        // .andThen(Commands.runOnce(() -> m_launcherSubsystem.turnOffIndexer(),
+        // m_indexSubsystem))
         .andThen(Commands.runOnce(() -> m_launcherSubsystem.turnOffLauncher(), m_launcherSubsystem))
         .andThen(new MoveWristToPosCommand(m_aimSubsystem, Constants.zeroLaunchAngle));
   }
 
-  public Command groundIntake() {
+  // public Command groundIntake() {
 
-    return Commands.parallel(
-        Commands.runOnce(() -> m_intakeSubsystem.intakeOn(), m_intakeSubsystem),
-        Commands.runOnce(() -> m_indexSubsystem.indexOn(), m_indexSubsystem),
-        // CHANGE THIS NUMBER LATER IT SHOULDNT BE 5 TEST IT
-        new MoveIntakeToPosCommand(m_intakeSubsystem, 5.1))
+  // return Commands.parallel(
+  // Commands.runOnce(() -> m_intakeSubsystem.intakeOn(), m_intakeSubsystem),
+  // Commands.runOnce(() -> m_indexSubsystem.indexOn(), m_indexSubsystem),
+  // // CHANGE THIS NUMBER LATER IT SHOULDNT BE 5 TEST IT
+  // new MoveIntakeToPosCommand(m_intakeSubsystem, 5.1))
 
-        .andThen(new IndexBeamBreakCommand(m_indexSubsystem))
+  // .andThen(new IndexBeamBreakCommand(m_indexSubsystem))
 
-        .andThen(Commands.parallel(
-            Commands.runOnce(() -> m_intakeSubsystem.intakeOff(), m_intakeSubsystem),
-            Commands.runOnce(() -> m_indexSubsystem.indexOff(), m_indexSubsystem),
-            // CHANGE THIS NUMBER LATER IT SHOULDNT BE 5 TEST IT
-            new MoveIntakeToPosCommand(m_intakeSubsystem, 0.0)));
-  }
+  // .andThen(Commands.parallel(
+  // Commands.runOnce(() -> m_intakeSubsystem.intakeOff(), m_intakeSubsystem),
+  // Commands.runOnce(() -> m_indexSubsystem.indexOff(), m_indexSubsystem),
+  // // CHANGE THIS NUMBER LATER IT SHOULDNT BE 5 TEST IT
+  // new MoveIntakeToPosCommand(m_intakeSubsystem, 0.0)));
+  // }
 
   // Speaker launch w/ just wrist prep
   public Command speakerLaunchPrep() {
@@ -185,8 +189,9 @@ public class RobotContainer {
 
   // Amp launch with just elevator and wrist prep
   public Command ampLaunchPrep() {
-    return (new MoveElevatorToPosCommand(m_elevatorSubsystem, Constants.ampElevator))
-        .andThen(new MoveWristToPosCommand(m_aimSubsystem, Constants.ampAngle))
+    return Commands.parallel(
+        new MoveElevatorToPosCommand(m_elevatorSubsystem, Constants.ampElevator),
+        new MoveWristToPosCommand(m_aimSubsystem, Constants.ampAngle))
         .andThen(rumbleOperatorController(0.7));
   }
 
@@ -194,9 +199,11 @@ public class RobotContainer {
   public Command shoot() {
     return (Commands.runOnce(() -> m_launcherSubsystem.speakerTurnOnLauncher(), m_launcherSubsystem))
         .andThen(new WaitCommand(1))
-        .andThen(Commands.runOnce(() -> m_launcherSubsystem.turnOnIndexer(), m_indexSubsystem))
+        // .andThen(Commands.runOnce(() -> m_launcherSubsystem.turnOnIndexer(),
+        // m_indexSubsystem))
         .andThen(new WaitCommand(.3))
-        .andThen(Commands.runOnce(() -> m_launcherSubsystem.turnOffIndexer(), m_indexSubsystem))
+        // .andThen(Commands.runOnce(() -> m_launcherSubsystem.turnOffIndexer(),
+        // m_indexSubsystem))
         .andThen(Commands.runOnce(() -> m_launcherSubsystem.turnOffLauncher(), m_launcherSubsystem))
         .andThen(zeroArm())
         .andThen(Commands.runOnce(() -> m_operatorController.getHID().setRumble(RumbleType.kBothRumble, 0)));
@@ -212,8 +219,8 @@ public class RobotContainer {
 
   // Brings wrist and elevator to zero
   public Command zeroArm() {
-    return new MoveWristToPosCommand(m_aimSubsystem, Constants.zeroLaunchAngle)
-        .andThen(new MoveElevatorToPosCommand(m_elevatorSubsystem, Constants.zeroElevator));
+    return Commands.parallel(new MoveWristToPosCommand(m_aimSubsystem, Constants.zeroLaunchAngle),
+        new MoveElevatorToPosCommand(m_elevatorSubsystem, Constants.zeroElevator));
   }
 
   // Rumbles controller for a specified amount of time

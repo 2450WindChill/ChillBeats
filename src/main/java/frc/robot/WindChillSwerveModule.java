@@ -30,7 +30,7 @@ public class WindChillSwerveModule {
     this.moduleNumber = moduleNumber;
 
     /* Angle Encoder Config */
-    angleEncoder = new CANcoder(moduleConstants.cancoderID);
+    angleEncoder = new CANcoder(moduleConstants.cancoderID, "canivore");
 
     /* Angle Motor Config */
     angleMotor = new CANSparkMax(moduleConstants.angleMotorID, MotorType.kBrushless);

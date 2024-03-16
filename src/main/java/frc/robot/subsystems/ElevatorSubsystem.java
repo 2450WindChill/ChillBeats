@@ -19,7 +19,7 @@ public class ElevatorSubsystem extends SubsystemBase {
    public final SparkPIDController elevatorController = elevatorMotor.getPIDController();
 
   public ElevatorSubsystem() {
-    elevatorController.setP(.015);    
+    elevatorController.setP(.03);    
     elevatorController.setI(.00001); 
     elevatorMotor.setIdleMode(Constants.angleBrakeMode);
 
