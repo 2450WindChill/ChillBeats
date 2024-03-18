@@ -11,7 +11,7 @@ import frc.robot.commands.DefaultLEDCommand;
 import frc.robot.commands.DefaultShooterCommand;
 import frc.robot.commands.ElevatorCommand;
 import frc.robot.commands.FieldCentricAutoDrive;
-import frc.robot.commands.IndexBeamBreakCommand;
+import frc.robot.commands.CheckIndexBeamBreak;
 import frc.robot.commands.SourceIntakeCommand;
 import frc.robot.commands.IndexCommand;
 import frc.robot.commands.LaunchCommand;
@@ -156,11 +156,9 @@ public class RobotContainer {
   public Command autoSpeakerLaunch() {
     return (Commands.runOnce(() -> m_launcherSubsystem.speakerTurnOnLauncher(), m_launcherSubsystem))
         .andThen(new MoveWristToPosCommand(m_aimSubsystem, Constants.speakerAngle))
-        // .andThen(Commands.runOnce(() -> m_launcherSubsystem.turnOnIndexer(),
-        // m_indexSubsystem))
+        .andThen(Commands.runOnce(() -> m_launcherSubsystem.turnOnFeeder(), m_launcherSubsystem))
         .andThen(new WaitCommand(1))
-        // .andThen(Commands.runOnce(() -> m_launcherSubsystem.turnOffIndexer(),
-        // m_indexSubsystem))
+        .andThen(Commands.runOnce(() -> m_launcherSubsystem.turnOffFeeder(), m_launcherSubsystem))
         .andThen(Commands.runOnce(() -> m_launcherSubsystem.turnOffLauncher(), m_launcherSubsystem))
         .andThen(new MoveWristToPosCommand(m_aimSubsystem, Constants.zeroLaunchAngle));
   }
@@ -173,14 +171,14 @@ public class RobotContainer {
   // // CHANGE THIS NUMBER LATER IT SHOULDNT BE 5 TEST IT
   // new MoveIntakeToPosCommand(m_intakeSubsystem, 5.1))
 
-  // .andThen(new IndexBeamBreakCommand(m_indexSubsystem))
+        .andThen(new CheckIndexBeamBreak(m_indexSubsystem))
 
-  // .andThen(Commands.parallel(
-  // Commands.runOnce(() -> m_intakeSubsystem.intakeOff(), m_intakeSubsystem),
-  // Commands.runOnce(() -> m_indexSubsystem.indexOff(), m_indexSubsystem),
-  // // CHANGE THIS NUMBER LATER IT SHOULDNT BE 5 TEST IT
-  // new MoveIntakeToPosCommand(m_intakeSubsystem, 0.0)));
-  // }
+        .andThen(Commands.parallel(
+            Commands.runOnce(() -> m_intakeSubsystem.intakeOff(), m_intakeSubsystem),
+            Commands.runOnce(() -> m_indexSubsystem.indexOff(), m_launcherSubsystem),
+            // CHANGE THIS NUMBER LATER IT SHOULDNT BE 5 TEST IT
+            new MoveIntakeToPosCommand(m_intakeSubsystem, 0.0)));
+  }
 
   // Speaker launch w/ just wrist prep
   public Command speakerLaunchPrep() {
@@ -199,11 +197,9 @@ public class RobotContainer {
   public Command shoot() {
     return (Commands.runOnce(() -> m_launcherSubsystem.speakerTurnOnLauncher(), m_launcherSubsystem))
         .andThen(new WaitCommand(1))
-        // .andThen(Commands.runOnce(() -> m_launcherSubsystem.turnOnIndexer(),
-        // m_indexSubsystem))
+        .andThen(Commands.runOnce(() -> m_launcherSubsystem.turnOnFeeder(), m_launcherSubsystem))
         .andThen(new WaitCommand(.3))
-        // .andThen(Commands.runOnce(() -> m_launcherSubsystem.turnOffIndexer(),
-        // m_indexSubsystem))
+        .andThen(Commands.runOnce(() -> m_launcherSubsystem.turnOffFeeder(), m_launcherSubsystem))
         .andThen(Commands.runOnce(() -> m_launcherSubsystem.turnOffLauncher(), m_launcherSubsystem))
         .andThen(zeroArm())
         .andThen(Commands.runOnce(() -> m_operatorController.getHID().setRumble(RumbleType.kBothRumble, 0)));

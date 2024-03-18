@@ -42,12 +42,12 @@ public class LauncherSubsystem extends SubsystemBase {
         });
   }
 
-  public void turnOnIndexer() {
+  public void turnOnFeeder() {
     System.out.println("turn on");
     feederMotor.set(-1);
   }
 
-  public void turnOffIndexer() {
+  public void turnOffFeeder() {
       System.out.println("turn off");
     feederMotor.set(0);
   }
