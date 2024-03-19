@@ -4,18 +4,18 @@
 
 package frc.robot.commands;
 
-import frc.robot.subsystems.IndexSubsystem;
+import frc.robot.subsystems.LauncherSubsystem;
 import edu.wpi.first.wpilibj2.command.Command;
 
 /** An example command that uses an example subsystem. */
-public class CheckIndexBeamBreak extends Command {
+public class CheckLauncherBeamBreak extends Command {
   @SuppressWarnings({ "PMD.UnusedPrivateField", "PMD.SingularField" })
-  private final IndexSubsystem m_subsystem;
+  private final LauncherSubsystem m_subsystem;
 
   /*
    * @param subsystem The subsystem used by this command.
    */
-  public CheckIndexBeamBreak(IndexSubsystem subsystem) {
+  public CheckLauncherBeamBreak(LauncherSubsystem subsystem) {
     m_subsystem = subsystem;
 
     // Use addRequirements() here to declare subsystem dependencies.
@@ -41,6 +41,6 @@ public class CheckIndexBeamBreak extends Command {
   // Returns true when the command should end.
   @Override
   public boolean isFinished() {
-    return m_subsystem.indexBeamBreak.get();
+    return m_subsystem.wristBeamBreak.get();
   }
 }

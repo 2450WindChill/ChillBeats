@@ -12,12 +12,13 @@ import frc.robot.commands.DefaultShooterCommand;
 import frc.robot.commands.ElevatorCommand;
 import frc.robot.commands.FieldCentricAutoDrive;
 import frc.robot.commands.CheckIndexBeamBreak;
+import frc.robot.commands.CheckLauncherBeamBreak;
 import frc.robot.commands.SourceIntakeCommand;
 import frc.robot.commands.IndexCommand;
 import frc.robot.commands.LaunchCommand;
 import frc.robot.commands.LockMoveWristToPosCommand;
 import frc.robot.commands.MoveElevatorToPosCommand;
-import frc.robot.commands.MoveIntakeToPosCommand;
+// import frc.robot.commands.MoveIntakeToPosCommand;
 import frc.robot.commands.MoveWristToPosCommand;
 import frc.robot.libs.LimelightHelpers;
 import frc.robot.subsystems.AimSubsystem;
@@ -30,6 +31,7 @@ import frc.robot.subsystems.LightySubsystem;
 
 import java.util.Optional;
 
+import com.pathplanner.lib.auto.NamedCommands;
 import com.pathplanner.lib.commands.PathPlannerAuto;
 
 import edu.wpi.first.math.geometry.Translation2d;
@@ -42,6 +44,7 @@ import frc.robot.subsystems.PoseEstimatorSubsystem;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.Commands;
+import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.WaitCommand;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 
@@ -52,7 +55,7 @@ public class RobotContainer {
   private final ElevatorSubsystem m_elevatorSubsystem = new ElevatorSubsystem();
   private final AimSubsystem m_aimSubsystem = new AimSubsystem();
   private final LauncherSubsystem m_launcherSubsystem = new LauncherSubsystem();
-  // private final IndexSubsystem m_indexSubsystem = new IndexSubsystem();
+  private final IndexSubsystem m_indexSubsystem = new IndexSubsystem();
   public Alliance teamColor;
   private final LightySubsystem m_ledSubsystem = new LightySubsystem(this);
   private final IntakeSubsystem m_intakeSubsystem = new IntakeSubsystem();
@@ -79,14 +82,15 @@ public class RobotContainer {
    */
   public RobotContainer() {
 
-    m_drivetrainSubsystem.setDefaultCommand(
-        new DefaultDriveCommand(
-            m_drivetrainSubsystem,
-            () -> m_driverController.getLeftY(),
-            () -> m_driverController.getLeftX(),
-            () -> m_driverController.getRightX(),
-            () -> Constants.isRobotCentric,
-            () -> m_driverController.rightStick().getAsBoolean()));
+    // m_drivetrainSubsystem.setDefaultCommand(
+    //     new DefaultDriveCommand(
+    //         m_drivetrainSubsystem,
+    //         () -> m_driverController.getLeftY(),
+    //         () -> m_driverController.getLeftX(),
+    //         () -> m_driverController.getRightX(),
+    //         () -> Constants.isRobotCentric,
+    //         () -> m_driverController.rightStick().getAsBoolean())
+    //       );
 
     m_launcherSubsystem.setDefaultCommand(new DefaultShooterCommand(m_launcherSubsystem));
     m_elevatorSubsystem.setDefaultCommand(new ElevatorCommand(m_elevatorSubsystem, m_operatorController));
@@ -130,12 +134,10 @@ public class RobotContainer {
     m_driverController.b().onTrue(new MoveElevatorToPosCommand(m_elevatorSubsystem, Constants.maxHeight));
 
     // TEMPORARY TESTING
-    // m_driverController.leftTrigger().whileTrue(Commands.runOnce(() ->
-    // m_intakeSubsystem.intakeOn(), m_intakeSubsystem)
-    // .finallyDo(() -> m_intakeSubsystem.intakeOff()));
-    // m_driverController.rightTrigger().whileTrue(Commands.runOnce(() ->
-    // m_indexSubsystem.indexOn(), m_indexSubsystem)
-    // .finallyDo(() -> m_indexSubsystem.indexOff()));
+    m_driverController.leftTrigger().whileTrue(Commands.runOnce(() -> m_intakeSubsystem.intakeOn(), m_intakeSubsystem))
+        .onFalse(Commands.runOnce(() -> m_intakeSubsystem.intakeOff()));
+    m_driverController.rightTrigger().whileTrue(Commands.runOnce(() -> m_indexSubsystem.indexOn(), m_intakeSubsystem))
+        .onFalse(Commands.runOnce(() -> m_indexSubsystem.indexOff()));
   }
 
   /*
@@ -152,6 +154,10 @@ public class RobotContainer {
     LimelightHelpers.setCameraPose_RobotSpace("limelight", 0, 0, 0, 0, 0, 0);
   }
 
+  private void configureNamedCommands() {
+
+  }
+
   // Full speaker launch sequential command
   public Command autoSpeakerLaunch() {
     return (Commands.runOnce(() -> m_launcherSubsystem.speakerTurnOnLauncher(), m_launcherSubsystem))
@@ -163,21 +169,54 @@ public class RobotContainer {
         .andThen(new MoveWristToPosCommand(m_aimSubsystem, Constants.zeroLaunchAngle));
   }
 
-  // public Command groundIntake() {
+  public Command partialGroundIntake() {
 
-  // return Commands.parallel(
-  // Commands.runOnce(() -> m_intakeSubsystem.intakeOn(), m_intakeSubsystem),
-  // Commands.runOnce(() -> m_indexSubsystem.indexOn(), m_indexSubsystem),
-  // // CHANGE THIS NUMBER LATER IT SHOULDNT BE 5 TEST IT
-  // new MoveIntakeToPosCommand(m_intakeSubsystem, 5.1))
+    return Commands.parallel(
+        Commands.runOnce(() -> m_intakeSubsystem.intakeOn(), m_intakeSubsystem),
+        Commands.runOnce(() -> m_indexSubsystem.indexOn(), m_indexSubsystem))
+        // CHANGE THIS NUMBER LATER IT SHOULDNT BE 5 TEST IT
+        // new MoveIntakeToPosCommand(m_intakeSubsystem, 5.1))
 
         .andThen(new CheckIndexBeamBreak(m_indexSubsystem))
 
         .andThen(Commands.parallel(
             Commands.runOnce(() -> m_intakeSubsystem.intakeOff(), m_intakeSubsystem),
-            Commands.runOnce(() -> m_indexSubsystem.indexOff(), m_launcherSubsystem),
+            Commands.runOnce(() -> m_indexSubsystem.indexOff(), m_launcherSubsystem)));
             // CHANGE THIS NUMBER LATER IT SHOULDNT BE 5 TEST IT
-            new MoveIntakeToPosCommand(m_intakeSubsystem, 0.0)));
+            // new MoveIntakeToPosCommand(m_intakeSubsystem, 0.0)));
+  }
+
+  public Command fullGroundIntake() {
+    return Commands.parallel(
+        // Flip out and turn on intake
+          Commands.runOnce(() -> m_intakeSubsystem.intakeOn(), m_intakeSubsystem),
+          // new MoveIntakeToPosCommand(m_intakeSubsystem, 5.0),
+        // Turn on intake
+          Commands.runOnce(() -> m_indexSubsystem.indexOn(), m_indexSubsystem)
+        )
+
+        // Wait for index beam break to be tripped
+        .andThen(new CheckIndexBeamBreak(m_indexSubsystem))
+
+        .andThen(Commands.parallel(
+          // Retract and turn off intake
+            Commands.runOnce(() -> m_intakeSubsystem.intakeOff(), m_intakeSubsystem),
+            // new MoveIntakeToPosCommand(m_intakeSubsystem, 0.0),
+          // Turn on feeder
+            Commands.runOnce(() -> m_launcherSubsystem.turnOnFeeder(), m_launcherSubsystem)
+          )
+
+          // Wait for wrist beam break to be tripped
+          .andThen(new CheckLauncherBeamBreak(m_launcherSubsystem))
+
+        .andThen(Commands.parallel(
+          // Turn off indexer and feeder
+            Commands.runOnce(() -> m_indexSubsystem.indexOff())
+            .andThen(() -> m_launcherSubsystem.turnOffFeeder())
+        ))
+            
+      );
+
   }
 
   // Speaker launch w/ just wrist prep
@@ -223,13 +262,15 @@ public class RobotContainer {
   public Command rumbleDriveController(double duration) {
     return Commands.runOnce(() -> m_driverController.getHID().setRumble(RumbleType.kBothRumble, 1))
         .andThen(new WaitCommand(duration))
-        .andThen(Commands.runOnce(() -> m_driverController.getHID().setRumble(RumbleType.kBothRumble, 0)));
+        .andThen(Commands.runOnce(() -> m_driverController.getHID().setRumble(RumbleType.kBothRumble, 0)))
+        .handleInterrupt(() -> m_driverController.getHID().setRumble(RumbleType.kBothRumble, 0));
   }
 
   public Command rumbleOperatorController(double duration) {
     return Commands.runOnce(() -> m_operatorController.getHID().setRumble(RumbleType.kBothRumble, 1))
         .andThen(new WaitCommand(duration))
-        .andThen(Commands.runOnce(() -> m_operatorController.getHID().setRumble(RumbleType.kBothRumble, 0)));
+        .andThen(Commands.runOnce(() -> m_operatorController.getHID().setRumble(RumbleType.kBothRumble, 0)))
+        .handleInterrupt(() -> m_driverController.getHID().setRumble(RumbleType.kBothRumble, 0));
   }
 
   // Returns our current alliance
