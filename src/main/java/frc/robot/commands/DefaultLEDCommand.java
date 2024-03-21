@@ -11,7 +11,7 @@ public class DefaultLEDCommand extends Command {
     public DefaultLEDCommand(LauncherSubsystem launcherSubsystem, LightySubsystem lightySubsystem) {
         m_LauncherSubsystem = launcherSubsystem;
         m_LightySubsystem = lightySubsystem;
-        addRequirements(m_LauncherSubsystem, m_LightySubsystem);
+        addRequirements(m_LightySubsystem);
     }
 
     public void initialize() {

@@ -20,17 +20,17 @@ import frc.robot.Constants;
 public class IntakeSubsystem extends SubsystemBase {
      // TODO: Change motor ids
      public final CANSparkFlex intakeMotor = new CANSparkFlex(13, MotorType.kBrushless);
-     // public final CANSparkMax angleIntakeMotor = new CANSparkMax(27, MotorType.kBrushless);
-     // public final SparkPIDController angleIntakeController = angleIntakeMotor.getPIDController();
+     public final CANSparkFlex angleIntakeMotor = new CANSparkFlex(21, MotorType.kBrushless);
+     public final SparkPIDController angleIntakeController = angleIntakeMotor.getPIDController();
 
 
   /** Creates a new IntakeSubsystem. */
   public IntakeSubsystem() {
     // CHANGE P AND I VALUES LATER RAAAAAH
-    // angleIntakeController.setP(.01);
-    // angleIntakeController.setOutputRange(-0.6, 0.6);
-    // angleIntakeController.setI(.000003);
-    // angleIntakeMotor.setIdleMode(Constants.angleBrakeMode);
+    angleIntakeController.setP(.01);
+    angleIntakeController.setOutputRange(-0.6, 0.6);
+    angleIntakeController.setI(.000003);
+    angleIntakeMotor.setIdleMode(Constants.angleBrakeMode);
   }
 
   /**

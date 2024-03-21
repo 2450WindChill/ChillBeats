@@ -82,15 +82,15 @@ public class RobotContainer {
    */
   public RobotContainer() {
 
-    // m_drivetrainSubsystem.setDefaultCommand(
-    //     new DefaultDriveCommand(
-    //         m_drivetrainSubsystem,
-    //         () -> m_driverController.getLeftY(),
-    //         () -> m_driverController.getLeftX(),
-    //         () -> m_driverController.getRightX(),
-    //         () -> Constants.isRobotCentric,
-    //         () -> m_driverController.rightStick().getAsBoolean())
-    //       );
+    m_drivetrainSubsystem.setDefaultCommand(
+        new DefaultDriveCommand(
+            m_drivetrainSubsystem,
+            () -> m_driverController.getLeftY(),
+            () -> m_driverController.getLeftX(),
+            () -> m_driverController.getRightX(),
+            () -> Constants.isRobotCentric,
+            () -> m_driverController.rightStick().getAsBoolean())
+          );
 
     m_launcherSubsystem.setDefaultCommand(new DefaultShooterCommand(m_launcherSubsystem));
     m_elevatorSubsystem.setDefaultCommand(new ElevatorCommand(m_elevatorSubsystem, m_operatorController));
