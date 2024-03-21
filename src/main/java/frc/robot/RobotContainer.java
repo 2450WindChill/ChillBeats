@@ -18,6 +18,7 @@ import frc.robot.commands.IndexCommand;
 import frc.robot.commands.LaunchCommand;
 import frc.robot.commands.LockMoveWristToPosCommand;
 import frc.robot.commands.MoveElevatorToPosCommand;
+import frc.robot.commands.MoveIntakeToPosCommand;
 // import frc.robot.commands.MoveIntakeToPosCommand;
 import frc.robot.commands.MoveWristToPosCommand;
 import frc.robot.libs.LimelightHelpers;
@@ -89,8 +90,7 @@ public class RobotContainer {
             () -> m_driverController.getLeftX(),
             () -> m_driverController.getRightX(),
             () -> Constants.isRobotCentric,
-            () -> m_driverController.rightStick().getAsBoolean())
-          );
+            () -> m_driverController.rightStick().getAsBoolean()));
 
     m_launcherSubsystem.setDefaultCommand(new DefaultShooterCommand(m_launcherSubsystem));
     m_elevatorSubsystem.setDefaultCommand(new ElevatorCommand(m_elevatorSubsystem, m_operatorController));
@@ -120,13 +120,16 @@ public class RobotContainer {
     // Operator
     // Sequences
     m_operatorController.x().onTrue(ampLaunchPrep());
-    m_operatorController.rightTrigger().onTrue(shoot());
+    //m_operatorController.rightTrigger().onTrue(shoot());
     m_operatorController.y().onTrue(autoSpeakerLaunch());
     m_operatorController.a().onTrue(sourceIntake());
     m_operatorController.b().onTrue(zeroArm());
-    m_operatorController.leftTrigger().whileTrue(new LaunchCommand(m_launcherSubsystem, -0.3));
-    m_operatorController.leftTrigger().whileTrue(new IndexCommand(m_launcherSubsystem, .1));
-    // m_operatorController.leftBumper().onTrue(groundIntake());
+    // m_operatorController.leftTrigger().whileTrue(new
+    // LaunchCommand(m_launcherSubsystem, -0.3));
+    // m_operatorController.leftTrigger().whileTrue(new
+    // IndexCommand(m_launcherSubsystem, .1));
+    m_operatorController.leftTrigger().onTrue(fullGroundIntake());
+    m_operatorController.rightTrigger().onTrue(partialGroundIntake());
 
     // Driver
     // Zero Gyro
@@ -170,38 +173,42 @@ public class RobotContainer {
   }
 
   public Command partialGroundIntake() {
+     return Commands.parallel(
+        // Flip out and turn on intake
+         
+          new MoveIntakeToPosCommand(m_intakeSubsystem, 0.509),
+        // Turn on intake
+          Commands.runOnce(() -> m_indexSubsystem.indexOn(), m_indexSubsystem)
+        )
+        .andThen(Commands.runOnce(() -> m_intakeSubsystem.intakeOn(), m_intakeSubsystem))
 
-    return Commands.parallel(
-        Commands.runOnce(() -> m_intakeSubsystem.intakeOn(), m_intakeSubsystem),
-        Commands.runOnce(() -> m_indexSubsystem.indexOn(), m_indexSubsystem))
-        // CHANGE THIS NUMBER LATER IT SHOULDNT BE 5 TEST IT
-        // new MoveIntakeToPosCommand(m_intakeSubsystem, 5.1))
-
+        // Wait for index beam break to be tripped
         .andThen(new CheckIndexBeamBreak(m_indexSubsystem))
-
+        .andThen(Commands.runOnce(() -> m_intakeSubsystem.intakeOff(), m_intakeSubsystem))
         .andThen(Commands.parallel(
-            Commands.runOnce(() -> m_intakeSubsystem.intakeOff(), m_intakeSubsystem),
-            Commands.runOnce(() -> m_indexSubsystem.indexOff(), m_launcherSubsystem)));
-            // CHANGE THIS NUMBER LATER IT SHOULDNT BE 5 TEST IT
-            // new MoveIntakeToPosCommand(m_intakeSubsystem, 0.0)));
+          
+            new MoveIntakeToPosCommand(m_intakeSubsystem, 0.0),
+          // Turn on feeder
+            Commands.runOnce(() -> m_indexSubsystem.indexOff(), m_indexSubsystem)
+          ));
   }
 
   public Command fullGroundIntake() {
     return Commands.parallel(
         // Flip out and turn on intake
-          Commands.runOnce(() -> m_intakeSubsystem.intakeOn(), m_intakeSubsystem),
-          // new MoveIntakeToPosCommand(m_intakeSubsystem, 5.0),
+         
+          new MoveIntakeToPosCommand(m_intakeSubsystem, 0.509),
         // Turn on intake
           Commands.runOnce(() -> m_indexSubsystem.indexOn(), m_indexSubsystem)
         )
+        .andThen(Commands.runOnce(() -> m_intakeSubsystem.intakeOn(), m_intakeSubsystem))
 
         // Wait for index beam break to be tripped
         .andThen(new CheckIndexBeamBreak(m_indexSubsystem))
-
+        .andThen(Commands.runOnce(() -> m_intakeSubsystem.intakeOff(), m_intakeSubsystem))
         .andThen(Commands.parallel(
-          // Retract and turn off intake
-            Commands.runOnce(() -> m_intakeSubsystem.intakeOff(), m_intakeSubsystem),
-            // new MoveIntakeToPosCommand(m_intakeSubsystem, 0.0),
+          
+            new MoveIntakeToPosCommand(m_intakeSubsystem, 0.0),
           // Turn on feeder
             Commands.runOnce(() -> m_launcherSubsystem.turnOnFeeder(), m_launcherSubsystem)
           )

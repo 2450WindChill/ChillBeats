@@ -27,10 +27,11 @@ public class IntakeSubsystem extends SubsystemBase {
   /** Creates a new IntakeSubsystem. */
   public IntakeSubsystem() {
     // CHANGE P AND I VALUES LATER RAAAAAH
-    angleIntakeController.setP(.01);
+    angleIntakeController.setP(.7);
     angleIntakeController.setOutputRange(-0.6, 0.6);
-    angleIntakeController.setI(.000003);
+    angleIntakeController.setI(.0003);
     angleIntakeMotor.setIdleMode(Constants.angleBrakeMode);
+    intakeMotor.setOpenLoopRampRate(1);
   }
 
   /**
@@ -59,7 +60,7 @@ public class IntakeSubsystem extends SubsystemBase {
 
   @Override
   public void periodic() {
-
+    SmartDashboard.putNumber("Intake angle", angleIntakeMotor.getEncoder().getPosition());
   }
 
   @Override
@@ -67,9 +68,10 @@ public class IntakeSubsystem extends SubsystemBase {
     // This method will be called once per scheduler run during simulation
   }
 
-  public void intakeOn() {
+  public void 
+  intakeOn() {
     System.out.println("intake turn on");
-    intakeMotor.set(0.1);
+    intakeMotor.set(0.5);
   }
 
   public void intakeOff() {
