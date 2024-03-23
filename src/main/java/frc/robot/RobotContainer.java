@@ -133,6 +133,10 @@ public class RobotContainer {
     m_operatorController.leftTrigger()
         .onTrue(Commands.runOnce(() -> m_launcherSubsystem.manualTurnOnFeeder(), m_launcherSubsystem))
         .onFalse(Commands.runOnce(() -> m_launcherSubsystem.turnOffFeeder(), m_launcherSubsystem));
+
+    m_operatorController.leftBumper().onTrue(Commands.runOnce(() -> m_launcherSubsystem.slowSpeakerTurnOnLauncher()))
+     .onFalse(Commands.runOnce(() -> m_launcherSubsystem.turnOffLauncher()));
+     
     // m_operatorController.leftTrigger().whileTrue(new
     // IndexCommand(m_launcherSubsystem, .1));
 
@@ -181,14 +185,40 @@ public class RobotContainer {
 
   // Full speaker launch sequential command
   public Command autoSpeakerLaunch() {
-    return (Commands.runOnce(() -> m_launcherSubsystem.speakerTurnOnLauncher(), m_launcherSubsystem))
+    return (Commands.runOnce(() -> m_launcherSubsystem.speakerTurnOnLauncher(),
+        m_launcherSubsystem))
         .andThen(new MoveWristToPosCommand(m_aimSubsystem, Constants.speakerAngle))
-        .andThen(Commands.runOnce(() -> m_launcherSubsystem.turnOnFeeder(), m_launcherSubsystem))
+        .andThen(Commands.runOnce(() -> m_launcherSubsystem.turnOnFeeder(),
+            m_launcherSubsystem))
         .andThen(new WaitCommand(1))
-        .andThen(Commands.runOnce(() -> m_launcherSubsystem.turnOffFeeder(), m_launcherSubsystem))
-        .andThen(Commands.runOnce(() -> m_launcherSubsystem.turnOffLauncher(), m_launcherSubsystem))
-        .andThen(new MoveWristToPosCommand(m_aimSubsystem, Constants.zeroLaunchAngle));
+        .andThen(Commands.runOnce(() -> m_launcherSubsystem.turnOffFeeder(),
+            m_launcherSubsystem))
+        .andThen(Commands.runOnce(() -> m_launcherSubsystem.turnOffLauncher(),
+            m_launcherSubsystem))
+        .andThen(new MoveWristToPosCommand(m_aimSubsystem,
+            Constants.zeroLaunchAngle));
   }
+
+ 
+     
+  
+  // // Full speaker launch sequential command
+  // public Command autoSpeakerLaunch() {
+  // return Commands.parallel(
+  // // Shoot and angle
+  // new MoveWristToPosCommand(m_aimSubsystem, Constants.speakerAngle),
+  // // Turn on launcher and feeder
+  // Commands.runOnce(() -> m_launcherSubsystem.turnOnLauncherAndFeeder(),
+  // m_launcherSubsystem))
+  // // Wait
+  // .andThen(new WaitCommand(1))
+  // // Turn off feeder and launcher and zero wrist
+  // .andThen(Commands.parallel(
+  // Commands.runOnce(() -> m_launcherSubsystem.turnOffFeederAndLauncher(),
+  // m_launcherSubsystem),
+  // new MoveWristToPosCommand(m_aimSubsystem, Constants.zeroLaunchAngle)
+  // ));
+  // }
 
   public Command partialGroundIntake() {
     return Commands.parallel(
@@ -268,9 +298,13 @@ public class RobotContainer {
   public Command sourceIntake() {
     return new MoveWristToPosCommand(m_aimSubsystem, Constants.sourceAngle)
         .andThen(new SourceIntakeCommand(m_launcherSubsystem))
+        .andThen(new WaitCommand(.15))
+        .andThen(Commands.runOnce(() -> m_launcherSubsystem.turnOffFeeder()))
         .andThen(rumbleDriveController(0.7))
         .andThen(zeroArm());
   }
+
+  
 
   // Brings wrist and elevator to zero
   public Command zeroArm() {
