@@ -19,6 +19,7 @@ import frc.robot.commands.LaunchCommand;
 import frc.robot.commands.LockMoveWristToPosCommand;
 import frc.robot.commands.MoveElevatorToPosCommand;
 import frc.robot.commands.MoveIntakeToPosCommand;
+import frc.robot.commands.MoveToPose;
 // import frc.robot.commands.MoveIntakeToPosCommand;
 import frc.robot.commands.MoveWristToPosCommand;
 import frc.robot.libs.LimelightHelpers;
@@ -35,6 +36,8 @@ import java.util.Optional;
 import com.pathplanner.lib.auto.NamedCommands;
 import com.pathplanner.lib.commands.PathPlannerAuto;
 
+import edu.wpi.first.math.geometry.Pose2d;
+import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.DriverStation.Alliance;
@@ -74,6 +77,8 @@ public class RobotContainer {
   public Command Red_Short_Side;
   public Command Red_Middle_Side;
   public Command Red_Long_Side;
+
+  public Command test;
 
   public Command moveForward;
   public SendableChooser<Command> m_chooser;
@@ -128,8 +133,15 @@ public class RobotContainer {
     // LaunchCommand(m_launcherSubsystem, -0.3));
     // m_operatorController.leftTrigger().whileTrue(new
     // IndexCommand(m_launcherSubsystem, .1));
+
     m_operatorController.leftTrigger().onTrue(fullGroundIntake());
     m_operatorController.rightTrigger().onTrue(partialGroundIntake());
+
+    // m_operatorController.leftTrigger().onTrue(new MoveToPose(m_drivetrainSubsystem, m_poseEstimator,
+    //   new Pose2d(new Translation2d(1, 0), new Rotation2d())));
+
+    // m_operatorController.rightTrigger().onTrue(new MoveToPose(m_drivetrainSubsystem, m_poseEstimator,
+    //   new Pose2d(new Translation2d(0, 0), new Rotation2d())));
 
     // Driver
     // Zero Gyro
@@ -342,6 +354,8 @@ public class RobotContainer {
         .andThen(new WaitCommand(1.85))
         .andThen(new FieldCentricAutoDrive(m_drivetrainSubsystem, new Translation2d(0, 0), 0));
 
+    test = (new PathPlannerAuto("test_auto"));
+
     m_chooser = new SendableChooser<>();
     m_chooser.setDefaultOption("Blue Stage Side", Blue_Middle_Side);
     m_chooser.addOption("Blue Amp Side", Blue_Short_Side);
@@ -349,6 +363,7 @@ public class RobotContainer {
     m_chooser.addOption("Red Amp Side", Red_Short_Side);
     m_chooser.addOption("Red Stage Side", Red_Middle_Side);
     m_chooser.addOption("Red Source Side", Red_Long_Side);
+    m_chooser.addOption("Test", test);
   }
 
   // Auto command

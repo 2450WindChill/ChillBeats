@@ -58,12 +58,12 @@ public class DrivetrainSubsystem extends SubsystemBase {
     AutoBuilder.configureHolonomic(
         PoseEstimatorSubsystem::getBotPose, // Robot pose supplier
         PoseEstimatorSubsystem::resetPose, // Method to reset odometry (will be called if your auto has a starting pose)
-        this::getSpeeds, // ChassisSpeeds supplier. MUST BE ROBOT RELATIVE
+        this::getAutoSpeeds, // ChassisSpeeds supplier. MUST BE ROBOT RELATIVE
         this::driveRobotRelative, // Method that will drive the robot given ROBOT RELATIVE ChassisSpeeds
         new HolonomicPathFollowerConfig( // HolonomicPathFollowerConfig, this should likely live in your Constants class
-            new PIDConstants(1, 0.2, 0.0), // Translation PID constants
-            new PIDConstants(0.5, 0.0, 0.0), // Rotation PID constants
-            4.5, // Max module speed, in m/s
+            new PIDConstants(6.0, 0.0, 0.0), // Translation PID constants
+            new PIDConstants(5.0, 0.0, 0.0), // Rotation PID constants
+            0.5, // Max module speed, in m/s
             Units.inchesToMeters(15.6875), // Drive base radius in meters. Distance from robot center to furthest
                                            // module.
             new ReplanningConfig() // Default path replanning config. See the API for the options here
@@ -177,6 +177,14 @@ public class DrivetrainSubsystem extends SubsystemBase {
     return states;
   }
 
+  public SwerveModuleState[] getAutoModuleStates() {
+    SwerveModuleState[] states = new SwerveModuleState[4];
+    for (WindChillSwerveModule mod : swerveModules) {
+      states[mod.moduleNumber] = mod.getAutoState();
+    }
+    return states;
+  }
+
   public WindChillSwerveModule[] getModules() {
     return swerveModules;
   }
@@ -241,6 +249,10 @@ public class DrivetrainSubsystem extends SubsystemBase {
     return Constants.swerveKinematics.toChassisSpeeds(getModuleStates());
   }
 
+  public ChassisSpeeds getAutoSpeeds() {
+    return Constants.swerveKinematics.toChassisSpeeds(getAutoModuleStates());
+  }
+
   public void setStates(SwerveModuleState[] targetStates) {
     SwerveDriveKinematics.desaturateWheelSpeeds(targetStates, Constants.maxSpeed);
     var modules = getModules();
@@ -283,6 +295,8 @@ public class DrivetrainSubsystem extends SubsystemBase {
           "Mod " + mod.moduleNumber + " Integrated", mod.getState().angle.getDegrees());
       SmartDashboard.putNumber(
           "Mod " + mod.moduleNumber + " Velocity", mod.getState().speedMetersPerSecond);
+          SmartDashboard.putNumber(
+          "Mod " + mod.moduleNumber + " drive", mod.getDriveEncoder());
     }
 
     SmartDashboard.putNumber("Gyro Yaw", gyro.getYaw().getValueAsDouble());

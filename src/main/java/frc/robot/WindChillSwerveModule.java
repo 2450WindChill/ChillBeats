@@ -96,6 +96,10 @@ public class WindChillSwerveModule {
     return Rotation2d.fromDegrees(integratedAngleEncoder.getPosition());
   }
 
+  private Rotation2d getAutoAngle() {
+    return Rotation2d.fromDegrees(-integratedAngleEncoder.getPosition());
+  }
+
   public double getCanCoderInDegrees() {
     return getRawCanCoder() * 360.0;
   }
@@ -110,6 +114,10 @@ public class WindChillSwerveModule {
 
   public SwerveModuleState getState() {
     return new SwerveModuleState(driveEncoder.getVelocity(), getAngle());
+  }
+
+  public SwerveModuleState getAutoState() {
+    return new SwerveModuleState(driveEncoder.getVelocity(), getAutoAngle());
   }
 
   private void configAngleMotor() {
@@ -150,10 +158,10 @@ public class WindChillSwerveModule {
     driveMotor.setInverted(Constants.driveInvert);
     driveEncoder.setVelocityConversionFactor(Constants.driveConversionVelocityFactor);
     driveEncoder.setPositionConversionFactor(Constants.driveConversionPositionFactor);
-    driveController.setP(Constants.angleKP);
-    driveController.setI(Constants.angleKI);
-    driveController.setD(Constants.angleKD);
-    driveController.setFF(Constants.angleKFF);
+    driveController.setP(Constants.driveKP);
+    driveController.setI(Constants.driveKI);
+    driveController.setD(Constants.driveKD);
+    driveController.setFF(Constants.driveKFF);
     driveMotor.enableVoltageCompensation(Constants.voltageComp);
     driveMotor.burnFlash();
     driveEncoder.setPosition(0.0);
@@ -161,7 +169,7 @@ public class WindChillSwerveModule {
 
   public SwerveModulePosition getPosition() {
     return new SwerveModulePosition(
-        (getDriveEncoder() / Constants.rotationsPerOneFoot) * Constants.feetToMeters,
+        -((getDriveEncoder() / Constants.rotationsPerOneFoot) * Constants.feetToMeters),
         Rotation2d.fromDegrees(getCanCoderInDegrees()));
   }
 
