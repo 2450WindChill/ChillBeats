@@ -47,6 +47,11 @@ public class LauncherSubsystem extends SubsystemBase {
     feederMotor.set(-1);
   }
 
+  public void manualTurnOnFeeder() {
+    System.out.println("turn on feeder");
+    feederMotor.set(1);
+  }
+
   public void turnOffFeeder() {
       System.out.println("turn off feeder");
     feederMotor.set(0);

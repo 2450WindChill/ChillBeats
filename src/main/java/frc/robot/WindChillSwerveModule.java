@@ -97,7 +97,7 @@ public class WindChillSwerveModule {
   }
 
   private Rotation2d getAutoAngle() {
-    return Rotation2d.fromDegrees(-integratedAngleEncoder.getPosition());
+    return Rotation2d.fromDegrees(integratedAngleEncoder.getPosition());
   }
 
   public double getCanCoderInDegrees() {

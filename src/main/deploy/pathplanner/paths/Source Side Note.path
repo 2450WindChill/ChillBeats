@@ -8,8 +8,8 @@
       },
       "prevControl": null,
       "nextControl": {
-        "x": 2.05387479086575,
-        "y": 4.812459969056739
+        "x": 1.2898154757749216,
+        "y": 5.453581858547019
       },
       "isLocked": false,
       "linkedName": null
@@ -36,38 +36,32 @@
         "y": 5.55
       },
       "prevControl": {
-        "x": 1.7293437358336772,
-        "y": 5.080654877560639
+        "x": 1.2849066664678466,
+        "y": 5.453581858547019
       },
       "nextControl": null,
       "isLocked": false,
       "linkedName": null
     }
   ],
-  "rotationTargets": [
-    {
-      "waypointRelativePos": 1,
-      "rotationDegrees": -39.40066066347941,
-      "rotateFast": false
-    }
-  ],
+  "rotationTargets": [],
   "constraintZones": [],
   "eventMarkers": [],
   "globalConstraints": {
-    "maxVelocity": 0.5,
-    "maxAcceleration": 0.5,
-    "maxAngularVelocity": 540.0,
-    "maxAngularAcceleration": 360.0
+    "maxVelocity": 1.5,
+    "maxAcceleration": 1.0,
+    "maxAngularVelocity": 720.0,
+    "maxAngularAcceleration": 720.0
   },
   "goalEndState": {
     "velocity": 0,
-    "rotation": 1.3803540734444624,
+    "rotation": 180.0,
     "rotateFast": false
   },
   "reversed": false,
   "folder": "Note Pickups from Center",
   "previewStartingState": {
-    "rotation": 0,
+    "rotation": 180.0,
     "velocity": 0
   },
   "useDefaultConstraints": true

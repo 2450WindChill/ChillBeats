@@ -95,7 +95,7 @@ public class RobotContainer {
             () -> m_driverController.getLeftX(),
             () -> m_driverController.getRightX(),
             () -> Constants.isRobotCentric,
-            () -> m_driverController.rightStick().getAsBoolean()));
+            () -> m_driverController.leftTrigger().getAsBoolean()));
 
     m_launcherSubsystem.setDefaultCommand(new DefaultShooterCommand(m_launcherSubsystem));
     m_elevatorSubsystem.setDefaultCommand(new ElevatorCommand(m_elevatorSubsystem, m_operatorController));
@@ -108,6 +108,7 @@ public class RobotContainer {
     configureBindings();
     configureLimelight();
     configureAutoChooser();
+    configureNamedCommands();
     SmartDashboard.putData("Auto Mode", m_chooser);
 
   }
@@ -125,23 +126,26 @@ public class RobotContainer {
     // Operator
     // Sequences
     m_operatorController.x().onTrue(ampLaunchPrep());
-    //m_operatorController.rightTrigger().onTrue(shoot());
+    m_operatorController.rightTrigger().onTrue(shoot());
     m_operatorController.y().onTrue(autoSpeakerLaunch());
     m_operatorController.a().onTrue(sourceIntake());
     m_operatorController.b().onTrue(zeroArm());
-    // m_operatorController.leftTrigger().whileTrue(new
-    // LaunchCommand(m_launcherSubsystem, -0.3));
+    m_operatorController.leftTrigger()
+        .onTrue(Commands.runOnce(() -> m_launcherSubsystem.manualTurnOnFeeder(), m_launcherSubsystem))
+        .onFalse(Commands.runOnce(() -> m_launcherSubsystem.turnOffFeeder(), m_launcherSubsystem));
     // m_operatorController.leftTrigger().whileTrue(new
     // IndexCommand(m_launcherSubsystem, .1));
 
-    m_operatorController.leftTrigger().onTrue(fullGroundIntake());
-    m_operatorController.rightTrigger().onTrue(partialGroundIntake());
+    // m_operatorController.leftTrigger().onTrue(fullGroundIntake());
+    // m_operatorController.rightTrigger().onTrue(partialGroundIntake());
 
-    // m_operatorController.leftTrigger().onTrue(new MoveToPose(m_drivetrainSubsystem, m_poseEstimator,
-    //   new Pose2d(new Translation2d(1, 0), new Rotation2d())));
+    // m_operatorController.leftTrigger().onTrue(new
+    // MoveToPose(m_drivetrainSubsystem, m_poseEstimator,
+    // new Pose2d(new Translation2d(1, 0), new Rotation2d())));
 
-    // m_operatorController.rightTrigger().onTrue(new MoveToPose(m_drivetrainSubsystem, m_poseEstimator,
-    //   new Pose2d(new Translation2d(0, 0), new Rotation2d())));
+    // m_operatorController.rightTrigger().onTrue(new
+    // MoveToPose(m_drivetrainSubsystem, m_poseEstimator,
+    // new Pose2d(new Translation2d(0, 0), new Rotation2d())));
 
     // Driver
     // Zero Gyro
@@ -149,10 +153,12 @@ public class RobotContainer {
     m_driverController.b().onTrue(new MoveElevatorToPosCommand(m_elevatorSubsystem, Constants.maxHeight));
 
     // TEMPORARY TESTING
-    m_driverController.leftTrigger().whileTrue(Commands.runOnce(() -> m_intakeSubsystem.intakeOn(), m_intakeSubsystem))
-        .onFalse(Commands.runOnce(() -> m_intakeSubsystem.intakeOff()));
-    m_driverController.rightTrigger().whileTrue(Commands.runOnce(() -> m_indexSubsystem.indexOn(), m_intakeSubsystem))
-        .onFalse(Commands.runOnce(() -> m_indexSubsystem.indexOff()));
+    // m_driverController.leftTrigger().whileTrue(Commands.runOnce(() ->
+    // m_intakeSubsystem.intakeOn(), m_intakeSubsystem))
+    // .onFalse(Commands.runOnce(() -> m_intakeSubsystem.intakeOff()));
+    // m_driverController.rightTrigger().whileTrue(Commands.runOnce(() ->
+    // m_indexSubsystem.indexOn(), m_intakeSubsystem))
+    // .onFalse(Commands.runOnce(() -> m_indexSubsystem.indexOff()));
   }
 
   /*
@@ -170,7 +176,7 @@ public class RobotContainer {
   }
 
   private void configureNamedCommands() {
-
+    NamedCommands.registerCommand("Shoot", shoot());
   }
 
   // Full speaker launch sequential command
@@ -185,56 +191,51 @@ public class RobotContainer {
   }
 
   public Command partialGroundIntake() {
-     return Commands.parallel(
+    return Commands.parallel(
         // Flip out and turn on intake
-         
-          new MoveIntakeToPosCommand(m_intakeSubsystem, 0.509),
+
+        new MoveIntakeToPosCommand(m_intakeSubsystem, 0.509),
         // Turn on intake
-          Commands.runOnce(() -> m_indexSubsystem.indexOn(), m_indexSubsystem)
-        )
+        Commands.runOnce(() -> m_indexSubsystem.indexOn(), m_indexSubsystem))
         .andThen(Commands.runOnce(() -> m_intakeSubsystem.intakeOn(), m_intakeSubsystem))
 
         // Wait for index beam break to be tripped
         .andThen(new CheckIndexBeamBreak(m_indexSubsystem))
         .andThen(Commands.runOnce(() -> m_intakeSubsystem.intakeOff(), m_intakeSubsystem))
         .andThen(Commands.parallel(
-          
+
             new MoveIntakeToPosCommand(m_intakeSubsystem, 0.0),
-          // Turn on feeder
-            Commands.runOnce(() -> m_indexSubsystem.indexOff(), m_indexSubsystem)
-          ));
+            // Turn on feeder
+            Commands.runOnce(() -> m_indexSubsystem.indexOff(), m_indexSubsystem)));
   }
 
   public Command fullGroundIntake() {
     return Commands.parallel(
         // Flip out and turn on intake
-         
-          new MoveIntakeToPosCommand(m_intakeSubsystem, 0.509),
+
+        new MoveIntakeToPosCommand(m_intakeSubsystem, 0.509),
         // Turn on intake
-          Commands.runOnce(() -> m_indexSubsystem.indexOn(), m_indexSubsystem)
-        )
+        Commands.runOnce(() -> m_indexSubsystem.indexOn(), m_indexSubsystem))
         .andThen(Commands.runOnce(() -> m_intakeSubsystem.intakeOn(), m_intakeSubsystem))
 
         // Wait for index beam break to be tripped
         .andThen(new CheckIndexBeamBreak(m_indexSubsystem))
         .andThen(Commands.runOnce(() -> m_intakeSubsystem.intakeOff(), m_intakeSubsystem))
         .andThen(Commands.parallel(
-          
+
             new MoveIntakeToPosCommand(m_intakeSubsystem, 0.0),
-          // Turn on feeder
-            Commands.runOnce(() -> m_launcherSubsystem.turnOnFeeder(), m_launcherSubsystem)
-          )
+            // Turn on feeder
+            Commands.runOnce(() -> m_launcherSubsystem.turnOnFeeder(), m_launcherSubsystem))
 
-          // Wait for wrist beam break to be tripped
-          .andThen(new CheckLauncherBeamBreak(m_launcherSubsystem))
+            // Wait for wrist beam break to be tripped
+            .andThen(new CheckLauncherBeamBreak(m_launcherSubsystem))
 
-        .andThen(Commands.parallel(
-          // Turn off indexer and feeder
-            Commands.runOnce(() -> m_indexSubsystem.indexOff())
-            .andThen(() -> m_launcherSubsystem.turnOffFeeder())
-        ))
-            
-      );
+            .andThen(Commands.parallel(
+                // Turn off indexer and feeder
+                Commands.runOnce(() -> m_indexSubsystem.indexOff())
+                    .andThen(() -> m_launcherSubsystem.turnOffFeeder())))
+
+        );
 
   }
 
@@ -354,7 +355,7 @@ public class RobotContainer {
         .andThen(new WaitCommand(1.85))
         .andThen(new FieldCentricAutoDrive(m_drivetrainSubsystem, new Translation2d(0, 0), 0));
 
-    test = (new PathPlannerAuto("test_auto"));
+    test = (new PathPlannerAuto("4 Note"));
 
     m_chooser = new SendableChooser<>();
     m_chooser.setDefaultOption("Blue Stage Side", Blue_Middle_Side);

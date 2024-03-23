@@ -250,7 +250,9 @@ public class DrivetrainSubsystem extends SubsystemBase {
   }
 
   public ChassisSpeeds getAutoSpeeds() {
-    return Constants.swerveKinematics.toChassisSpeeds(getAutoModuleStates());
+    ChassisSpeeds temChassisSpeeds = Constants.swerveKinematics.toChassisSpeeds(getAutoModuleStates());
+    ChassisSpeeds reversedcChassisSpeeds = new ChassisSpeeds(-temChassisSpeeds.vxMetersPerSecond, -temChassisSpeeds.vyMetersPerSecond, -temChassisSpeeds.omegaRadiansPerSecond);
+    return reversedcChassisSpeeds;
   }
 
   public void setStates(SwerveModuleState[] targetStates) {
@@ -262,7 +264,8 @@ public class DrivetrainSubsystem extends SubsystemBase {
   }
 
   public void driveRobotRelative(ChassisSpeeds robotRelativeSpeeds) {
-    SwerveModuleState[] modStates = Constants.swerveKinematics.toSwerveModuleStates(robotRelativeSpeeds);
+    ChassisSpeeds reversedChassisSpeeds = new ChassisSpeeds(-robotRelativeSpeeds.vxMetersPerSecond, -robotRelativeSpeeds.vyMetersPerSecond, -robotRelativeSpeeds.omegaRadiansPerSecond);
+    SwerveModuleState[] modStates = Constants.swerveKinematics.toSwerveModuleStates(reversedChassisSpeeds);
 
     for (WindChillSwerveModule mod : swerveModules) {
       mod.setDesiredState(modStates[mod.moduleNumber], false);
@@ -295,13 +298,16 @@ public class DrivetrainSubsystem extends SubsystemBase {
           "Mod " + mod.moduleNumber + " Integrated", mod.getState().angle.getDegrees());
       SmartDashboard.putNumber(
           "Mod " + mod.moduleNumber + " Velocity", mod.getState().speedMetersPerSecond);
-          SmartDashboard.putNumber(
+      SmartDashboard.putNumber(
           "Mod " + mod.moduleNumber + " drive", mod.getDriveEncoder());
     }
 
     SmartDashboard.putNumber("Gyro Yaw", gyro.getYaw().getValueAsDouble());
     SmartDashboard.putNumber("Gyro Roll", gyro.getRoll().getValueAsDouble());
     SmartDashboard.putNumber("Gyro Pitch", gyro.getPitch().getValueAsDouble());
+    SmartDashboard.putNumber("Chassis speed x", getAutoSpeeds().vxMetersPerSecond);
+    SmartDashboard.putNumber("Chassis speed y", getAutoSpeeds().vyMetersPerSecond);
+    SmartDashboard.putNumber("Chassis speed rotation", getAutoSpeeds().omegaRadiansPerSecond);
   }
 
   @Override
