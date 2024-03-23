@@ -12,7 +12,7 @@
         "y": 5.453581858547019
       },
       "isLocked": false,
-      "linkedName": null
+      "linkedName": "Stage Side of Subwoofer"
     },
     {
       "anchor": {
@@ -32,26 +32,32 @@
     },
     {
       "anchor": {
-        "x": 1.17,
+        "x": 1.174908809307075,
         "y": 5.55
       },
       "prevControl": {
-        "x": 1.2849066664678466,
+        "x": 1.2898154757749216,
         "y": 5.453581858547019
       },
       "nextControl": null,
       "isLocked": false,
-      "linkedName": null
+      "linkedName": "Stage Side of Subwoofer"
     }
   ],
-  "rotationTargets": [],
+  "rotationTargets": [
+    {
+      "waypointRelativePos": 1,
+      "rotationDegrees": 140.0,
+      "rotateFast": false
+    }
+  ],
   "constraintZones": [],
   "eventMarkers": [],
   "globalConstraints": {
-    "maxVelocity": 1.5,
-    "maxAcceleration": 1.0,
+    "maxVelocity": 0.4,
+    "maxAcceleration": 3.5,
     "maxAngularVelocity": 720.0,
-    "maxAngularAcceleration": 720.0
+    "maxAngularAcceleration": 1080.0
   },
   "goalEndState": {
     "velocity": 0,

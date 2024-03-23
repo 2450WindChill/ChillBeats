@@ -3,16 +3,22 @@
   "robotLength": 0.552,
   "holonomicMode": true,
   "pathFolders": [
+    "Disruption Paths",
+    "Note Pick Ups from Amp Side",
     "Note Pickups from Center",
+    "Note Pickups from Source Side",
     "Test"
   ],
   "autoFolders": [
+    "2 Note Autos",
+    "3 Note Autos",
     "4 Note Autos",
-    "Test Autos"
+    "Test Autos",
+    "Disruption Autos"
   ],
-  "defaultMaxVel": 1.5,
-  "defaultMaxAccel": 1.0,
+  "defaultMaxVel": 0.4,
+  "defaultMaxAccel": 3.5,
   "defaultMaxAngVel": 720.0,
-  "defaultMaxAngAccel": 720.0,
-  "maxModuleSpeed": 0.5
+  "defaultMaxAngAccel": 1080.0,
+  "maxModuleSpeed": 3.0
 }

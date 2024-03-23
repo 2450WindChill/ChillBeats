@@ -3,45 +3,45 @@
   "waypoints": [
     {
       "anchor": {
-        "x": 1.174908809307075,
-        "y": 5.55
+        "x": 0.8,
+        "y": 6.5
       },
       "prevControl": null,
       "nextControl": {
-        "x": 1.3249088093070749,
-        "y": 5.55
+        "x": 2.3130321957989004,
+        "y": 7.427550601172738
       },
       "isLocked": false,
-      "linkedName": "Stage Side of Subwoofer"
+      "linkedName": "Amp Side of Subwoofer"
     },
     {
       "anchor": {
-        "x": 2.59,
-        "y": 5.5513281057372
+        "x": 8.01324523847716,
+        "y": 7.41825821054528
       },
       "prevControl": {
-        "x": 2.4399999999999995,
-        "y": 5.5513281057372
+        "x": 8.513245238477163,
+        "y": 7.41825821054528
       },
       "nextControl": {
-        "x": 2.7449452719510004,
-        "y": 5.5513281057372
+        "x": 7.513245238477159,
+        "y": 7.41825821054528
       },
       "isLocked": false,
       "linkedName": null
     },
     {
       "anchor": {
-        "x": 1.174908809307075,
-        "y": 5.55
+        "x": 0.8,
+        "y": 6.5
       },
       "prevControl": {
-        "x": 1.3249088093070749,
-        "y": 5.55
+        "x": 1.666025403784439,
+        "y": 7.0
       },
       "nextControl": null,
       "isLocked": false,
-      "linkedName": "Stage Side of Subwoofer"
+      "linkedName": "Amp Side of Subwoofer"
     }
   ],
   "rotationTargets": [
@@ -61,13 +61,13 @@
   },
   "goalEndState": {
     "velocity": 0,
-    "rotation": 180.0,
+    "rotation": -130.0,
     "rotateFast": false
   },
   "reversed": false,
-  "folder": "Note Pickups from Center",
+  "folder": "Note Pick Ups from Amp Side",
   "previewStartingState": {
-    "rotation": 180.0,
+    "rotation": -130.0,
     "velocity": 0
   },
   "useDefaultConstraints": true

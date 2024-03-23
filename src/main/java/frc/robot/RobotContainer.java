@@ -70,13 +70,13 @@ public class RobotContainer {
   private final CommandXboxController m_operatorController = new CommandXboxController(
       OperatorConstants.kOperatorControllerPort);
 
-  public Command Blue_Short_Side;
-  public Command Blue_Middle_Side;
-  public Command Blue_Long_Side;
+  public Command Four_Note_From_Center;
+  public Command Three_Note_From_Amp_Side;
+  public Command Three_Note_From_Source_Side;
 
-  public Command Red_Short_Side;
-  public Command Red_Middle_Side;
-  public Command Red_Long_Side;
+  public Command Two_Note_to_Amp_Note;
+  public Command Two_Note_to_Stage_Note;
+  public Command Two_Note_to_Source_Note;
 
   public Command test;
 
@@ -311,59 +311,12 @@ public class RobotContainer {
   // Creating different options for auto
   public void configureAutoChooser() {
 
-    Blue_Short_Side = Commands.runOnce(() -> m_drivetrainSubsystem.setGyro(230), m_drivetrainSubsystem)
-        .andThen(autoSpeakerLaunch())
-        .andThen(new WaitCommand(4))
-        .andThen(new FieldCentricAutoDrive(m_drivetrainSubsystem, new Translation2d(0, -1.5), 0))
-        .andThen(new WaitCommand(.5))
-        .andThen(new FieldCentricAutoDrive(m_drivetrainSubsystem, new Translation2d(-1.5, 0), 0))
-        .andThen(new WaitCommand(5))
-        .andThen(new FieldCentricAutoDrive(m_drivetrainSubsystem, new Translation2d(0, 0), 0));
+    Four_Note_From_Center = new PathPlannerAuto("4 Note");
+    Two_Note_to_Stage_Note = new PathPlannerAuto("Center to Center Note");
 
-    Blue_Middle_Side = Commands.runOnce(() -> m_drivetrainSubsystem.setGyro(180), m_drivetrainSubsystem)
-        .andThen(autoSpeakerLaunch())
-        .andThen(new FieldCentricAutoDrive(m_drivetrainSubsystem, new Translation2d(-1.5, 0), 0))
-        .andThen(new WaitCommand(2))
-        .andThen(new FieldCentricAutoDrive(m_drivetrainSubsystem, new Translation2d(0, 0), 0));
-
-    Blue_Long_Side = Commands.runOnce(() -> m_drivetrainSubsystem.setGyro(144), m_drivetrainSubsystem)
-        .andThen(autoSpeakerLaunch())
-        .andThen(new WaitCommand(3.5))
-        .andThen(new FieldCentricAutoDrive(m_drivetrainSubsystem, new Translation2d(0, 1.5), 0))
-        .andThen(new WaitCommand(1))
-        .andThen(new FieldCentricAutoDrive(m_drivetrainSubsystem, new Translation2d(-1.5, 0), 0))
-        .andThen(new WaitCommand(5))
-        .andThen(new FieldCentricAutoDrive(m_drivetrainSubsystem, new Translation2d(0, 0), 0));
-
-    Red_Short_Side = Commands.runOnce(() -> m_drivetrainSubsystem.setGyro(230), m_drivetrainSubsystem)
-        .andThen(autoSpeakerLaunch())
-        .andThen(new FieldCentricAutoDrive(m_drivetrainSubsystem, new Translation2d(0, -1.5), 0))
-        .andThen(new WaitCommand(.5))
-        .andThen(new FieldCentricAutoDrive(m_drivetrainSubsystem, new Translation2d(1.5, 0), 0))
-        .andThen(new WaitCommand(5))
-        .andThen(new FieldCentricAutoDrive(m_drivetrainSubsystem, new Translation2d(0, 0), 0));
-
-    Red_Middle_Side = Commands.runOnce(() -> m_drivetrainSubsystem.setGyro(180), m_drivetrainSubsystem)
-        .andThen(autoSpeakerLaunch())
-        .andThen(new FieldCentricAutoDrive(m_drivetrainSubsystem, new Translation2d(-1.5, 0), 0))
-        .andThen(new WaitCommand(2))
-        .andThen(new FieldCentricAutoDrive(m_drivetrainSubsystem, new Translation2d(0, 0), 0));
-
-    Red_Long_Side = Commands.runOnce(() -> m_drivetrainSubsystem.setGyro(144), m_drivetrainSubsystem)
-        .andThen(autoSpeakerLaunch())
-        .andThen(new FieldCentricAutoDrive(m_drivetrainSubsystem, new Translation2d(-1.5, 0), 0))
-        .andThen(new WaitCommand(1.85))
-        .andThen(new FieldCentricAutoDrive(m_drivetrainSubsystem, new Translation2d(0, 0), 0));
-
-    test = (new PathPlannerAuto("4 Note"));
+    test = new PathPlannerAuto("test_auto");
 
     m_chooser = new SendableChooser<>();
-    m_chooser.setDefaultOption("Blue Stage Side", Blue_Middle_Side);
-    m_chooser.addOption("Blue Amp Side", Blue_Short_Side);
-    m_chooser.addOption("Blue Source Side", Blue_Long_Side);
-    m_chooser.addOption("Red Amp Side", Red_Short_Side);
-    m_chooser.addOption("Red Stage Side", Red_Middle_Side);
-    m_chooser.addOption("Red Source Side", Red_Long_Side);
     m_chooser.addOption("Test", test);
   }
 
