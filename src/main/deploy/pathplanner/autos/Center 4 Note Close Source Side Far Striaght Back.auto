@@ -2,8 +2,8 @@
   "version": 1.0,
   "startingPose": {
     "position": {
-      "x": 1.17,
-      "y": 5.55
+      "x": 1.1657298342343634,
+      "y": 5.564105245857552
     },
     "rotation": 180.0
   },
@@ -22,10 +22,22 @@
           "data": {
             "pathName": "Stage Side Note"
           }
+        },
+        {
+          "type": "path",
+          "data": {
+            "pathName": "Source Side Note"
+          }
+        },
+        {
+          "type": "path",
+          "data": {
+            "pathName": "Center to Straight Back Middle Note"
+          }
         }
       ]
     }
   },
-  "folder": "2 Note Autos",
+  "folder": "4 Note Autos",
   "choreoAuto": false
 }

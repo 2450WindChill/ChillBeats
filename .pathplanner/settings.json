@@ -13,10 +13,13 @@
     "2 Note Autos",
     "3 Note Autos",
     "4 Note Autos",
-    "Test Autos",
-    "Disruption Autos"
+    "5 Note Autos",
+    "6 Note Autos",
+    "7 Note Autos",
+    "Disruption Autos",
+    "Test Autos"
   ],
-  "defaultMaxVel": 0.4,
+  "defaultMaxVel": 3.0,
   "defaultMaxAccel": 3.5,
   "defaultMaxAngVel": 720.0,
   "defaultMaxAngAccel": 1080.0,

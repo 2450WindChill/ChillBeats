@@ -2,10 +2,10 @@
   "version": 1.0,
   "startingPose": {
     "position": {
-      "x": 0.8,
-      "y": 4.6
+      "x": 1.1657298342343634,
+      "y": 5.564105245857552
     },
-    "rotation": 130.0
+    "rotation": 180.0
   },
   "command": {
     "type": "sequential",
@@ -20,18 +20,30 @@
         {
           "type": "path",
           "data": {
-            "pathName": "Source Side to Source Side Note"
+            "pathName": "Stage Side Note"
           }
         },
         {
           "type": "path",
           "data": {
-            "pathName": "Source Side to Bottom Note"
+            "pathName": "Amp Side Note"
+          }
+        },
+        {
+          "type": "path",
+          "data": {
+            "pathName": "Source Side Note"
+          }
+        },
+        {
+          "type": "path",
+          "data": {
+            "pathName": "Center to Middle Middle Note"
           }
         }
       ]
     }
   },
-  "folder": "3 Note Autos",
+  "folder": "5 Note Autos",
   "choreoAuto": false
 }

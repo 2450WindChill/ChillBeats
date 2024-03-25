@@ -176,7 +176,8 @@ public class RobotContainer {
   }
 
   private void configureNamedCommands() {
-    NamedCommands.registerCommand("Shoot", shoot());
+    NamedCommands.registerCommand("Shoot", autoSpeakerLaunch());
+    NamedCommands.registerCommand("Intake", fullGroundIntake());
   }
 
   // Full speaker launch sequential command

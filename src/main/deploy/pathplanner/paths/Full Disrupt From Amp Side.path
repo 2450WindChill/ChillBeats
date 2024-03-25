@@ -8,23 +8,23 @@
       },
       "prevControl": null,
       "nextControl": {
-        "x": -0.34416071085352806,
-        "y": 8.140395155972838
+        "x": 0.5047980979662186,
+        "y": 8.174173180120754
       },
       "isLocked": false,
       "linkedName": "Amp Side of Subwoofer"
     },
     {
       "anchor": {
-        "x": 8.435478091826974,
+        "x": 8.4,
         "y": 7.491690011123871
       },
       "prevControl": {
-        "x": 8.435478091826974,
+        "x": 8.4,
         "y": 7.791690011123872
       },
       "nextControl": {
-        "x": 8.435478091826974,
+        "x": 8.4,
         "y": 7.191690011123871
       },
       "isLocked": false,
@@ -32,15 +32,15 @@
     },
     {
       "anchor": {
-        "x": 8.435478091826974,
+        "x": 8.4,
         "y": 0.7084274323900551
       },
       "prevControl": {
-        "x": 8.472513811768883,
+        "x": 8.437035719941909,
         "y": 0.7084274323900551
       },
       "nextControl": {
-        "x": 7.750625424314392,
+        "x": 7.715147332487418,
         "y": 0.708427432390055
       },
       "isLocked": false,
@@ -70,12 +70,17 @@
       "waypointRelativePos": 2,
       "rotationDegrees": -135.0,
       "rotateFast": false
+    },
+    {
+      "waypointRelativePos": 0.4,
+      "rotationDegrees": -90.0,
+      "rotateFast": true
     }
   ],
   "constraintZones": [],
   "eventMarkers": [],
   "globalConstraints": {
-    "maxVelocity": 0.4,
+    "maxVelocity": 3.0,
     "maxAcceleration": 3.5,
     "maxAngularVelocity": 720.0,
     "maxAngularAcceleration": 1080.0

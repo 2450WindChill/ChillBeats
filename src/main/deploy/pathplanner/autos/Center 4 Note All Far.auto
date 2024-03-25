@@ -22,10 +22,22 @@
           "data": {
             "pathName": "Stage Side Note"
           }
+        },
+        {
+          "type": "path",
+          "data": {
+            "pathName": "Center to Top Middle Note"
+          }
+        },
+        {
+          "type": "path",
+          "data": {
+            "pathName": "Center to Middle Middle Note"
+          }
         }
       ]
     }
   },
-  "folder": "2 Note Autos",
+  "folder": "4 Note Autos",
   "choreoAuto": false
 }

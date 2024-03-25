@@ -22,12 +22,6 @@
           "data": {
             "pathName": "Source Side Note"
           }
-        },
-        {
-          "type": "named",
-          "data": {
-            "name": "Shoot"
-          }
         }
       ]
     }

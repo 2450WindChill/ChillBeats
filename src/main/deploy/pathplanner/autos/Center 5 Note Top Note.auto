@@ -24,21 +24,9 @@
           }
         },
         {
-          "type": "named",
-          "data": {
-            "name": "Shoot"
-          }
-        },
-        {
           "type": "path",
           "data": {
             "pathName": "Amp Side Note"
-          }
-        },
-        {
-          "type": "named",
-          "data": {
-            "name": "Shoot"
           }
         },
         {
@@ -48,14 +36,14 @@
           }
         },
         {
-          "type": "named",
+          "type": "path",
           "data": {
-            "name": "Shoot"
+            "pathName": "Center to Top Middle Note"
           }
         }
       ]
     }
   },
-  "folder": "4 Note Autos",
+  "folder": "5 Note Autos",
   "choreoAuto": false
 }
