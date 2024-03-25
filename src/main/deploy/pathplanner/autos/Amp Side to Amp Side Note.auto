@@ -2,24 +2,30 @@
   "version": 1.0,
   "startingPose": {
     "position": {
-      "x": 1.17,
-      "y": 5.55
+      "x": 0.8,
+      "y": 6.5
     },
-    "rotation": 0.0
+    "rotation": -130.0
   },
   "command": {
     "type": "sequential",
     "data": {
       "commands": [
         {
+          "type": "named",
+          "data": {
+            "name": "Shoot"
+          }
+        },
+        {
           "type": "path",
           "data": {
-            "pathName": "Middle_Station"
+            "pathName": "Amp Side to Amp Note"
           }
         }
       ]
     }
   },
-  "folder": "Test Autos",
+  "folder": "2 Note Autos",
   "choreoAuto": false
 }

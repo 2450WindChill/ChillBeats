@@ -3,64 +3,59 @@
   "waypoints": [
     {
       "anchor": {
-        "x": 1.174908809307075,
-        "y": 5.55
+        "x": 0.8,
+        "y": 6.5
       },
       "prevControl": null,
       "nextControl": {
-        "x": 1.2898154757749216,
-        "y": 5.453581858547019
+        "x": 2.3130321957989004,
+        "y": 7.427550601172738
       },
       "isLocked": false,
-      "linkedName": "Stage Side of Subwoofer"
+      "linkedName": "Amp Side of Subwoofer"
     },
     {
       "anchor": {
-        "x": 2.616007895722784,
-        "y": 4.315764635968784
+        "x": 8.01324523847716,
+        "y": 7.41825821054528
       },
       "prevControl": {
-        "x": 2.501101229254937,
-        "y": 4.412182777421765
+        "x": 8.513245238477163,
+        "y": 7.41825821054528
       },
       "nextControl": {
-        "x": 2.734702860288407,
-        "y": 4.2161677349791695
+        "x": 7.513245238477159,
+        "y": 7.41825821054528
       },
       "isLocked": false,
       "linkedName": null
     },
     {
       "anchor": {
-        "x": 1.174908809307075,
-        "y": 5.55
+        "x": 0.8,
+        "y": 6.5
       },
       "prevControl": {
-        "x": 1.2898154757749216,
-        "y": 5.453581858547019
+        "x": 1.5328888371428244,
+        "y": 7.381542310254432
       },
       "nextControl": null,
       "isLocked": false,
-      "linkedName": "Stage Side of Subwoofer"
+      "linkedName": "Amp Side of Subwoofer"
     }
   ],
   "rotationTargets": [
     {
-      "waypointRelativePos": 1,
-      "rotationDegrees": 140.0,
-      "rotateFast": false
-    },
-    {
-      "waypointRelativePos": 0.55,
-      "rotationDegrees": 140.0,
-      "rotateFast": false
+      "waypointRelativePos": 1.0,
+      "rotationDegrees": 180.0,
+      "rotateFast": true
     }
   ],
   "constraintZones": [],
   "eventMarkers": [
     {
       "name": "Intake",
-      "waypointRelativePos": 0.4,
+      "waypointRelativePos": 0.55,
       "command": {
         "type": "sequential",
         "data": {
@@ -68,7 +63,7 @@
             {
               "type": "named",
               "data": {
-                "name": "Shoot"
+                "name": "Intake"
               }
             }
           ]
@@ -101,13 +96,13 @@
   },
   "goalEndState": {
     "velocity": 0,
-    "rotation": 180.0,
+    "rotation": -130.0,
     "rotateFast": false
   },
   "reversed": false,
-  "folder": "Note Pickups from Center",
+  "folder": "Note Pick Ups from Amp Side",
   "previewStartingState": {
-    "rotation": 180.0,
+    "rotation": -130.0,
     "velocity": 0
   },
   "useDefaultConstraints": true

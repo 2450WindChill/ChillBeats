@@ -3,56 +3,51 @@
   "waypoints": [
     {
       "anchor": {
-        "x": 1.174908809307075,
-        "y": 5.55
+        "x": 0.8,
+        "y": 4.6
       },
       "prevControl": null,
       "nextControl": {
-        "x": 1.2898154757749216,
-        "y": 5.453581858547019
+        "x": 0.6590461068821138,
+        "y": 4.65130302149885
       },
       "isLocked": false,
-      "linkedName": "Stage Side of Subwoofer"
+      "linkedName": "Source Side of Subwoofer"
     },
     {
       "anchor": {
-        "x": 2.616007895722784,
-        "y": 4.315764635968784
+        "x": 2.6,
+        "y": 4.1
       },
       "prevControl": {
-        "x": 2.501101229254937,
-        "y": 4.412182777421765
+        "x": 2.7444283728654235,
+        "y": 4.059497591288356
       },
       "nextControl": {
-        "x": 2.734702860288407,
-        "y": 4.2161677349791695
+        "x": 1.8633319397640338,
+        "y": 4.306585660895673
       },
       "isLocked": false,
       "linkedName": null
     },
     {
       "anchor": {
-        "x": 1.174908809307075,
-        "y": 5.55
+        "x": 0.8,
+        "y": 4.6
       },
       "prevControl": {
-        "x": 1.2898154757749216,
-        "y": 5.453581858547019
+        "x": 1.312593435401343,
+        "y": 4.425912336840923
       },
       "nextControl": null,
       "isLocked": false,
-      "linkedName": "Stage Side of Subwoofer"
+      "linkedName": "Source Side of Subwoofer"
     }
   ],
   "rotationTargets": [
     {
       "waypointRelativePos": 1,
-      "rotationDegrees": 140.0,
-      "rotateFast": false
-    },
-    {
-      "waypointRelativePos": 0.55,
-      "rotationDegrees": 140.0,
+      "rotationDegrees": 180.0,
       "rotateFast": false
     }
   ],
@@ -68,7 +63,7 @@
             {
               "type": "named",
               "data": {
-                "name": "Shoot"
+                "name": "Intake"
               }
             }
           ]
@@ -101,13 +96,13 @@
   },
   "goalEndState": {
     "velocity": 0,
-    "rotation": 180.0,
+    "rotation": 130.0,
     "rotateFast": false
   },
   "reversed": false,
-  "folder": "Note Pickups from Center",
+  "folder": "Note Pickups from Source Side",
   "previewStartingState": {
-    "rotation": 180.0,
+    "rotation": 130.0,
     "velocity": 0
   },
   "useDefaultConstraints": true

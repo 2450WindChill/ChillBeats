@@ -1,0 +1,43 @@
+{
+  "version": 1.0,
+  "startingPose": {
+    "position": {
+      "x": 1.1657298342343634,
+      "y": 5.564105245857552
+    },
+    "rotation": 180.0
+  },
+  "command": {
+    "type": "sequential",
+    "data": {
+      "commands": [
+        {
+          "type": "named",
+          "data": {
+            "name": "Shoot"
+          }
+        },
+        {
+          "type": "path",
+          "data": {
+            "pathName": "Stage Side Note"
+          }
+        },
+        {
+          "type": "path",
+          "data": {
+            "pathName": "Source Side Note"
+          }
+        },
+        {
+          "type": "path",
+          "data": {
+            "pathName": "Center to Middle Middle Note"
+          }
+        }
+      ]
+    }
+  },
+  "folder": "4 Note Autos",
+  "choreoAuto": false
+}
