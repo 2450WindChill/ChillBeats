@@ -51,10 +51,10 @@ public class MoveIntakeToPosCommand extends Command {
     SmartDashboard.putNumber("Current intake position:", currentPosition);
     SmartDashboard.putNumber("Target intake position:", rotationTarget);
     SmartDashboard.putBoolean("Intake currently deploying?", isDeploying);
-    System.out.println("Move intake execute");
+    System.out.println("Move intake execute " + currentPosition + " target angle: " + rotationTarget);
 
 
-      m_subsystem.angleIntakeController.setReference(rotationTarget, ControlType.kPosition);
+    m_subsystem.angleIntakeController.setReference(rotationTarget, ControlType.kPosition);
    
 
   }
@@ -62,7 +62,7 @@ public class MoveIntakeToPosCommand extends Command {
   // Called once the command ends or is interrupted.
   @Override
   public void end(boolean interrupted) {
-    System.out.println("ending intake deployment");
+    System.out.println("ending intake deployment " + interrupted);
     m_subsystem.angleIntakeMotor.set(0);
   }
 

@@ -66,6 +66,8 @@ public final class Constants {
 
   public static final double maxHeight = 127;
   public static final double climbingAngle = -24.6;
+
+   public static final double intakeDown = 0.48;
   
 
   public static final double rotationsPerOneFoot = 0.33;

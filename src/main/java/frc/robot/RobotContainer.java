@@ -130,13 +130,20 @@ public class RobotContainer {
     m_operatorController.y().onTrue(autoSpeakerLaunch());
     m_operatorController.a().onTrue(sourceIntake());
     m_operatorController.b().onTrue(zeroArm());
-    m_operatorController.leftTrigger()
-        .onTrue(Commands.runOnce(() -> m_launcherSubsystem.manualTurnOnFeeder(), m_launcherSubsystem))
-        .onFalse(Commands.runOnce(() -> m_launcherSubsystem.turnOffFeeder(), m_launcherSubsystem));
+    m_operatorController.leftTrigger().onTrue(unstuckNote());
 
     m_operatorController.leftBumper().onTrue(Commands.runOnce(() -> m_launcherSubsystem.slowSpeakerTurnOnLauncher()))
      .onFalse(Commands.runOnce(() -> m_launcherSubsystem.turnOffLauncher()));
-     
+
+     // Intake on
+    m_driverController.a().onTrue(Commands.runOnce(() -> m_intakeSubsystem.intakeOn())).onFalse(Commands.runOnce(() -> m_intakeSubsystem.intakeOff()));
+    // Angle intake
+    m_driverController.y().onTrue(Commands.runOnce(() -> m_intakeSubsystem.angleIntakeOn())).onFalse(Commands.runOnce(() -> m_intakeSubsystem.angleIntakeOff()));
+
+   
+    // Index on
+    m_driverController.b().onTrue(Commands.runOnce(() -> m_indexSubsystem.indexOn())).onFalse(Commands.runOnce(() -> m_indexSubsystem.indexOff()));
+
     // m_operatorController.leftTrigger().whileTrue(new
     // IndexCommand(m_launcherSubsystem, .1));
 
@@ -153,8 +160,9 @@ public class RobotContainer {
 
     // Driver
     // Zero Gyro
-    m_driverController.x().onTrue(Commands.runOnce(() -> m_drivetrainSubsystem.zeroGyro(), m_drivetrainSubsystem));
-    m_driverController.b().onTrue(new MoveElevatorToPosCommand(m_elevatorSubsystem, Constants.maxHeight));
+    // TODO: uncommment
+    //m_driverController.x().onTrue(Commands.runOnce(() -> m_drivetrainSubsystem.zeroGyro(), m_drivetrainSubsystem));
+   // m_driverController.b().onTrue(new MoveElevatorToPosCommand(m_elevatorSubsystem, Constants.maxHeight));
 
     // TEMPORARY TESTING
     // m_driverController.leftTrigger().whileTrue(Commands.runOnce(() ->
@@ -182,6 +190,14 @@ public class RobotContainer {
   private void configureNamedCommands() {
     NamedCommands.registerCommand("Shoot", shoot());
   }
+
+ public Command unstuckNote() {
+    return Commands.runOnce(() -> m_launcherSubsystem.slowSpeakerTurnOnLauncher(), m_launcherSubsystem)
+    .andThen(new WaitCommand(.1))
+    .andThen(Commands.runOnce(() -> m_launcherSubsystem.turnOnFeeder(), m_launcherSubsystem))
+    .andThen(Commands.runOnce(() -> m_launcherSubsystem.turnOffFeeder(), m_launcherSubsystem));
+  }
+
 
   // Full speaker launch sequential command
   public Command autoSpeakerLaunch() {
@@ -223,8 +239,8 @@ public class RobotContainer {
   public Command partialGroundIntake() {
     return Commands.parallel(
         // Flip out and turn on intake
-
-        new MoveIntakeToPosCommand(m_intakeSubsystem, 0.509),
+        Commands.runOnce(() -> m_launcherSubsystem.turnOnFeeder()).andThen(
+        new MoveIntakeToPosCommand(m_intakeSubsystem, Constants.intakeDown),
         // Turn on intake
         Commands.runOnce(() -> m_indexSubsystem.indexOn(), m_indexSubsystem))
         .andThen(Commands.runOnce(() -> m_intakeSubsystem.intakeOn(), m_intakeSubsystem))
@@ -236,14 +252,15 @@ public class RobotContainer {
 
             new MoveIntakeToPosCommand(m_intakeSubsystem, 0.0),
             // Turn on feeder
-            Commands.runOnce(() -> m_indexSubsystem.indexOff(), m_indexSubsystem)));
+            Commands.runOnce(() -> m_indexSubsystem.indexOff(), m_indexSubsystem))));
   }
 
   public Command fullGroundIntake() {
     return Commands.parallel(
         // Flip out and turn on intake
-
-        new MoveIntakeToPosCommand(m_intakeSubsystem, 0.509),
+        // Turn on feeder
+        Commands.runOnce(() -> m_launcherSubsystem.turnOnFeeder(), m_launcherSubsystem),
+      //  new MoveIntakeToPosCommand(m_intakeSubsystem, Constants.intakeDown),
         // Turn on intake
         Commands.runOnce(() -> m_indexSubsystem.indexOn(), m_indexSubsystem))
         .andThen(Commands.runOnce(() -> m_intakeSubsystem.intakeOn(), m_intakeSubsystem))
@@ -254,11 +271,8 @@ public class RobotContainer {
         .andThen(Commands.parallel(
 
             new MoveIntakeToPosCommand(m_intakeSubsystem, 0.0),
-            // Turn on feeder
-            Commands.runOnce(() -> m_launcherSubsystem.turnOnFeeder(), m_launcherSubsystem))
-
             // Wait for wrist beam break to be tripped
-            .andThen(new CheckLauncherBeamBreak(m_launcherSubsystem))
+            new CheckLauncherBeamBreak(m_launcherSubsystem))
 
             .andThen(Commands.parallel(
                 // Turn off indexer and feeder

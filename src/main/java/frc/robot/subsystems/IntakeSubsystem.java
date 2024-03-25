@@ -68,11 +68,20 @@ public class IntakeSubsystem extends SubsystemBase {
     // This method will be called once per scheduler run during simulation
   }
 
-  public void 
-  intakeOn() {
+  public void intakeOn() {
     System.out.println("intake turn on");
     intakeMotor.set(0.5);
   }
+
+  public void angleIntakeOn() {
+    System.out.println("intake turn on");
+    angleIntakeMotor.set(0.2);
+  }
+
+  public void angleIntakeOff() {
+    angleIntakeMotor.set(0.0);
+  }
+
 
   public void intakeOff() {
     System.out.println("intake turn off");
