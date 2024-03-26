@@ -70,15 +70,34 @@ public class RobotContainer {
   private final CommandXboxController m_operatorController = new CommandXboxController(
       OperatorConstants.kOperatorControllerPort);
 
-  public Command Four_Note_From_Center;
-  public Command Three_Note_From_Amp_Side;
-  public Command Three_Note_From_Source_Side;
+  private Command Center_5_Note_Middle_Note;
+  private Command Center_5_Note_Top_Note;
 
-  public Command Two_Note_to_Amp_Note;
-  public Command Two_Note_to_Stage_Note;
-  public Command Two_Note_to_Source_Note;
+  private Command Center_4_Note_All_Close;
+  private Command Center_4_Note_All_Far;
+  private Command Center_4_Note_Close_Amp_Side_Far_Middle;
+  private Command Center_4_Note_Close_Amp_Side_Far_Straight_Back;
+  private Command Center_4_Note_Close_Amp_Side_Far_Top;
+  private Command Center_4_Note_Close_Source_Side_Far_Middle;
+  private Command Center_4_Note_Close_Source_Side_Far_Straight_Back;
+  private Command Center_4_Note_Close_Source_Side_Far_Top;
 
-  public Command test;
+  private Command Amp_Side_3_Note;
+  private Command Center_3_Note_With_Middle;
+  private Command Center_3_Note_With_Striaght_Back_Note;
+  private Command Center_3_Note_With_Top_Note;
+  private Command Source_Side_3_Note;
+
+  private Command Amp_Side_To_Amp_Side_Note;
+  private Command Center_To_Amp_Side_Note;
+  private Command Center_To_Center_Note;
+  private Command Center_To_Source_Side_Note;
+  private Command Source_Side_To_Source_Side_Note;
+
+  private Command Full_Disrupt_From_Amp_Side;
+  private Command Full_Disrupt_From_Source_Side;
+
+  private Command Test_Auto;
 
   public Command moveForward;
   public SendableChooser<Command> m_chooser;
@@ -382,14 +401,61 @@ public class RobotContainer {
 
   // Creating different options for auto
   public void configureAutoChooser() {
+    
+    Center_5_Note_Middle_Note = new PathPlannerAuto("Center_5_Note_Middle_Note");
+    Center_5_Note_Top_Note = new PathPlannerAuto("Center_5_Note_Top_Note");
 
-    Four_Note_From_Center = new PathPlannerAuto("4 Note");
-    Two_Note_to_Stage_Note = new PathPlannerAuto("Center to Center Note");
+    Center_4_Note_All_Close = new PathPlannerAuto("Center_4_Note_All_Close");
+    Center_4_Note_All_Far = new PathPlannerAuto("Center_4_Note_All_Far");
+    Center_4_Note_Close_Amp_Side_Far_Middle = new PathPlannerAuto("Center_4_Note_Close_Amp_Side_Far_Middle");
+    Center_4_Note_Close_Amp_Side_Far_Straight_Back = new PathPlannerAuto("Center_4_Note_Close_Amp_Side_Far_Straight_Back");
+    Center_4_Note_Close_Amp_Side_Far_Top = new PathPlannerAuto("Center_4_Note_Close_Amp_Side_Far_Top");
+    Center_4_Note_Close_Source_Side_Far_Middle = new PathPlannerAuto("Center_4_Note_Close_Source_Side_Far_Middle");
+    Center_4_Note_Close_Source_Side_Far_Straight_Back = new PathPlannerAuto("Center_4_Note_Close_Source_Side_Far_Straight_Back");
+    Center_4_Note_Close_Source_Side_Far_Top = new PathPlannerAuto("Center_4_Note_Close_Source_Side_Far_Top");
+  
+    Amp_Side_3_Note = new PathPlannerAuto("Amp_Side_3_Note");
+    Center_3_Note_With_Middle = new PathPlannerAuto("Center_3_Note_With_Middle");
+    Center_3_Note_With_Striaght_Back_Note = new PathPlannerAuto("Center_3_Note_With_Striaght_Back_Note");
+    Center_3_Note_With_Top_Note = new PathPlannerAuto("Center_3_Note_With_Top_Note");
+    Source_Side_3_Note = new PathPlannerAuto("Source_Side_3_Note");
 
-    test = new PathPlannerAuto("test_auto");
+    Amp_Side_To_Amp_Side_Note = new PathPlannerAuto("Amp_Side_To_Amp_Side_Note");
+    Center_To_Amp_Side_Note = new PathPlannerAuto("Center_To_Amp_Side_Note");
+    Center_To_Center_Note = new PathPlannerAuto("Center_To_Center_Note");
+    Center_To_Source_Side_Note = new PathPlannerAuto("Center_To_Source_Side_Note");
+    Source_Side_To_Source_Side_Note = new PathPlannerAuto("Source_Side_To_Source_Side_Note");
+
+    Full_Disrupt_From_Amp_Side = new PathPlannerAuto("Full_Disrupt_From_Amp_Side");
+    Full_Disrupt_From_Source_Side = new PathPlannerAuto("Full_Disrupt_From_Source_Side");
 
     m_chooser = new SendableChooser<>();
-    m_chooser.addOption("Test", test);
+    m_chooser.addOption("Center_5_Note_Middle_Note", Center_5_Note_Middle_Note);
+    m_chooser.addOption("Center_5_Note_Top_Note", Center_5_Note_Top_Note);
+
+    m_chooser.addOption("Center_4_Note_All_Close", Center_4_Note_All_Close);
+    m_chooser.addOption("Center_4_Note_All_Far", Center_4_Note_All_Far);
+    m_chooser.addOption("Center_4_Note_Close_Amp_Side_Far_Middle", Center_4_Note_Close_Amp_Side_Far_Middle);
+    m_chooser.addOption("Center_4_Note_Close_Amp_Side_Far_Straight_Back", Center_4_Note_Close_Amp_Side_Far_Straight_Back);
+    m_chooser.addOption("Center_4_Note_Close_Amp_Side_Far_Top", Center_4_Note_Close_Amp_Side_Far_Top);
+    m_chooser.addOption("Center_4_Note_Close_Source_Side_Far_Middle", Center_4_Note_Close_Source_Side_Far_Middle);
+    m_chooser.addOption("Center_4_Note_Close_Source_Side_Far_Straight_Back", Center_4_Note_Close_Source_Side_Far_Straight_Back);
+    m_chooser.addOption("Center_4_Note_Close_Source_Side_Far_Top", Center_4_Note_Close_Source_Side_Far_Top);
+
+    m_chooser.addOption("Amp_Side_3_Note", Amp_Side_3_Note);
+    m_chooser.addOption("Center_3_Note_With_Middle", Center_3_Note_With_Middle);
+    m_chooser.addOption("Center_3_Note_With_Striaght_Back_Note", Center_3_Note_With_Striaght_Back_Note);
+    m_chooser.addOption("Center_3_Note_With_Top_Note", Center_3_Note_With_Top_Note);
+    m_chooser.addOption("Source_Side_3_Note", Source_Side_3_Note);
+    
+    m_chooser.addOption("Amp_Side_To_Amp_Side_Note", Amp_Side_To_Amp_Side_Note);
+    m_chooser.addOption("Center_To_Amp_Side_Note", Center_To_Amp_Side_Note);
+    m_chooser.addOption("Center_To_Center_Note", Center_To_Center_Note);
+    m_chooser.addOption("Center_To_Source_Side_Note", Center_To_Source_Side_Note);
+    m_chooser.addOption("Source_Side_To_Source_Side_Note", Source_Side_To_Source_Side_Note);
+
+    m_chooser.addOption("Full_Disrupt_From_Amp_Side", Full_Disrupt_From_Amp_Side);
+    m_chooser.addOption("Full_Disrupt_From_Source_Side", Full_Disrupt_From_Source_Side);
   }
 
   // Auto command
