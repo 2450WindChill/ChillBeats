@@ -154,7 +154,7 @@ public class WindChillSwerveModule {
     //   driveMotor.setInverted(Constants.driveInvert);
     // }
 
-    driveMotor.setIdleMode(Constants.driveBrakeMode);
+    driveMotor.setIdleMode(Constants.driveIdleMode);
     driveMotor.setInverted(Constants.driveInvert);
     driveEncoder.setVelocityConversionFactor(Constants.driveConversionVelocityFactor);
     driveEncoder.setPositionConversionFactor(Constants.driveConversionPositionFactor);

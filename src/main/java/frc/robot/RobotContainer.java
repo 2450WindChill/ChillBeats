@@ -116,9 +116,13 @@ public class RobotContainer {
   /*
    * x = amp
    * y = speaker
-   * triggers = index
+   * right trigger = shoot
+   * left trigger = feeder in
+   * Left Bumper = unstucknote
    * a = source
-   * b = zero arm
+   * b = ground intake
+   * up dpad = zero
+   * 
    */
 
   private void configureBindings() {
@@ -129,12 +133,14 @@ public class RobotContainer {
     m_operatorController.rightTrigger().onTrue(shoot());
     m_operatorController.y().onTrue(autoSpeakerLaunch());
     m_operatorController.a().onTrue(sourceIntake());
-    m_operatorController.b().onTrue(zeroArm());
-    m_operatorController.leftTrigger().onTrue(unstuckNote());
+    m_operatorController.b().onTrue(fullGroundIntake());
+    m_operatorController.leftBumper().onTrue(unstuckNote());
+    m_operatorController.leftTrigger().onTrue(Commands.runOnce(() -> m_launcherSubsystem.turnOnFeeder(), m_launcherSubsystem)).onFalse(Commands.runOnce(() -> m_launcherSubsystem.turnOffFeeder()));
 
-    m_operatorController.leftBumper().onTrue(Commands.runOnce(() -> m_launcherSubsystem.slowSpeakerTurnOnLauncher()))
-     .onFalse(Commands.runOnce(() -> m_launcherSubsystem.turnOffLauncher()));
+    // m_operatorController.leftBumper().onTrue(Commands.runOnce(() -> m_launcherSubsystem.slowSpeakerTurnOnLauncher()))
+    //  .onFalse(Commands.runOnce(() -> m_launcherSubsystem.turnOffLauncher()));
 
+     m_operatorController.povUp().onTrue(zeroArm());
      // Intake on
     m_driverController.a().onTrue(Commands.runOnce(() -> m_intakeSubsystem.intakeOn())).onFalse(Commands.runOnce(() -> m_intakeSubsystem.intakeOff()));
     // Angle intake
@@ -144,19 +150,21 @@ public class RobotContainer {
     // Index on
     m_driverController.b().onTrue(Commands.runOnce(() -> m_indexSubsystem.indexOn())).onFalse(Commands.runOnce(() -> m_indexSubsystem.indexOff()));
 
+    m_driverController.povUp().onTrue(testAllOn()).onFalse(testAllOff());
+
     // m_operatorController.leftTrigger().whileTrue(new
     // IndexCommand(m_launcherSubsystem, .1));
 
     // m_operatorController.leftTrigger().onTrue(fullGroundIntake());
     // m_operatorController.rightTrigger().onTrue(partialGroundIntake());
 
-    // m_operatorController.leftTrigger().onTrue(new
-    // MoveToPose(m_drivetrainSubsystem, m_poseEstimator,
-    // new Pose2d(new Translation2d(1, 0), new Rotation2d())));
+    m_driverController.leftTrigger().onTrue(new
+    MoveToPose(m_drivetrainSubsystem, m_poseEstimator,
+    new Pose2d(new Translation2d(1, 0), new Rotation2d())));
 
-    // m_operatorController.rightTrigger().onTrue(new
-    // MoveToPose(m_drivetrainSubsystem, m_poseEstimator,
-    // new Pose2d(new Translation2d(0, 0), new Rotation2d())));
+    m_driverController.rightTrigger().onTrue(new
+    MoveToPose(m_drivetrainSubsystem, m_poseEstimator,
+    new Pose2d(new Translation2d(0, 0), new Rotation2d())));
 
     // Driver
     // Zero Gyro
@@ -284,6 +292,20 @@ public class RobotContainer {
 
   }
 
+  public Command testAllOn() {
+    return Commands.parallel(
+        Commands.runOnce(() -> m_launcherSubsystem.turnOnFeeder(), m_launcherSubsystem),
+        Commands.runOnce(() -> m_indexSubsystem.indexOn(), m_indexSubsystem),
+        Commands.runOnce(() -> m_intakeSubsystem.intakeOn(), m_intakeSubsystem));
+  }
+
+  public Command testAllOff() {
+    return Commands.parallel(
+        Commands.runOnce(() -> m_launcherSubsystem.turnOffFeeder(), m_launcherSubsystem),
+        Commands.runOnce(() -> m_indexSubsystem.indexOff(), m_indexSubsystem),
+        Commands.runOnce(() -> m_intakeSubsystem.intakeOff(), m_intakeSubsystem));
+  }
+
   // Speaker launch w/ just wrist prep
   public Command speakerLaunchPrep() {
     return new MoveWristToPosCommand(m_aimSubsystem, Constants.speakerAngle);
@@ -324,7 +346,8 @@ public class RobotContainer {
   // Brings wrist and elevator to zero
   public Command zeroArm() {
     return Commands.parallel(new MoveWristToPosCommand(m_aimSubsystem, Constants.zeroLaunchAngle),
-        new MoveElevatorToPosCommand(m_elevatorSubsystem, Constants.zeroElevator));
+        new MoveElevatorToPosCommand(m_elevatorSubsystem, Constants.zeroElevator),
+        new MoveIntakeToPosCommand(m_intakeSubsystem, Constants.intakeUp));
   }
 
   // Rumbles controller for a specified amount of time

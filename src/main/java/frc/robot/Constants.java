@@ -69,7 +69,7 @@ public final class Constants {
 
    public static final double intakeDown = 0.48;
   
-
+  public static final double intakeUp = 0.0;
   public static final double rotationsPerOneFoot = 0.33;
   public static final double feetToMeters = 0.3048;
 
@@ -125,9 +125,9 @@ public final class Constants {
 
   /* Neutral Modes */
   // public static final IdleMode angleNeutralMode = IdleMode.kBrake;
-  public static final IdleMode angleBrakeMode = IdleMode.kBrake;
-  public static final IdleMode driveBrakeMode = IdleMode.kBrake;
-  public static final IdleMode elevatorBrakeMode = IdleMode.kBrake;
+  public static final IdleMode angleIdleMode = IdleMode.kCoast;
+  public static final IdleMode driveIdleMode = IdleMode.kBrake;
+  public static final IdleMode elevatorIdleMode = IdleMode.kBrake;
 
   /* Motor Inverts */
 
