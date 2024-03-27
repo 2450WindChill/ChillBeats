@@ -152,24 +152,27 @@ public class RobotContainer {
     m_operatorController.rightTrigger().onTrue(shoot());
     m_operatorController.y().onTrue(autoSpeakerLaunch());
     m_operatorController.a().onTrue(sourceIntake());
-    m_operatorController.b().onTrue(fullGroundIntake());
-    m_operatorController.leftBumper().onTrue(unstuckNote());
-    m_operatorController.leftTrigger().onTrue(Commands.runOnce(() -> m_launcherSubsystem.turnOnFeeder(), m_launcherSubsystem)).onFalse(Commands.runOnce(() -> m_launcherSubsystem.turnOffFeeder()));
+   // m_operatorController.b().onTrue(fullGroundIntake());
+   // m_operatorController.leftBumper().onTrue(unstuckNote());
+    m_operatorController.leftBumper().onTrue(Commands.runOnce(() -> m_launcherSubsystem.turnOnFeeder(), m_launcherSubsystem)).onFalse(Commands.runOnce(() -> m_launcherSubsystem.turnOffFeeder()));
+    m_operatorController.leftTrigger().onTrue(Commands.runOnce(() -> m_launcherSubsystem.manualTurnOnFeeder(), m_launcherSubsystem)).onFalse(Commands.runOnce(() -> m_launcherSubsystem.turnOffFeeder()));
+    m_operatorController.rightBumper().onTrue(Commands.runOnce(() -> m_launcherSubsystem.turnOnBottomMotorandFeeder(), m_launcherSubsystem)).onFalse(Commands.runOnce(() -> m_launcherSubsystem.turnOffFeederAndBottomMotor()));
 
     // m_operatorController.leftBumper().onTrue(Commands.runOnce(() -> m_launcherSubsystem.slowSpeakerTurnOnLauncher()))
     //  .onFalse(Commands.runOnce(() -> m_launcherSubsystem.turnOffLauncher()));
 
      m_operatorController.povUp().onTrue(zeroArm());
+     m_operatorController.povDown().whileTrue(new AimCommand(m_aimSubsystem, m_operatorController));
      // Intake on
-    m_driverController.a().onTrue(Commands.runOnce(() -> m_intakeSubsystem.intakeOn())).onFalse(Commands.runOnce(() -> m_intakeSubsystem.intakeOff()));
+   // m_driverController.a().onTrue(Commands.runOnce(() -> m_intakeSubsystem.intakeOn())).onFalse(Commands.runOnce(() -> m_intakeSubsystem.intakeOff()));
     // Angle intake
-    m_driverController.y().onTrue(Commands.runOnce(() -> m_intakeSubsystem.angleIntakeOn())).onFalse(Commands.runOnce(() -> m_intakeSubsystem.angleIntakeOff()));
+   // m_driverController.y().onTrue(Commands.runOnce(() -> m_intakeSubsystem.angleIntakeOn())).onFalse(Commands.runOnce(() -> m_intakeSubsystem.angleIntakeOff()));
 
    
     // Index on
-    m_driverController.b().onTrue(Commands.runOnce(() -> m_indexSubsystem.indexOn())).onFalse(Commands.runOnce(() -> m_indexSubsystem.indexOff()));
+  //  m_driverController.b().onTrue(Commands.runOnce(() -> m_indexSubsystem.indexOn())).onFalse(Commands.runOnce(() -> m_indexSubsystem.indexOff()));
 
-    m_driverController.povUp().onTrue(testAllOn()).onFalse(testAllOff());
+  //  m_driverController.povUp().onTrue(testAllOn()).onFalse(testAllOff());
 
     // m_operatorController.leftTrigger().whileTrue(new
     // IndexCommand(m_launcherSubsystem, .1));
@@ -177,18 +180,18 @@ public class RobotContainer {
     // m_operatorController.leftTrigger().onTrue(fullGroundIntake());
     // m_operatorController.rightTrigger().onTrue(partialGroundIntake());
 
-    m_driverController.leftTrigger().onTrue(new
-    MoveToPose(m_drivetrainSubsystem, m_poseEstimator,
-    new Pose2d(new Translation2d(1, 0), new Rotation2d())));
+  //  m_driverController.leftTrigger().onTrue(new
+  //   MoveToPose(m_drivetrainSubsystem, m_poseEstimator,
+  //   new Pose2d(new Translation2d(1, 0), new Rotation2d())));
 
-    m_driverController.rightTrigger().onTrue(new
-    MoveToPose(m_drivetrainSubsystem, m_poseEstimator,
-    new Pose2d(new Translation2d(0, 0), new Rotation2d())));
+    // m_driverController.rightTrigger().onTrue(new
+    // MoveToPose(m_drivetrainSubsystem, m_poseEstimator,
+    // new Pose2d(new Translation2d(0, 0), new Rotation2d())));
 
     // Driver
     // Zero Gyro
     // TODO: uncommment
-    //m_driverController.x().onTrue(Commands.runOnce(() -> m_drivetrainSubsystem.zeroGyro(), m_drivetrainSubsystem));
+    m_driverController.x().onTrue(Commands.runOnce(() -> m_drivetrainSubsystem.zeroGyro(), m_drivetrainSubsystem));
    // m_driverController.b().onTrue(new MoveElevatorToPosCommand(m_elevatorSubsystem, Constants.maxHeight));
 
     // TEMPORARY TESTING
@@ -343,18 +346,20 @@ public class RobotContainer {
     return (Commands.runOnce(() -> m_launcherSubsystem.speakerTurnOnLauncher(), m_launcherSubsystem))
         .andThen(new WaitCommand(1))
         .andThen(Commands.runOnce(() -> m_launcherSubsystem.turnOnFeeder(), m_launcherSubsystem))
-        .andThen(new WaitCommand(.3))
+        .andThen(new WaitCommand(.7))
         .andThen(Commands.runOnce(() -> m_launcherSubsystem.turnOffFeeder(), m_launcherSubsystem))
         .andThen(Commands.runOnce(() -> m_launcherSubsystem.turnOffLauncher(), m_launcherSubsystem))
         .andThen(zeroArm())
         .andThen(Commands.runOnce(() -> m_operatorController.getHID().setRumble(RumbleType.kBothRumble, 0)));
   }
 
+  
+
   // Source intake
   public Command sourceIntake() {
     return new MoveWristToPosCommand(m_aimSubsystem, Constants.sourceAngle)
         .andThen(new SourceIntakeCommand(m_launcherSubsystem))
-        .andThen(new WaitCommand(.15))
+        .andThen(new WaitCommand(.11))
         .andThen(Commands.runOnce(() -> m_launcherSubsystem.turnOffFeeder()))
         .andThen(rumbleDriveController(0.7))
         .andThen(zeroArm());
@@ -366,7 +371,8 @@ public class RobotContainer {
   public Command zeroArm() {
     return Commands.parallel(new MoveWristToPosCommand(m_aimSubsystem, Constants.zeroLaunchAngle),
         new MoveElevatorToPosCommand(m_elevatorSubsystem, Constants.zeroElevator),
-        new MoveIntakeToPosCommand(m_intakeSubsystem, Constants.intakeUp));
+        Commands.runOnce(() -> m_launcherSubsystem.turnOffFeeder(), m_launcherSubsystem));
+      //  new MoveIntakeToPosCommand(m_intakeSubsystem, Constants.intakeUp));
   }
 
   // Rumbles controller for a specified amount of time
@@ -402,60 +408,60 @@ public class RobotContainer {
   // Creating different options for auto
   public void configureAutoChooser() {
     
-    Center_5_Note_Middle_Note = new PathPlannerAuto("Center_5_Note_Middle_Note");
-    Center_5_Note_Top_Note = new PathPlannerAuto("Center_5_Note_Top_Note");
+    // Center_5_Note_Middle_Note = new PathPlannerAuto("Center 5_Note Middle Note");
+    // Center_5_Note_Top_Note = new PathPlannerAuto("Center 5 Note Top Note");
 
-    Center_4_Note_All_Close = new PathPlannerAuto("Center_4_Note_All_Close");
-    Center_4_Note_All_Far = new PathPlannerAuto("Center_4_Note_All_Far");
-    Center_4_Note_Close_Amp_Side_Far_Middle = new PathPlannerAuto("Center_4_Note_Close_Amp_Side_Far_Middle");
-    Center_4_Note_Close_Amp_Side_Far_Straight_Back = new PathPlannerAuto("Center_4_Note_Close_Amp_Side_Far_Straight_Back");
-    Center_4_Note_Close_Amp_Side_Far_Top = new PathPlannerAuto("Center_4_Note_Close_Amp_Side_Far_Top");
-    Center_4_Note_Close_Source_Side_Far_Middle = new PathPlannerAuto("Center_4_Note_Close_Source_Side_Far_Middle");
-    Center_4_Note_Close_Source_Side_Far_Straight_Back = new PathPlannerAuto("Center_4_Note_Close_Source_Side_Far_Straight_Back");
-    Center_4_Note_Close_Source_Side_Far_Top = new PathPlannerAuto("Center_4_Note_Close_Source_Side_Far_Top");
+    Center_4_Note_All_Close = new PathPlannerAuto("Center 4 Note All Close");
+    // Center_4_Note_All_Far = new PathPlannerAuto("Center_4_Note_All_Far");
+    // Center_4_Note_Close_Amp_Side_Far_Middle = new PathPlannerAuto("Center_4_Note_Close_Amp_Side_Far_Middle");
+    // Center_4_Note_Close_Amp_Side_Far_Straight_Back = new PathPlannerAuto("Center_4_Note_Close_Amp_Side_Far_Straight_Back");
+    // Center_4_Note_Close_Amp_Side_Far_Top = new PathPlannerAuto("Center_4_Note_Close_Amp_Side_Far_Top");
+    // Center_4_Note_Close_Source_Side_Far_Middle = new PathPlannerAuto("Center_4_Note_Close_Source_Side_Far_Middle");
+    // Center_4_Note_Close_Source_Side_Far_Straight_Back = new PathPlannerAuto("Center_4_Note_Close_Source_Side_Far_Straight_Back");
+    // Center_4_Note_Close_Source_Side_Far_Top = new PathPlannerAuto("Center_4_Note_Close_Source_Side_Far_Top");
   
-    Amp_Side_3_Note = new PathPlannerAuto("Amp_Side_3_Note");
-    Center_3_Note_With_Middle = new PathPlannerAuto("Center_3_Note_With_Middle");
-    Center_3_Note_With_Striaght_Back_Note = new PathPlannerAuto("Center_3_Note_With_Striaght_Back_Note");
-    Center_3_Note_With_Top_Note = new PathPlannerAuto("Center_3_Note_With_Top_Note");
-    Source_Side_3_Note = new PathPlannerAuto("Source_Side_3_Note");
+    Amp_Side_3_Note = new PathPlannerAuto("Amp Side 3 Note");
+    // Center_3_Note_With_Middle = new PathPlannerAuto("Center_3_Note_With_Middle");
+    // Center_3_Note_With_Striaght_Back_Note = new PathPlannerAuto("Center_3_Note_With_Striaght_Back_Note");
+    // Center_3_Note_With_Top_Note = new PathPlannerAuto("Center_3_Note_With_Top_Note");
+    // Source_Side_3_Note = new PathPlannerAuto("Source_Side_3_Note");
 
-    Amp_Side_To_Amp_Side_Note = new PathPlannerAuto("Amp_Side_To_Amp_Side_Note");
-    Center_To_Amp_Side_Note = new PathPlannerAuto("Center_To_Amp_Side_Note");
-    Center_To_Center_Note = new PathPlannerAuto("Center_To_Center_Note");
-    Center_To_Source_Side_Note = new PathPlannerAuto("Center_To_Source_Side_Note");
-    Source_Side_To_Source_Side_Note = new PathPlannerAuto("Source_Side_To_Source_Side_Note");
+    // Amp_Side_To_Amp_Side_Note = new PathPlannerAuto("Amp_Side_To_Amp_Side_Note");
+    // Center_To_Amp_Side_Note = new PathPlannerAuto("Center_To_Amp_Side_Note");
+    // Center_To_Center_Note = new PathPlannerAuto("Center_To_Center_Note");
+    // Center_To_Source_Side_Note = new PathPlannerAuto("Center_To_Source_Side_Note");
+    //Source_Side_To_Source_Side_Note = new PathPlannerAuto("Source_Side_To_Source_Side_Note");
 
-    Full_Disrupt_From_Amp_Side = new PathPlannerAuto("Full_Disrupt_From_Amp_Side");
-    Full_Disrupt_From_Source_Side = new PathPlannerAuto("Full_Disrupt_From_Source_Side");
+    Full_Disrupt_From_Amp_Side = new PathPlannerAuto("Full Disrupt From Amp Side");
+    //Full_Disrupt_From_Source_Side = new PathPlannerAuto("Full_Disrupt_From_Source_Side");
 
     m_chooser = new SendableChooser<>();
-    m_chooser.addOption("Center_5_Note_Middle_Note", Center_5_Note_Middle_Note);
-    m_chooser.addOption("Center_5_Note_Top_Note", Center_5_Note_Top_Note);
+    // m_chooser.addOption("Center_5_Note_Middle_Note", Center_5_Note_Middle_Note);
+    // m_chooser.addOption("Center_5_Note_Top_Note", Center_5_Note_Top_Note);
 
     m_chooser.addOption("Center_4_Note_All_Close", Center_4_Note_All_Close);
-    m_chooser.addOption("Center_4_Note_All_Far", Center_4_Note_All_Far);
-    m_chooser.addOption("Center_4_Note_Close_Amp_Side_Far_Middle", Center_4_Note_Close_Amp_Side_Far_Middle);
-    m_chooser.addOption("Center_4_Note_Close_Amp_Side_Far_Straight_Back", Center_4_Note_Close_Amp_Side_Far_Straight_Back);
-    m_chooser.addOption("Center_4_Note_Close_Amp_Side_Far_Top", Center_4_Note_Close_Amp_Side_Far_Top);
-    m_chooser.addOption("Center_4_Note_Close_Source_Side_Far_Middle", Center_4_Note_Close_Source_Side_Far_Middle);
-    m_chooser.addOption("Center_4_Note_Close_Source_Side_Far_Straight_Back", Center_4_Note_Close_Source_Side_Far_Straight_Back);
-    m_chooser.addOption("Center_4_Note_Close_Source_Side_Far_Top", Center_4_Note_Close_Source_Side_Far_Top);
+    // m_chooser.addOption("Center_4_Note_All_Far", Center_4_Note_All_Far);
+    // m_chooser.addOption("Center_4_Note_Close_Amp_Side_Far_Middle", Center_4_Note_Close_Amp_Side_Far_Middle);
+    // m_chooser.addOption("Center_4_Note_Close_Amp_Side_Far_Straight_Back", Center_4_Note_Close_Amp_Side_Far_Straight_Back);
+    // m_chooser.addOption("Center_4_Note_Close_Amp_Side_Far_Top", Center_4_Note_Close_Amp_Side_Far_Top);
+    // m_chooser.addOption("Center_4_Note_Close_Source_Side_Far_Middle", Center_4_Note_Close_Source_Side_Far_Middle);
+    // m_chooser.addOption("Center_4_Note_Close_Source_Side_Far_Straight_Back", Center_4_Note_Close_Source_Side_Far_Straight_Back);
+    // m_chooser.addOption("Center_4_Note_Close_Source_Side_Far_Top", Center_4_Note_Close_Source_Side_Far_Top);
 
     m_chooser.addOption("Amp_Side_3_Note", Amp_Side_3_Note);
-    m_chooser.addOption("Center_3_Note_With_Middle", Center_3_Note_With_Middle);
-    m_chooser.addOption("Center_3_Note_With_Striaght_Back_Note", Center_3_Note_With_Striaght_Back_Note);
-    m_chooser.addOption("Center_3_Note_With_Top_Note", Center_3_Note_With_Top_Note);
-    m_chooser.addOption("Source_Side_3_Note", Source_Side_3_Note);
+    // m_chooser.addOption("Center_3_Note_With_Middle", Center_3_Note_With_Middle);
+    // m_chooser.addOption("Center_3_Note_With_Striaght_Back_Note", Center_3_Note_With_Striaght_Back_Note);
+    // m_chooser.addOption("Center_3_Note_With_Top_Note", Center_3_Note_With_Top_Note);
+    // m_chooser.addOption("Source_Side_3_Note", Source_Side_3_Note);
     
-    m_chooser.addOption("Amp_Side_To_Amp_Side_Note", Amp_Side_To_Amp_Side_Note);
-    m_chooser.addOption("Center_To_Amp_Side_Note", Center_To_Amp_Side_Note);
-    m_chooser.addOption("Center_To_Center_Note", Center_To_Center_Note);
-    m_chooser.addOption("Center_To_Source_Side_Note", Center_To_Source_Side_Note);
-    m_chooser.addOption("Source_Side_To_Source_Side_Note", Source_Side_To_Source_Side_Note);
+    // m_chooser.addOption("Amp_Side_To_Amp_Side_Note", Amp_Side_To_Amp_Side_Note);
+    // m_chooser.addOption("Center_To_Amp_Side_Note", Center_To_Amp_Side_Note);
+    // m_chooser.addOption("Center_To_Center_Note", Center_To_Center_Note);
+    // m_chooser.addOption("Center_To_Source_Side_Note", Center_To_Source_Side_Note);
+    // m_chooser.addOption("Source_Side_To_Source_Side_Note", Source_Side_To_Source_Side_Note);
 
     m_chooser.addOption("Full_Disrupt_From_Amp_Side", Full_Disrupt_From_Amp_Side);
-    m_chooser.addOption("Full_Disrupt_From_Source_Side", Full_Disrupt_From_Source_Side);
+    //m_chooser.addOption("Full_Disrupt_From_Source_Side", Full_Disrupt_From_Source_Side);
   }
 
   // Auto command

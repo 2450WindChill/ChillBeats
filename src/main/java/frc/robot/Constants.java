@@ -54,9 +54,11 @@ public final class Constants {
   public static final double openLoopRamp = 0.25;
   public static final double closedLoopRamp = 0.0;
 
-  public static final double speakerAngle = -7.0;
+  public static final double speakerAngle = -8.0;
   public static final double ampAngle = -41.14;
   public static final double zeroLaunchAngle = -1.5;
+  
+  public static final double farNoteLaunch = -21.83;
 
   public static final double zeroElevator = 0.0;
   public static final double ampElevator = 60;
@@ -126,6 +128,7 @@ public final class Constants {
   /* Neutral Modes */
   // public static final IdleMode angleNeutralMode = IdleMode.kBrake;
   public static final IdleMode angleIdleMode = IdleMode.kCoast;
+  public static final IdleMode wristIdleMode = IdleMode.kBrake;
   public static final IdleMode driveIdleMode = IdleMode.kBrake;
   public static final IdleMode elevatorIdleMode = IdleMode.kBrake;
 

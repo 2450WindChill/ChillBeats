@@ -3,57 +3,57 @@
   "waypoints": [
     {
       "anchor": {
-        "x": 0.8,
-        "y": 6.5
+        "x": 0.807749806398614,
+        "y": 6.463644802983281
       },
       "prevControl": null,
       "nextControl": {
-        "x": 0.5047980979662186,
-        "y": 8.174173180120754
+        "x": 3.607337203575628,
+        "y": 5.756863722384493
       },
       "isLocked": false,
       "linkedName": "Amp Side of Subwoofer"
     },
     {
       "anchor": {
-        "x": 8.4,
-        "y": 7.491690011123871
+        "x": 7.618549310350564,
+        "y": 7.436616160690702
       },
       "prevControl": {
-        "x": 8.4,
-        "y": 7.791690011123872
+        "x": 7.618549310350564,
+        "y": 7.736616160690703
       },
       "nextControl": {
-        "x": 8.4,
-        "y": 7.191690011123871
+        "x": 7.618549310350564,
+        "y": 7.136616160690703
       },
       "isLocked": false,
       "linkedName": null
     },
     {
       "anchor": {
-        "x": 8.4,
-        "y": 0.7084274323900551
+        "x": 7.609370335277853,
+        "y": 0.5982797315206179
       },
       "prevControl": {
-        "x": 8.437035719941909,
-        "y": 0.7084274323900551
+        "x": 7.646406055219759,
+        "y": 0.5982797315206179
       },
       "nextControl": {
-        "x": 7.715147332487418,
-        "y": 0.708427432390055
+        "x": 6.9245176677652704,
+        "y": 0.5982797315206178
       },
       "isLocked": false,
       "linkedName": null
     },
     {
       "anchor": {
-        "x": 7.361538008319726,
-        "y": 0.7084274323900551
+        "x": 7.012736955551604,
+        "y": 0.5523848561570593
       },
       "prevControl": {
-        "x": 7.260569282519899,
-        "y": 0.6992484573173432
+        "x": 6.911768229751778,
+        "y": 0.5432058810843474
       },
       "nextControl": null,
       "isLocked": false,
@@ -80,8 +80,8 @@
   "constraintZones": [],
   "eventMarkers": [],
   "globalConstraints": {
-    "maxVelocity": 3.0,
-    "maxAcceleration": 3.5,
+    "maxVelocity": 5.0,
+    "maxAcceleration": 5.0,
     "maxAngularVelocity": 720.0,
     "maxAngularAcceleration": 1080.0
   },
@@ -93,7 +93,7 @@
   "reversed": false,
   "folder": "Disruption Paths",
   "previewStartingState": {
-    "rotation": -130.0,
+    "rotation": -121.75948008481276,
     "velocity": 0
   },
   "useDefaultConstraints": true

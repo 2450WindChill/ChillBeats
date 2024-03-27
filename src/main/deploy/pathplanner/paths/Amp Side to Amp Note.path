@@ -3,13 +3,13 @@
   "waypoints": [
     {
       "anchor": {
-        "x": 0.8,
-        "y": 6.5
+        "x": 0.807749806398614,
+        "y": 6.463644802983281
       },
       "prevControl": null,
       "nextControl": {
-        "x": 0.9821503327801329,
-        "y": 7.096994083000375
+        "x": 0.9899001391787469,
+        "y": 7.060638885983656
       },
       "isLocked": false,
       "linkedName": "Amp Side of Subwoofer"
@@ -94,8 +94,8 @@
     }
   ],
   "globalConstraints": {
-    "maxVelocity": 3.0,
-    "maxAcceleration": 3.5,
+    "maxVelocity": 5.0,
+    "maxAcceleration": 5.0,
     "maxAngularVelocity": 720.0,
     "maxAngularAcceleration": 1080.0
   },

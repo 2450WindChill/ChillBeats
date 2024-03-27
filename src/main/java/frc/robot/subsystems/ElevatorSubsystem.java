@@ -21,7 +21,7 @@ public class ElevatorSubsystem extends SubsystemBase {
   public ElevatorSubsystem() {
     elevatorController.setP(.03);    
     elevatorController.setI(.00001); 
-    elevatorMotor.setIdleMode(Constants.angleIdleMode);
+    elevatorMotor.setIdleMode(Constants.elevatorIdleMode);
 
   }
   /**

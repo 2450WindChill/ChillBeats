@@ -62,6 +62,20 @@ public class LauncherSubsystem extends SubsystemBase {
     topMotor.set(0);
     bottomMotor.set(0);
   }
+
+  public void turnOffFeederAndBottomMotor() {
+    feederMotor.set(0);
+    bottomMotor.set(0);
+  }
+
+  public void turnOnBottomMotorandFeeder() {
+    bottomMotor.set(-0.3);
+    feederMotor.set(0.3);
+  }
+
+  public void turnOffBottomMotor() {
+    bottomMotor.set(0.0);
+  }
   
   public void speakerTurnOnLauncher() {
     System.out.println("turn on launcher");
