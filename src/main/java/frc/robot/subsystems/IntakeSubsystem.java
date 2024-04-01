@@ -27,11 +27,12 @@ public class IntakeSubsystem extends SubsystemBase {
   /** Creates a new IntakeSubsystem. */
   public IntakeSubsystem() {
     // CHANGE P AND I VALUES LATER RAAAAAH
-    angleIntakeController.setP(.07);
-    angleIntakeController.setOutputRange(-0.6, 0.6);
-    angleIntakeController.setI(.0003);
+    angleIntakeController.setP(.0175);
+    angleIntakeController.setOutputRange(-0.15, 0.15);
+    angleIntakeController.setI(0.001);
     angleIntakeMotor.setIdleMode(Constants.angleIdleMode);
     intakeMotor.setOpenLoopRampRate(1);
+    intakeMotor.setSmartCurrentLimit(40);
   }
 
   /**
@@ -70,7 +71,7 @@ public class IntakeSubsystem extends SubsystemBase {
 
   public void intakeOn() {
     System.out.println("intake turn on");
-    intakeMotor.set(0.5);
+    intakeMotor.set(0.7);
   }
 
   public void angleIntakeOn() {

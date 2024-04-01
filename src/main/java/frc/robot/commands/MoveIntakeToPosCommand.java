@@ -71,14 +71,14 @@ public class MoveIntakeToPosCommand extends Command {
   public boolean isFinished() {
     double currentPosition = m_subsystem.angleIntakeMotor.getEncoder().getPosition();
     if (isDeploying) {
-      if (currentPosition >= rotationTarget - 0.05) {
+      if (currentPosition >= rotationTarget - 0.5) {
         return true;
       } else {
         return false;
       }
     } else {
 
-      if (currentPosition <= rotationTarget + 0.05) {
+      if (currentPosition <= rotationTarget + 0.5) {
         return true;
       } else {
         return false;

@@ -19,7 +19,7 @@ public class IndexSubsystem extends SubsystemBase {
 
   /** Creates a new IndexSubsystem. */
   public IndexSubsystem() {
-    
+    indexMotor.setSmartCurrentLimit(40);
   }
 
   /**
