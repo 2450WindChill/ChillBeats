@@ -124,10 +124,10 @@ public class RobotContainer {
     // m_ledSubsystem));
 
     // Configure bindings and limelight
+    configureNamedCommands();
     configureBindings();
     configureLimelight();
     configureAutoChooser();
-    configureNamedCommands();
     SmartDashboard.putData("Auto Mode", m_chooser);
 
   }
@@ -169,7 +169,8 @@ public class RobotContainer {
     // .onFalse(Commands.runOnce(() -> m_launcherSubsystem.turnOffLauncher()));
 
     m_operatorController.povUp().onTrue(zeroArm());
-    m_operatorController.povDown().whileTrue(new AimCommand(m_aimSubsystem, m_operatorController));
+     m_operatorController.povDown().onTrue(turnOffAllMotors());
+   // m_operatorController.povDown().whileTrue(new AimCommand(m_aimSubsystem, m_operatorController));
     // Intake on
     m_driverController.a().onTrue(Commands.runOnce(() -> m_intakeSubsystem.intakeOn()))
         .onFalse(Commands.runOnce(() -> m_intakeSubsystem.intakeOff()));
@@ -232,6 +233,7 @@ public class RobotContainer {
   private void configureNamedCommands() {
     NamedCommands.registerCommand("Shoot", autoSpeakerLaunch());
     NamedCommands.registerCommand("Intake", fullGroundIntake());
+    NamedCommands.registerCommand("Instant Command", new InstantCommand());
   }
 
   public Command unstuckNote() {
@@ -290,8 +292,10 @@ public class RobotContainer {
         .andThen(Commands.runOnce(() -> m_intakeSubsystem.intakeOff(), m_intakeSubsystem))
         .andThen(new MoveIntakeToPosCommand(m_intakeSubsystem, 0.0))
         .andThen(new CheckLauncherBeamBreak(m_launcherSubsystem))
+        .andThen(new MoveWristToPosCommand(m_aimSubsystem, Constants.zeroLaunchAngle))
         .andThen(Commands.runOnce(() -> m_launcherSubsystem.turnOffFeeder()))
-        .andThen(Commands.runOnce(() -> m_indexSubsystem.indexOff(), m_indexSubsystem));
+        .andThen(Commands.runOnce(() -> m_indexSubsystem.indexOff()))
+        .andThen(Commands.runOnce(() -> m_launcherSubsystem.turnOffLauncher()));
   }
 
   public Command farLaunch() {
@@ -353,11 +357,16 @@ public class RobotContainer {
 
   // Brings wrist and elevator to zero
   public Command zeroArm() {
-    return Commands.parallel(new MoveWristToPosCommand(m_aimSubsystem, Constants.zeroLaunchAngle),
+    return Commands.parallel(Commands.parallel(new MoveWristToPosCommand(m_aimSubsystem, Constants.zeroLaunchAngle),
         new MoveElevatorToPosCommand(m_elevatorSubsystem, Constants.zeroElevator),
-        Commands.runOnce(() -> m_launcherSubsystem.turnOffFeeder(), m_launcherSubsystem),
-        new MoveIntakeToPosCommand(m_intakeSubsystem, Constants.intakeUp))
-        .andThen(Commands.runOnce(() -> m_intakeSubsystem.intakeOff(), m_intakeSubsystem));
+        new MoveIntakeToPosCommand(m_intakeSubsystem, Constants.intakeUp)));
+  }
+
+  public Command turnOffAllMotors() {
+    return Commands.parallel(Commands.runOnce(() -> m_launcherSubsystem.turnOffFeeder()),
+    Commands.runOnce(() -> m_indexSubsystem.indexOff()))
+    .andThen(Commands.runOnce(() -> m_launcherSubsystem.turnOffLauncher())
+    .andThen(Commands.runOnce(() -> m_intakeSubsystem.intakeOff())));
   }
 
   // Rumbles controller for a specified amount of time
