@@ -257,24 +257,6 @@ public class RobotContainer {
             Constants.zeroLaunchAngle));
   }
 
-  // // Full speaker launch sequential command
-  // public Command autoSpeakerLaunch() {
-  // return Commands.parallel(
-  // // Shoot and angle
-  // new MoveWristToPosCommand(m_aimSubsystem, Constants.speakerAngle),
-  // // Turn on launcher and feeder
-  // Commands.runOnce(() -> m_launcherSubsystem.turnOnLauncherAndFeeder(),
-  // m_launcherSubsystem))
-  // // Wait
-  // .andThen(new WaitCommand(1))
-  // // Turn off feeder and launcher and zero wrist
-  // .andThen(Commands.parallel(
-  // Commands.runOnce(() -> m_launcherSubsystem.turnOffFeederAndLauncher(),
-  // m_launcherSubsystem),
-  // new MoveWristToPosCommand(m_aimSubsystem, Constants.zeroLaunchAngle)
-  // ));
-  // }
-
   public Command fullGroundIntake() {
 
     // Rev intake
@@ -287,17 +269,23 @@ public class RobotContainer {
 
             // Turn on feeder
             .andThen(Commands.runOnce(() -> m_launcherSubsystem.turnOnFeeder())))
-        // Wait for index beam break to be tripped
+        // Wait for index beam break to be trippedbane
         .andThen(new CheckIndexBeamBreak(m_indexSubsystem))
         .andThen(Commands.runOnce(() -> m_intakeSubsystem.intakeOff(), m_intakeSubsystem))
         .andThen(new MoveIntakeToPosCommand(m_intakeSubsystem, 0.0))
         .andThen(new CheckLauncherBeamBreak(m_launcherSubsystem))
         .andThen(Commands.runOnce(() -> m_launcherSubsystem.turnOffFeeder()));
-            // Turn on feeder
-            //Commands.runOnce(() -> m_indexSubsystem.indexOff(), m_indexSubsystem)));
+    // Turn on feeder
+    // Commands.runOnce(() -> m_indexSubsystem.indexOff(), m_indexSubsystem)));
   }
 
-  
+  public Command FarLaunchShoot() {
+
+    return new MoveWristToPosCommand(m_aimSubsystem, Constants.farNoteLaunch)
+        .andThen(autoSpeakerLaunch())
+        .andThen(zeroArm());
+
+  }
 
   public Command testAllOn() {
     return Commands.parallel(
@@ -341,7 +329,7 @@ public class RobotContainer {
   // Source intake
   public Command sourceIntake() {
     return new MoveWristToPosCommand(m_aimSubsystem, Constants.sourceAngle)
-        .andThen(new SourceIntakeCommand(m_launcherSubsystem))
+        .andThen(new SourceIntakeCommand(m_launcherSubsystem, m_ledSubsystem))
         .andThen(new WaitCommand(.11))
         .andThen(Commands.runOnce(() -> m_launcherSubsystem.turnOffFeeder()))
         .andThen(rumbleDriveController(0.7))
@@ -377,16 +365,6 @@ public class RobotContainer {
     return DriverStation.getAlliance().orElse(Alliance.Blue);
   }
 
-  // Climb sequence sequential command
-  // public Command climbSequence() {
-  // return new MoveWristToPosCommand(m_aimSubsystem, Constants.ampAngle)
-  // .andThen(new MoveElevatorToPosCommand(m_elevatorSubsystem,
-  // Constants.climbingHeight))
-  // .andThen(new MoveWristToPosCommand(m_aimSubsystem, Constants.climbingAngle)
-  // .andThen(new MoveElevatorToPosCommand(m_elevatorSubsystem,
-  // Constants.zeroElevator)));
-  // }
-
   // Creating different options for auto
   public void configureAutoChooser() {
 
@@ -418,7 +396,7 @@ public class RobotContainer {
 
     // Amp_Side_To_Amp_Side_Note = new PathPlannerAuto("Amp_Side_To_Amp_Side_Note");
     // Center_To_Amp_Side_Note = new PathPlannerAuto("Center_To_Amp_Side_Note");
-    // Center_To_Center_Note = new PathPlannerAuto("Center_To_Center_Note");
+    Center_To_Center_Note = new PathPlannerAuto("Center To Center Note");
     // Center_To_Source_Side_Note = new
     // PathPlannerAuto("Center_To_Source_Side_Note");
     // Source_Side_To_Source_Side_Note = new
@@ -448,6 +426,7 @@ public class RobotContainer {
     // Center_4_Note_Close_Source_Side_Far_Top);
 
     m_chooser.addOption("Amp_Side_3_Note", Amp_Side_3_Note);
+    m_chooser.addOption("Test auto", Center_To_Center_Note);
     // m_chooser.addOption("Center_3_Note_With_Middle", Center_3_Note_With_Middle);
     // m_chooser.addOption("Center_3_Note_With_Striaght_Back_Note",
     // Center_3_Note_With_Striaght_Back_Note);

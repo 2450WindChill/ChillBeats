@@ -16,6 +16,7 @@ public class SourceIntakeCommand extends Command {
   @SuppressWarnings({ "PMD.UnusedPrivateField", "PMD.SingularField" })
 
   private final LauncherSubsystem m_launcherSubsystem;
+  private final LightySubsystem m_LightySubsystem;
   private boolean currentBeamBreakState;
   private int stateChangeCounter;
 
@@ -24,9 +25,9 @@ public class SourceIntakeCommand extends Command {
    *
    * @param subsystem The subsystem used by this command.
    */
-  public SourceIntakeCommand(LauncherSubsystem launcherSubsystem) {
+  public SourceIntakeCommand(LauncherSubsystem launcherSubsystem, LightySubsystem lightySubsystem) {
     m_launcherSubsystem = launcherSubsystem;
-
+    m_LightySubsystem = lightySubsystem;
     // Use addRequirements() here to declare subsystem dependencies.
     addRequirements(launcherSubsystem);
   }
@@ -39,6 +40,9 @@ public class SourceIntakeCommand extends Command {
     m_launcherSubsystem.bottomMotor.set(0.4);
     currentBeamBreakState = m_launcherSubsystem.wristBeamBreak.get();
     stateChangeCounter = 0;
+
+    m_LightySubsystem.SetLEDsToWhite();
+    
   }
 
   // Called every time the scheduler runs while the command is scheduled.

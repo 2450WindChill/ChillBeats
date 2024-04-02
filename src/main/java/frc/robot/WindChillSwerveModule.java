@@ -30,7 +30,7 @@ public class WindChillSwerveModule {
     this.moduleNumber = moduleNumber;
 
     /* Angle Encoder Config */
-    angleEncoder = new CANcoder(moduleConstants.cancoderID, "canivore");
+    angleEncoder = new CANcoder(moduleConstants.cancoderID);
 
     /* Angle Motor Config */
     angleMotor = new CANSparkMax(moduleConstants.angleMotorID, MotorType.kBrushless);
@@ -72,13 +72,13 @@ public class WindChillSwerveModule {
 
     double desiredAngle = angle.getDegrees();
 
-    while (desiredAngle < 0) {
-      desiredAngle += 360;
-    }
+    // while (desiredAngle < 0) {
+    //   desiredAngle += 360;
+    // }
 
-    while (desiredAngle > 360) {
-      desiredAngle -= 360;
-    }
+    // while (desiredAngle > 360) {
+    //   desiredAngle -= 360;
+    // }
 
     SmartDashboard.putNumber("Desired Angle " + moduleNumber, desiredAngle);
 
@@ -127,6 +127,10 @@ public class WindChillSwerveModule {
     angleMotor.setInverted(Constants.angleInvert);
     // angleMotor.setIdleMode(Constants.angleNeutralMode);
     integratedAngleEncoder.setPositionConversionFactor(Constants.angleConversionFactor);
+    // Wrap angle motors to stay within 0-360 degrees
+    angleController.setPositionPIDWrappingEnabled(true);
+    angleController.setPositionPIDWrappingMinInput(0.0);
+    angleController.setPositionPIDWrappingMaxInput(360.0);
     angleController.setP(Constants.angleKP);
     angleController.setI(Constants.angleKI);
     angleController.setD(Constants.angleKD);
