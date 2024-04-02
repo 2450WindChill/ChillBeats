@@ -1,0 +1,94 @@
+<xml version="1.0">
+<dashboard>
+	<static-widget class="edu.wpi.first.smartdashboard.gui.elements.Image">
+		<location x="-994" y="568"/>
+		<width>3469</width>
+		<height>240</height>
+		<property name="Image File" value="C:\Users\2450 Wind Chill\Downloads\hulky boy.png"/>
+	</static-widget>
+	<widget field="Pose Y" type="Number" class="edu.wpi.first.smartdashboard.gui.elements.FormattedField">
+		<location x="383" y="400"/>
+		<width>144</width>
+	</widget>
+	<widget field="Pose X" type="Number" class="edu.wpi.first.smartdashboard.gui.elements.FormattedField">
+		<location x="380" y="424"/>
+		<width>149</width>
+	</widget>
+	<widget field="Reset pose" type="Command" class="edu.wpi.first.smartdashboard.gui.elements.Command">
+		<location x="390" y="474"/>
+	</widget>
+	<widget field="Pose Rotation" type="Number" class="edu.wpi.first.smartdashboard.gui.elements.FormattedField">
+		<location x="383" y="449"/>
+		<width>145</width>
+	</widget>
+	<widget field="Gyro Pitch" type="Number" class="edu.wpi.first.smartdashboard.gui.elements.FormattedField">
+		<location x="742" y="437"/>
+		<height>21</height>
+	</widget>
+	<widget field="Gyro Roll" type="Number" class="edu.wpi.first.smartdashboard.gui.elements.FormattedField">
+		<location x="587" y="436"/>
+	</widget>
+	<widget field="Gyro Yaw" type="Number" class="edu.wpi.first.smartdashboard.gui.elements.FormattedField">
+		<location x="655" y="406"/>
+	</widget>
+	<widget field="Mod 3 Velocity" type="Number" class="edu.wpi.first.smartdashboard.gui.elements.FormattedField">
+		<location x="920" y="239"/>
+		<width>182</width>
+	</widget>
+	<widget field="Mod 2 Velocity" type="Number" class="edu.wpi.first.smartdashboard.gui.elements.FormattedField">
+		<location x="365" y="238"/>
+		<width>181</width>
+	</widget>
+	<widget field="Mod 3 Cancoder" type="Number" class="edu.wpi.first.smartdashboard.gui.elements.FormattedField">
+		<location x="920" y="211"/>
+	</widget>
+	<widget field="Mod 2 Cancoder" type="Number" class="edu.wpi.first.smartdashboard.gui.elements.FormattedField">
+		<location x="366" y="209"/>
+	</widget>
+	<widget field="Mod 1 Velocity" type="Number" class="edu.wpi.first.smartdashboard.gui.elements.FormattedField">
+		<location x="920" y="76"/>
+		<width>180</width>
+	</widget>
+	<widget field="Mod 0 Velocity" type="Number" class="edu.wpi.first.smartdashboard.gui.elements.FormattedField">
+		<location x="370" y="83"/>
+	</widget>
+	<widget field="Mod 1 Cancoder" type="Number" class="edu.wpi.first.smartdashboard.gui.elements.FormattedField">
+		<location x="917" y="51"/>
+	</widget>
+	<widget field="Mod 0 Cancoder" type="Number" class="edu.wpi.first.smartdashboard.gui.elements.FormattedField">
+		<location x="367" y="51"/>
+	</widget>
+	<widget field="Mod 3 Integrated" type="Number" class="edu.wpi.first.smartdashboard.gui.elements.Compass">
+		<location x="703" y="209"/>
+		<width>261</width>
+		<height>158</height>
+		<property name="Ring Color" value="0.204.255.255"/>
+	</widget>
+	<widget field="Mod 2 Integrated" type="Number" class="edu.wpi.first.smartdashboard.gui.elements.Compass">
+		<location x="498" y="210"/>
+		<property name="Ring Color" value="0.204.255.255"/>
+	</widget>
+	<widget field="Mod 1 Integrated" type="Number" class="edu.wpi.first.smartdashboard.gui.elements.Compass">
+		<location x="708" y="50"/>
+		<property name="Ring Color" value="0.204.255.255"/>
+	</widget>
+	<widget field="Mod 0 Integrated" type="Number" class="edu.wpi.first.smartdashboard.gui.elements.Compass">
+		<location x="496" y="53"/>
+		<property name="Ring Color" value="0.204.255.255"/>
+	</widget>
+	<widget field="Auto Mode" type="String Chooser" class="edu.wpi.first.smartdashboard.gui.elements.Chooser">
+		<location x="1430" y="101"/>
+	</widget>
+	<static-widget class="edu.wpi.first.smartdashboard.gui.elements.Label">
+		<location x="1465" y="5"/>
+		<property name="Text" value="Robot Status"/>
+	</static-widget>
+	<static-widget class="edu.wpi.first.smartdashboard.gui.elements.ConnectionIndicator">
+		<location x="1409" y="22"/>
+		<width>118</width>
+		<height>64</height>
+	</static-widget>
+</dashboard>
+<live-window>
+</live-window>
+</xml>
