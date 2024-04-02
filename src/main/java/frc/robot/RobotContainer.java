@@ -152,7 +152,7 @@ public class RobotContainer {
     m_operatorController.rightTrigger().onTrue(shoot());
     m_operatorController.y().onTrue(autoSpeakerLaunch());
     m_operatorController.a().onTrue(sourceIntake());
-    // m_operatorController.b().onTrue(fullGroundIntake());
+    m_operatorController.b().onTrue(farLaunch());
     // m_operatorController.leftBumper().onTrue(unstuckNote());
     m_operatorController.leftBumper()
         .onTrue(Commands.runOnce(() -> m_launcherSubsystem.turnOnFeeder(), m_launcherSubsystem))
@@ -257,6 +257,19 @@ public class RobotContainer {
             Constants.zeroLaunchAngle));
   }
 
+  // Full speaker launch sequential command
+  public Command farLaunchShoot() {
+    return (Commands.runOnce(() -> m_launcherSubsystem.speakerTurnOnLauncher(),
+        m_launcherSubsystem))
+        .andThen(Commands.runOnce(() -> m_launcherSubsystem.turnOnFeeder(),
+            m_launcherSubsystem))
+        .andThen(new WaitCommand(2))
+        .andThen(Commands.runOnce(() -> m_launcherSubsystem.turnOffFeeder(),
+            m_launcherSubsystem))
+        .andThen(Commands.runOnce(() -> m_launcherSubsystem.turnOffLauncher(),
+            m_launcherSubsystem));
+  }
+
   public Command fullGroundIntake() {
 
     // Rev intake
@@ -265,24 +278,26 @@ public class RobotContainer {
         // In parallel move intake down and turn on index
         .andThen(Commands.parallel(new MoveIntakeToPosCommand(m_intakeSubsystem, Constants.intakeDown),
             // Turn on intake
-            Commands.runOnce(() -> m_indexSubsystem.indexOn(), m_indexSubsystem))
-
-            // Turn on feeder
-            .andThen(Commands.runOnce(() -> m_launcherSubsystem.turnOnFeeder())))
+            Commands.runOnce(() -> m_indexSubsystem.indexOn(), m_indexSubsystem),
+            (new MoveWristToPosCommand(m_aimSubsystem, -2.0)))
+        // Turn on feeder
+        .andThen(Commands.runOnce(() -> m_launcherSubsystem.turnOnFeeder())))
+        .andThen(new WaitCommand(1))
         // Wait for index beam break to be trippedbane
         .andThen(new CheckIndexBeamBreak(m_indexSubsystem))
+        .andThen(new WaitCommand(.5))
+        .andThen(new MoveWristToPosCommand(m_aimSubsystem, Constants.unstuckNoteAngle))
         .andThen(Commands.runOnce(() -> m_intakeSubsystem.intakeOff(), m_intakeSubsystem))
         .andThen(new MoveIntakeToPosCommand(m_intakeSubsystem, 0.0))
         .andThen(new CheckLauncherBeamBreak(m_launcherSubsystem))
-        .andThen(Commands.runOnce(() -> m_launcherSubsystem.turnOffFeeder()));
-    // Turn on feeder
-    // Commands.runOnce(() -> m_indexSubsystem.indexOff(), m_indexSubsystem)));
+        .andThen(Commands.runOnce(() -> m_launcherSubsystem.turnOffFeeder()))
+        .andThen(Commands.runOnce(() -> m_indexSubsystem.indexOff(), m_indexSubsystem));
   }
 
-  public Command FarLaunchShoot() {
+  public Command farLaunch() {
 
     return new MoveWristToPosCommand(m_aimSubsystem, Constants.farNoteLaunch)
-        .andThen(autoSpeakerLaunch())
+        .andThen(farLaunchShoot())
         .andThen(zeroArm());
 
   }
