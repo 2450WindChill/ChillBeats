@@ -295,7 +295,7 @@ public class DrivetrainSubsystem extends SubsystemBase {
       SmartDashboard.putNumber(
           "Mod " + mod.moduleNumber + " Cancoder", mod.getRawCanCoder());
       SmartDashboard.putNumber(
-          "Mod " + mod.moduleNumber + " Integrated", mod.getState().angle.getDegrees());
+          "Mod " + mod.moduleNumber + " Integrated", mod.getState().angle.getDegrees() % 360);
       SmartDashboard.putNumber(
           "Mod " + mod.moduleNumber + " Velocity", mod.getState().speedMetersPerSecond);
       SmartDashboard.putNumber(

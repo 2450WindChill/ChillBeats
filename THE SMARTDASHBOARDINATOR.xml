@@ -1,35 +1,107 @@
 <xml version="1.0">
 <dashboard>
+	<static-widget class="edu.wpi.first.smartdashboard.gui.elements.Label">
+		<location x="789" y="199"/>
+		<property name="Text" value="Mod 3 Intergrated"/>
+	</static-widget>
+	<static-widget class="edu.wpi.first.smartdashboard.gui.elements.Label">
+		<location x="585" y="202"/>
+		<property name="Text" value="Mod 2 Intergrated"/>
+	</static-widget>
+	<static-widget class="edu.wpi.first.smartdashboard.gui.elements.Label">
+		<location x="789" y="34"/>
+		<property name="Text" value="Mod 1 Intergrated"/>
+	</static-widget>
+	<static-widget class="edu.wpi.first.smartdashboard.gui.elements.Label">
+		<location x="588" y="32"/>
+		<property name="Text" value="Mod 0 Intergrated"/>
+	</static-widget>
+	<widget field="Desired Angle 3" type="Number" class="edu.wpi.first.smartdashboard.gui.elements.TextBox">
+		<location x="0" y="320"/>
+	</widget>
+	<widget field="Desired Angle 2" type="Number" class="edu.wpi.first.smartdashboard.gui.elements.TextBox">
+		<location x="0" y="300"/>
+	</widget>
+	<widget field="Desired Angle 1" type="Number" class="edu.wpi.first.smartdashboard.gui.elements.TextBox">
+		<location x="0" y="280"/>
+	</widget>
+	<widget field="Desired Angle 0" type="Number" class="edu.wpi.first.smartdashboard.gui.elements.TextBox">
+		<location x="0" y="260"/>
+	</widget>
+	<widget field="Intake angle" type="Number" class="edu.wpi.first.smartdashboard.gui.elements.TextBox">
+		<location x="0" y="240"/>
+	</widget>
+	<widget field="Index Beam Break" type="Boolean" class="edu.wpi.first.smartdashboard.gui.elements.TextBox">
+		<location x="0" y="220"/>
+	</widget>
+	<widget field="Beam Break" type="Boolean" class="edu.wpi.first.smartdashboard.gui.elements.TextBox">
+		<location x="0" y="200"/>
+	</widget>
+	<widget field="rubikx" type="Number" class="edu.wpi.first.smartdashboard.gui.elements.TextBox">
+		<location x="0" y="180"/>
+	</widget>
+	<widget field="Wrist position" type="Number" class="edu.wpi.first.smartdashboard.gui.elements.TextBox">
+		<location x="0" y="160"/>
+	</widget>
+	<widget field="Elevator " type="Number" class="edu.wpi.first.smartdashboard.gui.elements.TextBox">
+		<location x="6" y="141"/>
+	</widget>
+	<widget field="Chassis speed rotation" type="Number" class="edu.wpi.first.smartdashboard.gui.elements.TextBox">
+		<location x="0" y="120"/>
+	</widget>
+	<widget field="Chassis speed y" type="Number" class="edu.wpi.first.smartdashboard.gui.elements.TextBox">
+		<location x="0" y="100"/>
+	</widget>
+	<widget field="Chassis speed x" type="Number" class="edu.wpi.first.smartdashboard.gui.elements.TextBox">
+		<location x="0" y="80"/>
+	</widget>
+	<widget field="Mod 3 drive" type="Number" class="edu.wpi.first.smartdashboard.gui.elements.TextBox">
+		<location x="0" y="60"/>
+	</widget>
+	<widget field="Mod 2 drive" type="Number" class="edu.wpi.first.smartdashboard.gui.elements.TextBox">
+		<location x="0" y="40"/>
+	</widget>
+	<widget field="Mod 1 drive" type="Number" class="edu.wpi.first.smartdashboard.gui.elements.TextBox">
+		<location x="0" y="20"/>
+	</widget>
+	<widget field="Mod 0 drive" type="Number" class="edu.wpi.first.smartdashboard.gui.elements.TextBox">
+		<location x="0" y="0"/>
+	</widget>
+	<static-widget class="edu.wpi.first.smartdashboard.gui.elements.RobotPreferences">
+		<location x="1208" y="214"/>
+	</static-widget>
 	<static-widget class="edu.wpi.first.smartdashboard.gui.elements.Image">
-		<location x="-994" y="568"/>
+		<location x="-1019" y="559"/>
 		<width>3469</width>
 		<height>240</height>
 		<property name="Image File" value="C:\Users\2450 Wind Chill\Downloads\hulky boy.png"/>
 	</static-widget>
 	<widget field="Pose Y" type="Number" class="edu.wpi.first.smartdashboard.gui.elements.FormattedField">
-		<location x="383" y="400"/>
-		<width>144</width>
+		<location x="551" y="371"/>
+		<width>146</width>
 	</widget>
 	<widget field="Pose X" type="Number" class="edu.wpi.first.smartdashboard.gui.elements.FormattedField">
-		<location x="380" y="424"/>
+		<location x="720" y="370"/>
 		<width>149</width>
 	</widget>
 	<widget field="Reset pose" type="Command" class="edu.wpi.first.smartdashboard.gui.elements.Command">
-		<location x="390" y="474"/>
+		<location x="651" y="429"/>
+		<property name="Start Button Color" value="0.153.255.255"/>
 	</widget>
 	<widget field="Pose Rotation" type="Number" class="edu.wpi.first.smartdashboard.gui.elements.FormattedField">
-		<location x="383" y="449"/>
+		<location x="643" y="401"/>
 		<width>145</width>
 	</widget>
 	<widget field="Gyro Pitch" type="Number" class="edu.wpi.first.smartdashboard.gui.elements.FormattedField">
-		<location x="742" y="437"/>
+		<location x="710" y="522"/>
 		<height>21</height>
 	</widget>
 	<widget field="Gyro Roll" type="Number" class="edu.wpi.first.smartdashboard.gui.elements.FormattedField">
-		<location x="587" y="436"/>
+		<location x="639" y="490"/>
 	</widget>
 	<widget field="Gyro Yaw" type="Number" class="edu.wpi.first.smartdashboard.gui.elements.FormattedField">
-		<location x="655" y="406"/>
+		<location x="553" y="520"/>
+		<height>21</height>
 	</widget>
 	<widget field="Mod 3 Velocity" type="Number" class="edu.wpi.first.smartdashboard.gui.elements.FormattedField">
 		<location x="920" y="239"/>
@@ -58,26 +130,8 @@
 	<widget field="Mod 0 Cancoder" type="Number" class="edu.wpi.first.smartdashboard.gui.elements.FormattedField">
 		<location x="367" y="51"/>
 	</widget>
-	<widget field="Mod 3 Integrated" type="Number" class="edu.wpi.first.smartdashboard.gui.elements.Compass">
-		<location x="703" y="209"/>
-		<width>261</width>
-		<height>158</height>
-		<property name="Ring Color" value="0.204.255.255"/>
-	</widget>
-	<widget field="Mod 2 Integrated" type="Number" class="edu.wpi.first.smartdashboard.gui.elements.Compass">
-		<location x="498" y="210"/>
-		<property name="Ring Color" value="0.204.255.255"/>
-	</widget>
-	<widget field="Mod 1 Integrated" type="Number" class="edu.wpi.first.smartdashboard.gui.elements.Compass">
-		<location x="708" y="50"/>
-		<property name="Ring Color" value="0.204.255.255"/>
-	</widget>
-	<widget field="Mod 0 Integrated" type="Number" class="edu.wpi.first.smartdashboard.gui.elements.Compass">
-		<location x="496" y="53"/>
-		<property name="Ring Color" value="0.204.255.255"/>
-	</widget>
 	<widget field="Auto Mode" type="String Chooser" class="edu.wpi.first.smartdashboard.gui.elements.Chooser">
-		<location x="1430" y="101"/>
+		<location x="1341" y="98"/>
 	</widget>
 	<static-widget class="edu.wpi.first.smartdashboard.gui.elements.Label">
 		<location x="1465" y="5"/>
@@ -88,6 +142,26 @@
 		<width>118</width>
 		<height>64</height>
 	</static-widget>
+	<widget field="Mod 2 Integrated" type="Number" class="edu.wpi.first.smartdashboard.gui.elements.SimpleDial">
+		<location x="498" y="210"/>
+		<property name="Upper Limit" value="360.0"/>
+		<property name="Tick Interval" value="30.0"/>
+	</widget>
+	<widget field="Mod 0 Integrated" type="Number" class="edu.wpi.first.smartdashboard.gui.elements.SimpleDial">
+		<location x="505" y="46"/>
+		<property name="Upper Limit" value="360.0"/>
+		<property name="Tick Interval" value="30.0"/>
+	</widget>
+	<widget field="Mod 1 Integrated" type="Number" class="edu.wpi.first.smartdashboard.gui.elements.SimpleDial">
+		<location x="708" y="50"/>
+		<property name="Upper Limit" value="360.0"/>
+		<property name="Tick Interval" value="30.0"/>
+	</widget>
+	<widget field="Mod 3 Integrated" type="Number" class="edu.wpi.first.smartdashboard.gui.elements.SimpleDial">
+		<location x="703" y="209"/>
+		<property name="Upper Limit" value="360.0"/>
+		<property name="Tick Interval" value="30.0"/>
+	</widget>
 </dashboard>
 <live-window>
 </live-window>
