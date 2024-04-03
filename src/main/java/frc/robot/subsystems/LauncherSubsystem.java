@@ -15,8 +15,8 @@ import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 
 public class LauncherSubsystem extends SubsystemBase {
-  public final CANSparkFlex bottomMotor = new CANSparkFlex(18, MotorType.kBrushless);
-  public final CANSparkFlex topMotor = new CANSparkFlex(19, MotorType.kBrushless);
+  public final CANSparkFlex bottomMotor = new CANSparkFlex(19, MotorType.kBrushless);
+  public final CANSparkFlex topMotor = new CANSparkFlex(18, MotorType.kBrushless);
   
    
   public final CANSparkMax feederMotor = new CANSparkMax(15, MotorType.kBrushless);
