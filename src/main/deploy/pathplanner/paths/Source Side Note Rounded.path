@@ -1,0 +1,130 @@
+{
+  "version": 1.0,
+  "waypoints": [
+    {
+      "anchor": {
+        "x": 1.174908809307075,
+        "y": 5.55
+      },
+      "prevControl": null,
+      "nextControl": {
+        "x": 1.3034144603250362,
+        "y": 4.930755965840456
+      },
+      "isLocked": false,
+      "linkedName": "Stage Side of Subwoofer"
+    },
+    {
+      "anchor": {
+        "x": 1.6063206377245165,
+        "y": 4.132185134514554
+      },
+      "prevControl": {
+        "x": 1.5063206377245164,
+        "y": 4.132185134514554
+      },
+      "nextControl": {
+        "x": 1.968298953455343,
+        "y": 4.132185134514554
+      },
+      "isLocked": false,
+      "linkedName": null
+    },
+    {
+      "anchor": {
+        "x": 2.5150391699229573,
+        "y": 4.1046482092964185
+      },
+      "prevControl": {
+        "x": 2.2800823290777883,
+        "y": 4.1046482092964185
+      },
+      "nextControl": {
+        "x": 2.6150391699229574,
+        "y": 4.1046482092964185
+      },
+      "isLocked": false,
+      "linkedName": null
+    },
+    {
+      "anchor": {
+        "x": 1.174908809307075,
+        "y": 5.55
+      },
+      "prevControl": {
+        "x": 1.6981103884516318,
+        "y": 5.3988836945487435
+      },
+      "nextControl": null,
+      "isLocked": false,
+      "linkedName": "Stage Side of Subwoofer"
+    }
+  ],
+  "rotationTargets": [
+    {
+      "waypointRelativePos": 2.0,
+      "rotationDegrees": 180.0,
+      "rotateFast": false
+    },
+    {
+      "waypointRelativePos": 1,
+      "rotationDegrees": 180.0,
+      "rotateFast": false
+    }
+  ],
+  "constraintZones": [],
+  "eventMarkers": [
+    {
+      "name": "Intake",
+      "waypointRelativePos": 0.5,
+      "command": {
+        "type": "sequential",
+        "data": {
+          "commands": [
+            {
+              "type": "named",
+              "data": {
+                "name": "Intake"
+              }
+            }
+          ]
+        }
+      }
+    },
+    {
+      "name": "Shoot",
+      "waypointRelativePos": 3.0,
+      "command": {
+        "type": "sequential",
+        "data": {
+          "commands": [
+            {
+              "type": "named",
+              "data": {
+                "name": "Shoot"
+              }
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "globalConstraints": {
+    "maxVelocity": 3.0,
+    "maxAcceleration": 3.0,
+    "maxAngularVelocity": 720.0,
+    "maxAngularAcceleration": 1080.0
+  },
+  "goalEndState": {
+    "velocity": 0,
+    "rotation": 180.0,
+    "rotateFast": false
+  },
+  "reversed": false,
+  "folder": "Note Pickups from Center",
+  "previewStartingState": {
+    "rotation": 180.0,
+    "velocity": 0
+  },
+  "useDefaultConstraints": true
+}
