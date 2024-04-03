@@ -361,7 +361,7 @@ public class RobotContainer {
     Center_4_Note_All_Far = new PathPlannerAuto("Center 4 Note All Far");
     Center_4_Note_Close_Amp_Side_Far_Middle = new PathPlannerAuto("Center 4 Note Close Amp Side Far Middle");
     Center_4_Note_Close_Amp_Side_Far_Straight_Back = new PathPlannerAuto("Center 4 Note Close Amp Side Far Straight Back");
-    Center_4_Note_Close_Amp_Side_Far_Top = new PathPlannerAuto("Center4 Note Close Amp Side Far Top");
+    Center_4_Note_Close_Amp_Side_Far_Top = new PathPlannerAuto("Center 4 Note Close Amp Side Far Top");
     Center_4_Note_Close_Source_Side_Far_Middle = new PathPlannerAuto("Center 4 Note Close Source Side Far Middle");
     Center_4_Note_Close_Source_Side_Far_Straight_Back = new PathPlannerAuto("Center 4 Note Close Source Side Far Straight Back");
     Center_4_Note_Close_Source_Side_Far_Top = new PathPlannerAuto("Center 4 Note Close Source Side Far Top");
@@ -382,34 +382,34 @@ public class RobotContainer {
     Full_Disrupt_From_Source_Side = new PathPlannerAuto("Full Disrupt From Source Side");
 
     m_chooser = new SendableChooser<>();
-    m_chooser.addOption("Center_5_Note_Middle_Note", Center_5_Note_Middle_Note);
-    m_chooser.addOption("Center_5_Note_Top_Note", Center_5_Note_Top_Note);
+    // m_chooser.addOption("Center_5_Note_Middle_Note", Center_5_Note_Middle_Note);
+    // m_chooser.addOption("Center_5_Note_Top_Note", Center_5_Note_Top_Note);
 
     m_chooser.addOption("Center_4_Note_All_Close", Center_4_Note_All_Close);
     m_chooser.addOption("Center_4_Note_All_Close_Rounded", Center_4_Note_All_Close_Rounded);
-    m_chooser.addOption("Center_4_Note_All_Far", Center_4_Note_All_Far);
-    m_chooser.addOption("Center_4_Note_Close_Amp_Side_Far_Middle", Center_4_Note_Close_Amp_Side_Far_Middle);
-    m_chooser.addOption("Center_4_Note_Close_Amp_Side_Far_Straight_Back", Center_4_Note_Close_Amp_Side_Far_Straight_Back);
-    m_chooser.addOption("Center_4_Note_Close_Amp_Side_Far_Top", Center_4_Note_Close_Amp_Side_Far_Top);
-    m_chooser.addOption("Center_4_Note_Close_Source_Side_Far_Middle", Center_4_Note_Close_Source_Side_Far_Middle);
-    m_chooser.addOption("Center_4_Note_Close_Source_Side_Far_Straight_Back", Center_4_Note_Close_Source_Side_Far_Straight_Back);
-    m_chooser.addOption("Center_4_Note_Close_Source_Side_Far_Top", Center_4_Note_Close_Source_Side_Far_Top);
+    // m_chooser.addOption("Center_4_Note_All_Far", Center_4_Note_All_Far);
+    // m_chooser.addOption("Center_4_Note_Close_Amp_Side_Far_Middle", Center_4_Note_Close_Amp_Side_Far_Middle);
+    // m_chooser.addOption("Center_4_Note_Close_Amp_Side_Far_Straight_Back", Center_4_Note_Close_Amp_Side_Far_Straight_Back);
+    // m_chooser.addOption("Center_4_Note_Close_Amp_Side_Far_Top", Center_4_Note_Close_Amp_Side_Far_Top);
+    // m_chooser.addOption("Center_4_Note_Close_Source_Side_Far_Middle", Center_4_Note_Close_Source_Side_Far_Middle);
+    // m_chooser.addOption("Center_4_Note_Close_Source_Side_Far_Straight_Back", Center_4_Note_Close_Source_Side_Far_Straight_Back);
+    // m_chooser.addOption("Center_4_Note_Close_Source_Side_Far_Top", Center_4_Note_Close_Source_Side_Far_Top);
 
-    m_chooser.addOption("Amp_Side_3_Note", Amp_Side_3_Note);
-    m_chooser.addOption("Test auto", Center_To_Center_Note);
-    m_chooser.addOption("Center_3_Note_With_Middle", Center_3_Note_With_Middle);
-    m_chooser.addOption("Center_3_Note_With_Striaght_Back_Note", Center_3_Note_With_Striaght_Back_Note);
-    m_chooser.addOption("Center_3_Note_With_Top_Note", Center_3_Note_With_Top_Note);
-    m_chooser.addOption("Source_Side_3_Note", Source_Side_3_Note);
+    // m_chooser.addOption("Amp_Side_3_Note", Amp_Side_3_Note);
+    // m_chooser.addOption("Test auto", Center_To_Center_Note);
+    // m_chooser.addOption("Center_3_Note_With_Middle", Center_3_Note_With_Middle);
+    // m_chooser.addOption("Center_3_Note_With_Striaght_Back_Note", Center_3_Note_With_Striaght_Back_Note);
+    // m_chooser.addOption("Center_3_Note_With_Top_Note", Center_3_Note_With_Top_Note);
+    // m_chooser.addOption("Source_Side_3_Note", Source_Side_3_Note);
 
-    m_chooser.addOption("Amp_Side_To_Amp_Side_Note", Amp_Side_To_Amp_Side_Note);
-    m_chooser.addOption("Center_To_Amp_Side_Note", Center_To_Amp_Side_Note);
+    // m_chooser.addOption("Amp_Side_To_Amp_Side_Note", Amp_Side_To_Amp_Side_Note);
+    // m_chooser.addOption("Center_To_Amp_Side_Note", Center_To_Amp_Side_Note);
     m_chooser.addOption("Center_To_Center_Note", Center_To_Center_Note);
-    m_chooser.addOption("Center_To_Source_Side_Note", Center_To_Source_Side_Note);
-    m_chooser.addOption("Source_Side_To_Source_Side_Note", Source_Side_To_Source_Side_Note);
+    // m_chooser.addOption("Center_To_Source_Side_Note", Center_To_Source_Side_Note);
+    // m_chooser.addOption("Source_Side_To_Source_Side_Note", Source_Side_To_Source_Side_Note);
 
     m_chooser.addOption("Full_Disrupt_From_Amp_Side", Full_Disrupt_From_Amp_Side);
-    m_chooser.addOption("Full_Disrupt_From_Source_Side", Full_Disrupt_From_Source_Side);
+    // m_chooser.addOption("Full_Disrupt_From_Source_Side", Full_Disrupt_From_Source_Side);
   }
 
   // Auto command

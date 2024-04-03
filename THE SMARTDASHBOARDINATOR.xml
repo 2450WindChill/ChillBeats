@@ -1,5 +1,67 @@
 <xml version="1.0">
 <dashboard>
+	<widget field="Index Beam Break" type="Boolean" class="edu.wpi.first.smartdashboard.gui.elements.BooleanBox">
+		<location x="52" y="59"/>
+		<width>97</width>
+		<height>77</height>
+	</widget>
+	<widget field="Beam Break" type="Boolean" class="edu.wpi.first.smartdashboard.gui.elements.BooleanBox">
+		<location x="224" y="60"/>
+		<width>90</width>
+		<height>80</height>
+	</widget>
+	<widget field="Elevator " type="Number" class="edu.wpi.first.smartdashboard.gui.elements.FormattedField">
+		<location x="126" y="185"/>
+	</widget>
+	<widget field="Intake angle" type="Number" class="edu.wpi.first.smartdashboard.gui.elements.FormattedField">
+		<location x="112" y="243"/>
+	</widget>
+	<widget field="Wrist position" type="Number" class="edu.wpi.first.smartdashboard.gui.elements.FormattedField">
+		<location x="110" y="215"/>
+	</widget>
+	<widget field="Chassis speed rotation" type="Number" class="edu.wpi.first.smartdashboard.gui.elements.FormattedField">
+		<location x="205" y="515"/>
+	</widget>
+	<widget field="Chassis speed y" type="Number" class="edu.wpi.first.smartdashboard.gui.elements.FormattedField">
+		<location x="309" y="490"/>
+	</widget>
+	<widget field="Chassis speed x" type="Number" class="edu.wpi.first.smartdashboard.gui.elements.FormattedField">
+		<location x="124" y="492"/>
+	</widget>
+	<widget field="Desired Angle 0" type="Number" class="edu.wpi.first.smartdashboard.gui.elements.FormattedField">
+		<location x="369" y="139"/>
+	</widget>
+	<widget field="Desired Angle 1" type="Number" class="edu.wpi.first.smartdashboard.gui.elements.FormattedField">
+		<location x="917" y="132"/>
+	</widget>
+	<widget field="Desired Angle 2" type="Number" class="edu.wpi.first.smartdashboard.gui.elements.FormattedField">
+		<location x="361" y="293"/>
+	</widget>
+	<widget field="Desired Angle 3" type="Number" class="edu.wpi.first.smartdashboard.gui.elements.FormattedField">
+		<location x="916" y="294"/>
+	</widget>
+	<widget field="Mod 3 drive" type="Number" class="edu.wpi.first.smartdashboard.gui.elements.FormattedField">
+		<location x="923" y="266"/>
+	</widget>
+	<widget field="Mod 2 drive" type="Number" class="edu.wpi.first.smartdashboard.gui.elements.FormattedField">
+		<location x="370" y="267"/>
+	</widget>
+	<widget field="Mod 1 drive" type="Number" class="edu.wpi.first.smartdashboard.gui.elements.FormattedField">
+		<location x="922" y="105"/>
+	</widget>
+	<widget field="Mod 0 drive" type="Number" class="edu.wpi.first.smartdashboard.gui.elements.FormattedField">
+		<location x="369" y="111"/>
+	</widget>
+	<static-widget class="edu.wpi.first.smartdashboard.gui.elements.Label">
+		<location x="1076" y="482"/>
+		<property name="Text" value="He&apos;s helping you drive -----&gt;"/>
+	</static-widget>
+	<static-widget class="edu.wpi.first.smartdashboard.gui.elements.Image">
+		<location x="1217" y="407"/>
+		<width>287</width>
+		<height>160</height>
+		<property name="Image File" value="C:\Users\2450 Wind Chill\Documents\ChillBeats\Smartdashboard Images\Screenshot 2024-04-03 170200.png"/>
+	</static-widget>
 	<static-widget class="edu.wpi.first.smartdashboard.gui.elements.Label">
 		<location x="789" y="199"/>
 		<property name="Text" value="Mod 3 Intergrated"/>
@@ -16,59 +78,8 @@
 		<location x="588" y="32"/>
 		<property name="Text" value="Mod 0 Intergrated"/>
 	</static-widget>
-	<widget field="Desired Angle 3" type="Number" class="edu.wpi.first.smartdashboard.gui.elements.TextBox">
-		<location x="0" y="320"/>
-	</widget>
-	<widget field="Desired Angle 2" type="Number" class="edu.wpi.first.smartdashboard.gui.elements.TextBox">
-		<location x="0" y="300"/>
-	</widget>
-	<widget field="Desired Angle 1" type="Number" class="edu.wpi.first.smartdashboard.gui.elements.TextBox">
-		<location x="0" y="280"/>
-	</widget>
-	<widget field="Desired Angle 0" type="Number" class="edu.wpi.first.smartdashboard.gui.elements.TextBox">
-		<location x="0" y="260"/>
-	</widget>
-	<widget field="Intake angle" type="Number" class="edu.wpi.first.smartdashboard.gui.elements.TextBox">
-		<location x="0" y="240"/>
-	</widget>
-	<widget field="Index Beam Break" type="Boolean" class="edu.wpi.first.smartdashboard.gui.elements.TextBox">
-		<location x="0" y="220"/>
-	</widget>
-	<widget field="Beam Break" type="Boolean" class="edu.wpi.first.smartdashboard.gui.elements.TextBox">
-		<location x="0" y="200"/>
-	</widget>
-	<widget field="rubikx" type="Number" class="edu.wpi.first.smartdashboard.gui.elements.TextBox">
-		<location x="0" y="180"/>
-	</widget>
-	<widget field="Wrist position" type="Number" class="edu.wpi.first.smartdashboard.gui.elements.TextBox">
-		<location x="0" y="160"/>
-	</widget>
-	<widget field="Elevator " type="Number" class="edu.wpi.first.smartdashboard.gui.elements.TextBox">
-		<location x="6" y="141"/>
-	</widget>
-	<widget field="Chassis speed rotation" type="Number" class="edu.wpi.first.smartdashboard.gui.elements.TextBox">
-		<location x="0" y="120"/>
-	</widget>
-	<widget field="Chassis speed y" type="Number" class="edu.wpi.first.smartdashboard.gui.elements.TextBox">
-		<location x="0" y="100"/>
-	</widget>
-	<widget field="Chassis speed x" type="Number" class="edu.wpi.first.smartdashboard.gui.elements.TextBox">
-		<location x="0" y="80"/>
-	</widget>
-	<widget field="Mod 3 drive" type="Number" class="edu.wpi.first.smartdashboard.gui.elements.TextBox">
-		<location x="0" y="60"/>
-	</widget>
-	<widget field="Mod 2 drive" type="Number" class="edu.wpi.first.smartdashboard.gui.elements.TextBox">
-		<location x="0" y="40"/>
-	</widget>
-	<widget field="Mod 1 drive" type="Number" class="edu.wpi.first.smartdashboard.gui.elements.TextBox">
-		<location x="0" y="20"/>
-	</widget>
-	<widget field="Mod 0 drive" type="Number" class="edu.wpi.first.smartdashboard.gui.elements.TextBox">
-		<location x="0" y="0"/>
-	</widget>
 	<static-widget class="edu.wpi.first.smartdashboard.gui.elements.RobotPreferences">
-		<location x="1208" y="214"/>
+		<location x="1206" y="193"/>
 	</static-widget>
 	<static-widget class="edu.wpi.first.smartdashboard.gui.elements.Image">
 		<location x="-1019" y="559"/>
@@ -131,7 +142,7 @@
 		<location x="367" y="51"/>
 	</widget>
 	<widget field="Auto Mode" type="String Chooser" class="edu.wpi.first.smartdashboard.gui.elements.Chooser">
-		<location x="1341" y="98"/>
+		<location x="1204" y="23"/>
 	</widget>
 	<static-widget class="edu.wpi.first.smartdashboard.gui.elements.Label">
 		<location x="1465" y="5"/>
@@ -165,4 +176,5 @@
 </dashboard>
 <live-window>
 </live-window>
+	<hidden field="rubikx"/>
 </xml>
