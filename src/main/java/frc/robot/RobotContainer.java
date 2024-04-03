@@ -157,8 +157,8 @@ public class RobotContainer {
     m_operatorController.x().onTrue(ampLaunchPrep());
     m_operatorController.rightTrigger().onTrue(runShooter());
     m_operatorController.y().onTrue(autoSpeakerLaunch());
-    m_operatorController.a().whileTrue(sourceIntake()).onFalse(totalReset());
-    m_operatorController.b().onTrue(fullGroundIntake());
+    m_operatorController.a().onTrue(sourceIntake());
+    m_operatorController.b().whileTrue(fullGroundIntake()).onFalse(totalReset());
     m_operatorController.rightBumper().onTrue(farLaunchShoot());
     m_operatorController.povUp().onTrue(zeroArm());
     m_operatorController.povDown().onTrue(turnOffAllMotors());
@@ -248,12 +248,12 @@ public class RobotContainer {
         .andThen(new WaitCommand(1))
         // Wait for index beam break to be trippedbane
         .andThen(new CheckIndexBeamBreak(m_indexSubsystem))
-        .andThen(new WaitCommand(.5))
-        .andThen(new MoveWristToPosCommand(m_aimSubsystem, Constants.unstuckNoteAngle))
+        // .andThen(new WaitCommand(.5))
+        // .andThen(new MoveWristToPosCommand(m_aimSubsystem, Constants.unstuckNoteAngle))
         .andThen(Commands.runOnce(() -> m_intakeSubsystem.intakeOff(), m_intakeSubsystem))
         .andThen(new MoveIntakeToPosCommand(m_intakeSubsystem, 0.0))
         .andThen(new CheckLauncherBeamBreak(m_launcherSubsystem))
-        .andThen(new MoveWristToPosCommand(m_aimSubsystem, Constants.zeroLaunchAngle))
+        // .andThen(new MoveWristToPosCommand(m_aimSubsystem, Constants.zeroLaunchAngle))
         .andThen(Commands.runOnce(() -> m_launcherSubsystem.turnOffFeeder()))
         .andThen(Commands.runOnce(() -> m_indexSubsystem.indexOff()))
         .andThen(Commands.runOnce(() -> m_launcherSubsystem.turnOffLauncher()));
@@ -353,39 +353,39 @@ public class RobotContainer {
   // Creating different options for auto
   public void configureAutoChooser() {
 
-    Center_5_Note_Middle_Note = new PathPlannerAuto("Center 5 Note Middle Note");
-    Center_5_Note_Top_Note = new PathPlannerAuto("Center 5 Note Top Note");
+    // Center_5_Note_Middle_Note = new PathPlannerAuto("Center 5 Note Middle Note");
+    // Center_5_Note_Top_Note = new PathPlannerAuto("Center 5 Note Top Note");
 
-    Center_4_Note_All_Close = new PathPlannerAuto("Center 4 Note All Close");
+    // Center_4_Note_All_Close = new PathPlannerAuto("Center 4 Note All Close");
     Center_4_Note_All_Close_Rounded = new PathPlannerAuto("Center 4 Note All Close");
-    Center_4_Note_All_Far = new PathPlannerAuto("Center 4 Note All Far");
-    Center_4_Note_Close_Amp_Side_Far_Middle = new PathPlannerAuto("Center 4 Note Close Amp Side Far Middle");
-    Center_4_Note_Close_Amp_Side_Far_Straight_Back = new PathPlannerAuto("Center 4 Note Close Amp Side Far Straight Back");
-    Center_4_Note_Close_Amp_Side_Far_Top = new PathPlannerAuto("Center 4 Note Close Amp Side Far Top");
-    Center_4_Note_Close_Source_Side_Far_Middle = new PathPlannerAuto("Center 4 Note Close Source Side Far Middle");
-    Center_4_Note_Close_Source_Side_Far_Straight_Back = new PathPlannerAuto("Center 4 Note Close Source Side Far Straight Back");
-    Center_4_Note_Close_Source_Side_Far_Top = new PathPlannerAuto("Center 4 Note Close Source Side Far Top");
+    // Center_4_Note_All_Far = new PathPlannerAuto("Center 4 Note All Far");
+    // Center_4_Note_Close_Amp_Side_Far_Middle = new PathPlannerAuto("Center 4 Note Close Amp Side Far Middle");
+    // Center_4_Note_Close_Amp_Side_Far_Straight_Back = new PathPlannerAuto("Center 4 Note Close Amp Side Far Straight Back");
+    // Center_4_Note_Close_Amp_Side_Far_Top = new PathPlannerAuto("Center  4 Note Close Amp Side Far Top");
+    // Center_4_Note_Close_Source_Side_Far_Middle = new PathPlannerAuto("Center 4 Note Close Source Side Far Middle");
+    // Center_4_Note_Close_Source_Side_Far_Straight_Back = new PathPlannerAuto("Center 4 Note Close Source Side Far Straight Back");
+    // Center_4_Note_Close_Source_Side_Far_Top = new PathPlannerAuto("Center 4 Note Close Source Side Far Top");
 
-    Amp_Side_3_Note = new PathPlannerAuto("Amp Side 3 Note");
-    Center_3_Note_With_Middle = new PathPlannerAuto("Center 3 Note With Middle");
-    Center_3_Note_With_Striaght_Back_Note = new PathPlannerAuto("Center 3 Note With Striaght Back Note");
-    Center_3_Note_With_Top_Note = new PathPlannerAuto("Center 3 Note With Top Note");
-    Source_Side_3_Note = new PathPlannerAuto("Source Side 3 Note");
+    // Amp_Side_3_Note = new PathPlannerAuto("Amp Side 3 Note");
+    // Center_3_Note_With_Middle = new PathPlannerAuto("Center 3 Note With Middle");
+    // Center_3_Note_With_Striaght_Back_Note = new PathPlannerAuto("Center 3 Note With Striaght Back Note");
+    // Center_3_Note_With_Top_Note = new PathPlannerAuto("Center 3 Note With Top Note");
+    // Source_Side_3_Note = new PathPlannerAuto("Source Side 3 Note");
 
-    Amp_Side_To_Amp_Side_Note = new PathPlannerAuto("Amp Side To Amp Side Note");
-    Center_To_Amp_Side_Note = new PathPlannerAuto("Center To Amp Side Note");
-    Center_To_Center_Note = new PathPlannerAuto("Center To Center Note");
-    Center_To_Source_Side_Note = new PathPlannerAuto("Center To Source Side Note");
-    Source_Side_To_Source_Side_Note = new PathPlannerAuto("Source Side To Source Side Note");
+    // Amp_Side_To_Amp_Side_Note = new PathPlannerAuto("Amp Side To Amp Side Note");
+    // Center_To_Amp_Side_Note = new PathPlannerAuto("Center To Amp Side Note");
+    // Center_To_Center_Note = new PathPlannerAuto("Center To Center Note");
+    // Center_To_Source_Side_Note = new PathPlannerAuto("Center To Source Side Note");
+    // Source_Side_To_Source_Side_Note = new PathPlannerAuto("Source Side To Source Side Note");
 
-    Full_Disrupt_From_Amp_Side = new PathPlannerAuto("Full Disrupt From Amp Side");
-    Full_Disrupt_From_Source_Side = new PathPlannerAuto("Full Disrupt From Source Side");
+    // Full_Disrupt_From_Amp_Side = new PathPlannerAuto("Full Disrupt From Amp Side");
+    // Full_Disrupt_From_Source_Side = new PathPlannerAuto("Full Disrupt From Source Side");
 
     m_chooser = new SendableChooser<>();
     // m_chooser.addOption("Center_5_Note_Middle_Note", Center_5_Note_Middle_Note);
     // m_chooser.addOption("Center_5_Note_Top_Note", Center_5_Note_Top_Note);
 
-    m_chooser.addOption("Center_4_Note_All_Close", Center_4_Note_All_Close);
+    // m_chooser.addOption("Center_4_Note_All_Close", Center_4_Note_All_Close);
     m_chooser.addOption("Center_4_Note_All_Close_Rounded", Center_4_Note_All_Close_Rounded);
     // m_chooser.addOption("Center_4_Note_All_Far", Center_4_Note_All_Far);
     // m_chooser.addOption("Center_4_Note_Close_Amp_Side_Far_Middle", Center_4_Note_Close_Amp_Side_Far_Middle);
@@ -402,14 +402,14 @@ public class RobotContainer {
     // m_chooser.addOption("Center_3_Note_With_Top_Note", Center_3_Note_With_Top_Note);
     // m_chooser.addOption("Source_Side_3_Note", Source_Side_3_Note);
 
-    // m_chooser.addOption("Amp_Side_To_Amp_Side_Note", Amp_Side_To_Amp_Side_Note);
-    // m_chooser.addOption("Center_To_Amp_Side_Note", Center_To_Amp_Side_Note);
+    m_chooser.addOption("Amp_Side_To_Amp_Side_Note", Amp_Side_To_Amp_Side_Note);
+    m_chooser.addOption("Center_To_Amp_Side_Note", Center_To_Amp_Side_Note);
     m_chooser.addOption("Center_To_Center_Note", Center_To_Center_Note);
-    // m_chooser.addOption("Center_To_Source_Side_Note", Center_To_Source_Side_Note);
-    // m_chooser.addOption("Source_Side_To_Source_Side_Note", Source_Side_To_Source_Side_Note);
+    m_chooser.addOption("Center_To_Source_Side_Note", Center_To_Source_Side_Note);
+    m_chooser.addOption("Source_Side_To_Source_Side_Note", Source_Side_To_Source_Side_Note);
 
     m_chooser.addOption("Full_Disrupt_From_Amp_Side", Full_Disrupt_From_Amp_Side);
-    // m_chooser.addOption("Full_Disrupt_From_Source_Side", Full_Disrupt_From_Source_Side);
+    m_chooser.addOption("Full_Disrupt_From_Source_Side", Full_Disrupt_From_Source_Side);
   }
 
   // Auto command
