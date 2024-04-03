@@ -2,8 +2,8 @@
   "version": 1.0,
   "startingPose": {
     "position": {
-      "x": 1.1657298342343634,
-      "y": 5.564105245857552
+      "x": 1.17,
+      "y": 5.55
     },
     "rotation": 180.0
   },
@@ -14,7 +14,7 @@
         {
           "type": "named",
           "data": {
-            "name": "Instant Command"
+            "name": "Shoot"
           }
         },
         {
@@ -26,13 +26,13 @@
         {
           "type": "path",
           "data": {
-            "pathName": "Amp Side Note"
+            "pathName": "Source Side Note Rounded"
           }
         },
         {
           "type": "path",
           "data": {
-            "pathName": "Source Side Note"
+            "pathName": "Amp Side Note Rounded"
           }
         }
       ]

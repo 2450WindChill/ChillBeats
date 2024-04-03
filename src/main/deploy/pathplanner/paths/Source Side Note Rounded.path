@@ -3,64 +3,69 @@
   "waypoints": [
     {
       "anchor": {
-        "x": 0.8,
-        "y": 4.6
+        "x": 1.174908809307075,
+        "y": 5.55
       },
       "prevControl": null,
       "nextControl": {
-        "x": 0.0,
-        "y": 3.159213776807132
+        "x": 1.3034144603250362,
+        "y": 4.930755965840456
       },
       "isLocked": false,
-      "linkedName": "Source Side of Subwoofer"
+      "linkedName": "Stage Side of Subwoofer"
     },
     {
       "anchor": {
-        "x": 7.976529338186315,
-        "y": 0.7635012828294246
+        "x": 1.6063206377245165,
+        "y": 4.132185134514554
       },
       "prevControl": {
-        "x": 7.912276512677333,
-        "y": 0.653353581956886
+        "x": 1.5063206377245164,
+        "y": 4.132185134514554
       },
       "nextControl": {
-        "x": 8.017896770927054,
-        "y": 0.834416881813547
+        "x": 1.968298953455343,
+        "y": 4.132185134514554
       },
       "isLocked": false,
       "linkedName": null
     },
     {
       "anchor": {
-        "x": 3.974496206484089,
-        "y": 2.351463970408518
+        "x": 2.5150391699229573,
+        "y": 4.1046482092964185
       },
       "prevControl": {
-        "x": 4.403000157722789,
-        "y": 2.1314214008535086
+        "x": 2.2800823290777883,
+        "y": 4.1046482092964185
       },
       "nextControl": {
-        "x": 3.634874128793763,
-        "y": 2.5258644967900374
+        "x": 2.6150391699229574,
+        "y": 4.1046482092964185
       },
       "isLocked": false,
       "linkedName": null
     },
     {
       "anchor": {
-        "x": 0.8,
-        "y": 4.6
+        "x": 1.174908809307075,
+        "y": 5.55
       },
       "prevControl": {
-        "x": 0.65,
-        "y": 4.6
+        "x": 1.6981103884516318,
+        "y": 5.3988836945487435
       },
       "nextControl": null,
       "isLocked": false,
-      "linkedName": "Source Side of Subwoofer"
+      "linkedName": "Stage Side of Subwoofer"
     }
   ],
   "rotationTargets": [
+    {
+      "waypointRelativePos": 2.0,
+      "rotationDegrees": 180.0,
+      "rotateFast": false
+    },
     {
       "waypointRelativePos": 1,
       "rotationDegrees": 180.0,
@@ -71,7 +76,7 @@
   "eventMarkers": [
     {
       "name": "Intake",
-      "waypointRelativePos": 0.6000000000000001,
+      "waypointRelativePos": 0.5,
       "command": {
         "type": "sequential",
         "data": {
@@ -112,13 +117,13 @@
   },
   "goalEndState": {
     "velocity": 0,
-    "rotation": 130.0,
+    "rotation": 180.0,
     "rotateFast": false
   },
   "reversed": false,
-  "folder": "Note Pickups from Source Side",
+  "folder": "Note Pickups from Center",
   "previewStartingState": {
-    "rotation": 130.0,
+    "rotation": 180.0,
     "velocity": 0
   },
   "useDefaultConstraints": true

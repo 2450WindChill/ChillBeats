@@ -3,72 +3,72 @@
   "waypoints": [
     {
       "anchor": {
-        "x": 0.8,
-        "y": 4.6
+        "x": 1.174908809307075,
+        "y": 5.55
       },
       "prevControl": null,
       "nextControl": {
-        "x": 0.7985708313259021,
-        "y": 3.5171938046428814
+        "x": 1.207844253619803,
+        "y": 5.848186613562586
       },
       "isLocked": false,
-      "linkedName": "Source Side of Subwoofer"
+      "linkedName": "Stage Side of Subwoofer"
     },
     {
       "anchor": {
-        "x": 7.8,
-        "y": 0.6258166567387514
+        "x": 1.7,
+        "y": 7.0
       },
       "prevControl": {
-        "x": 7.800000000000004,
-        "y": 0.2576264672073041
+        "x": 1.5246359274660493,
+        "y": 7.0
       },
       "nextControl": {
-        "x": 7.800000000000004,
-        "y": 1.0667897516704485
+        "x": 2.379058069585083,
+        "y": 7.0
       },
       "isLocked": false,
       "linkedName": null
     },
     {
       "anchor": {
-        "x": 7.8,
-        "y": 7.454974110836125
+        "x": 2.5425760951410923,
+        "y": 7.0
       },
       "prevControl": {
-        "x": 7.8,
-        "y": 6.676378625965236
+        "x": 2.0425760951410923,
+        "y": 7.0
       },
       "nextControl": {
-        "x": 7.8,
-        "y": 7.840606820665627
+        "x": 3.0425760951410923,
+        "y": 7.0
       },
       "isLocked": false,
       "linkedName": null
     },
     {
       "anchor": {
-        "x": 7.021915930624314,
-        "y": 7.454974110836125
+        "x": 1.174908809307075,
+        "y": 5.55
       },
       "prevControl": {
-        "x": 8.114213964276987,
-        "y": 7.583479761854086
+        "x": 1.8725109148331507,
+        "y": 5.564105245857552
       },
       "nextControl": null,
       "isLocked": false,
-      "linkedName": null
+      "linkedName": "Stage Side of Subwoofer"
     }
   ],
   "rotationTargets": [
     {
       "waypointRelativePos": 1,
-      "rotationDegrees": 135.0,
+      "rotationDegrees": 180.0,
       "rotateFast": false
     },
     {
       "waypointRelativePos": 2,
-      "rotationDegrees": 135.0,
+      "rotationDegrees": 180.0,
       "rotateFast": false
     }
   ],
@@ -82,13 +82,13 @@
   },
   "goalEndState": {
     "velocity": 0,
-    "rotation": 0,
+    "rotation": 180.0,
     "rotateFast": false
   },
   "reversed": false,
-  "folder": "Disruption Paths",
+  "folder": "Note Pickups from Center",
   "previewStartingState": {
-    "rotation": 130.0,
+    "rotation": 180.0,
     "velocity": 0
   },
   "useDefaultConstraints": true

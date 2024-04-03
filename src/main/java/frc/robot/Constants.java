@@ -68,6 +68,7 @@ public final class Constants {
 
   public static final double maxHeight = 127;
   public static final double climbingAngle = -24.6;
+  public static final double unstuckNoteAngle = -10.0;
 
    public static final double intakeDown = 12.0;
   
