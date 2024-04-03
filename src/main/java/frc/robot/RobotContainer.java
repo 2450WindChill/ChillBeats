@@ -133,87 +133,43 @@ public class RobotContainer {
   }
 
   /*
-   * x = amp
-   * y = speaker
-   * right trigger = shoot
+  Operator
+   * x = amp prep
+   * y = speaker shoot
+   * right trigger = run shoot
    * left trigger = feeder in
-   * Left Bumper = unstucknote
-   * a = source
+   * Left Bumper = feeder out
+   * Right Bumper = far launch
+   * a = source intake
    * b = ground intake
-   * up dpad = zero
-   * 
+   * up dpad = zero arm
+   * down dpad = turn off all motors
    */
 
-  private void configureBindings() {
+   /*
+   Driver
+    * x = zero gyro
+    */
 
+  private void configureBindings() {
     // Operator
-    // Sequences
     m_operatorController.x().onTrue(ampLaunchPrep());
-    m_operatorController.rightTrigger().onTrue(shoot());
+    m_operatorController.rightTrigger().onTrue(runShooter());
     m_operatorController.y().onTrue(autoSpeakerLaunch());
-    m_operatorController.a().onTrue(sourceIntake());
-    m_operatorController.b().onTrue(farLaunch());
-    // m_operatorController.leftBumper().onTrue(unstuckNote());
+    m_operatorController.a().whileTrue(sourceIntake()).onFalse(totalReset());
+    m_operatorController.b().onTrue(fullGroundIntake());
+    m_operatorController.rightBumper().onTrue(farLaunchShoot());
+    m_operatorController.povUp().onTrue(zeroArm());
+    m_operatorController.povDown().onTrue(turnOffAllMotors());
     m_operatorController.leftBumper()
         .onTrue(Commands.runOnce(() -> m_launcherSubsystem.turnOnFeeder(), m_launcherSubsystem))
         .onFalse(Commands.runOnce(() -> m_launcherSubsystem.turnOffFeeder()));
     m_operatorController.leftTrigger()
         .onTrue(Commands.runOnce(() -> m_launcherSubsystem.manualTurnOnFeeder(), m_launcherSubsystem))
         .onFalse(Commands.runOnce(() -> m_launcherSubsystem.turnOffFeeder()));
-    m_operatorController.rightBumper()
-        .onTrue(Commands.runOnce(() -> m_launcherSubsystem.turnOnBottomMotorandFeeder(), m_launcherSubsystem))
-        .onFalse(Commands.runOnce(() -> m_launcherSubsystem.turnOffFeederAndBottomMotor()));
-
-    // m_operatorController.leftBumper().onTrue(Commands.runOnce(() ->
-    // m_launcherSubsystem.slowSpeakerTurnOnLauncher()))
-    // .onFalse(Commands.runOnce(() -> m_launcherSubsystem.turnOffLauncher()));
-
-    m_operatorController.povUp().onTrue(zeroArm());
-     m_operatorController.povDown().onTrue(turnOffAllMotors());
-   // m_operatorController.povDown().whileTrue(new AimCommand(m_aimSubsystem, m_operatorController));
-    // Intake on
-    m_driverController.a().onTrue(Commands.runOnce(() -> m_intakeSubsystem.intakeOn()))
-        .onFalse(Commands.runOnce(() -> m_intakeSubsystem.intakeOff()));
-    // Angle intake
-    // m_driverController.y().onTrue(Commands.runOnce(() ->
-    // m_intakeSubsystem.angleIntakeOn())).onFalse(Commands.runOnce(() ->
-    // m_intakeSubsystem.angleIntakeOff()));
-
-    // Index on
-    // m_driverController.b().onTrue(Commands.runOnce(() ->
-    // m_indexSubsystem.indexOn())).onFalse(Commands.runOnce(() ->
-    // m_indexSubsystem.indexOff()));
-
-    // m_driverController.povUp().onTrue(testAllOn()).onFalse(testAllOff());
-
-    // m_operatorController.leftTrigger().whileTrue(new
-    // IndexCommand(m_launcherSubsystem, .1));
-
-    // m_operatorController.leftTrigger().onTrue(fullGroundIntake());
-    m_operatorController.povLeft().onTrue(fullGroundIntake());
-
-    // m_driverController.leftTrigger().onTrue(new
-    // MoveToPose(m_drivetrainSubsystem, m_poseEstimator,
-    // new Pose2d(new Translation2d(1, 0), new Rotation2d())));
-
-    // m_driverController.rightTrigger().onTrue(new
-    // MoveToPose(m_drivetrainSubsystem, m_poseEstimator,
-    // new Pose2d(new Translation2d(0, 0), new Rotation2d())));
 
     // Driver
-    // Zero Gyro
-    // TODO: uncommment
     m_driverController.x().onTrue(Commands.runOnce(() -> m_drivetrainSubsystem.zeroGyro(), m_drivetrainSubsystem));
-    // m_driverController.b().onTrue(new
-    // MoveElevatorToPosCommand(m_elevatorSubsystem, Constants.maxHeight));
-
-    // TEMPORARY TESTING
-    // m_driverController.leftTrigger().whileTrue(Commands.runOnce(() ->
-    // m_intakeSubsystem.intakeOn(), m_intakeSubsystem))
-    // .onFalse(Commands.runOnce(() -> m_intakeSubsystem.intakeOff()));
-    // m_driverController.rightTrigger().whileTrue(Commands.runOnce(() ->
-    // m_indexSubsystem.indexOn(), m_intakeSubsystem))
-    // .onFalse(Commands.runOnce(() -> m_indexSubsystem.indexOff()));
   }
 
   /*
@@ -257,6 +213,10 @@ public class RobotContainer {
             m_launcherSubsystem))
         .andThen(new MoveWristToPosCommand(m_aimSubsystem,
             Constants.zeroLaunchAngle));
+  }
+
+  public Command totalReset() {
+    return turnOffAllMotors().andThen(zeroArm());
   }
 
   // Full speaker launch sequential command
@@ -334,7 +294,7 @@ public class RobotContainer {
   }
 
   // Shoot command
-  public Command shoot() {
+  public Command runShooter() {
     return (Commands.runOnce(() -> m_launcherSubsystem.speakerTurnOnLauncher(), m_launcherSubsystem))
         .andThen(new WaitCommand(1))
         .andThen(Commands.runOnce(() -> m_launcherSubsystem.turnOnFeeder(), m_launcherSubsystem))
