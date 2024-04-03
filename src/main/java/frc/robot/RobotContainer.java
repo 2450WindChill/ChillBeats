@@ -353,7 +353,7 @@ public class RobotContainer {
   // Creating different options for auto
   public void configureAutoChooser() {
 
-    Center_5_Note_Middle_Note = new PathPlannerAuto("Center 5_Note Middle Note");
+    Center_5_Note_Middle_Note = new PathPlannerAuto("Center 5 Note Middle Note");
     Center_5_Note_Top_Note = new PathPlannerAuto("Center 5 Note Top Note");
 
     Center_4_Note_All_Close = new PathPlannerAuto("Center 4 Note All Close");
