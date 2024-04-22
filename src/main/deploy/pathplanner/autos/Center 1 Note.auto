@@ -16,22 +16,10 @@
           "data": {
             "name": "Shoot"
           }
-        },
-        {
-          "type": "path",
-          "data": {
-            "pathName": "Stage Side Note"
-          }
-        },
-        {
-          "type": "named",
-          "data": {
-            "name": "Shoot"
-          }
         }
       ]
     }
   },
-  "folder": "2 Note Autos",
+  "folder": "1 Note Autos",
   "choreoAuto": false
 }

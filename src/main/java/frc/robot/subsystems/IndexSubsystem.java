@@ -73,6 +73,10 @@ public class IndexSubsystem extends SubsystemBase {
     indexMotor.set(-0.7536932);
   }
 
+  public void indexReverse() {
+    indexMotor.set(0.7);
+  }
+
   public void indexOff() {
     System.out.println("index turn off");
     indexMotor.set(0);

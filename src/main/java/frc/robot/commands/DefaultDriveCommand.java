@@ -7,6 +7,7 @@ package frc.robot.commands;
 import frc.robot.Constants;
 import frc.robot.subsystems.DrivetrainSubsystem;
 import edu.wpi.first.wpilibj2.command.Command;
+import edu.wpi.first.wpilibj2.command.button.Trigger;
 
 import java.util.function.BooleanSupplier;
 import java.util.function.DoubleSupplier;
@@ -22,7 +23,7 @@ public class DefaultDriveCommand extends Command {
   private DoubleSupplier strafeSupplier;
   private DoubleSupplier rotationSupplier;
   private BooleanSupplier isRobotCentricSupplier;
-  private BooleanSupplier isSlowMode;
+  private Trigger isSlowMode;
   private SlewRateLimiter translationLimiter = new SlewRateLimiter(3.0);
   private SlewRateLimiter strafeLimiter = new SlewRateLimiter(3.0);
   private SlewRateLimiter rotationLimiter = new SlewRateLimiter(3.0);
@@ -38,7 +39,7 @@ public class DefaultDriveCommand extends Command {
       DoubleSupplier strafeSupplier,
       DoubleSupplier rotationSupplier,
       BooleanSupplier isRobotCentricSupplier,
-      BooleanSupplier isSlowModeSupplier
+      Trigger isSlowModeSupplier
     ) {
 
     m_driveTrainSubSystem = subsystem;

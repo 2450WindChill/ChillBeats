@@ -42,17 +42,23 @@ public class LauncherSubsystem extends SubsystemBase {
         });
   }
 
-  public void turnOnFeeder() {
+  public void slowIntake() {
+    feederMotor.set(0.1);
+    topMotor.set(-0.2);
+    bottomMotor.set(0.2);
+  }
+
+  public void feederOn() {
     System.out.println("turn on feeder");
     feederMotor.set(-1);
   }
 
-  public void manualTurnOnFeeder() {
+  public void feederReverse() {
     System.out.println("turn on feeder");
     feederMotor.set(1);
   }
 
-  public void turnOffFeeder() {
+  public void feederOff() {
       System.out.println("turn off feeder");
       feederMotor.set(0);
   }
@@ -79,8 +85,8 @@ public class LauncherSubsystem extends SubsystemBase {
   
   public void speakerTurnOnLauncher() {
     System.out.println("turn on launcher");
-    topMotor.set(0.7);
-    bottomMotor.set(-0.7);
+    topMotor.set(0.8);
+    bottomMotor.set(-0.8);
   }
   
 

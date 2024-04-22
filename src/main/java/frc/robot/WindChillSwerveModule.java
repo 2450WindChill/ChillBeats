@@ -171,13 +171,21 @@ public class WindChillSwerveModule {
     driveEncoder.setPosition(0.0);
   }
 
+  // public SwerveModulePosition getPosition() {
+  //   return new SwerveModulePosition(
+  //       -((getDriveEncoder() / Constants.rotationsPerOneFoot) * Constants.feetToMeters),
+  //       Rotation2d.fromDegrees(getCanCoderInDegrees()));
+  // }
+
   public SwerveModulePosition getPosition() {
     return new SwerveModulePosition(
-        -((getDriveEncoder() / Constants.rotationsPerOneFoot) * Constants.feetToMeters),
+        -((getDriveEncoder() / Constants.rotationsPerOneFoot) * Constants.feetToMeters) * 0.9,
         Rotation2d.fromDegrees(getCanCoderInDegrees()));
   }
+
 
   public void setPosition(double position) {
     integratedAngleEncoder.setPosition(position);
   }
 }
+ 

@@ -12,26 +12,14 @@
     "data": {
       "commands": [
         {
-          "type": "named",
-          "data": {
-            "name": "Shoot"
-          }
-        },
-        {
           "type": "path",
           "data": {
-            "pathName": "Stage Side Note"
-          }
-        },
-        {
-          "type": "named",
-          "data": {
-            "name": "Shoot"
+            "pathName": "3 Meter"
           }
         }
       ]
     }
   },
-  "folder": "2 Note Autos",
+  "folder": "Test Autos",
   "choreoAuto": false
 }

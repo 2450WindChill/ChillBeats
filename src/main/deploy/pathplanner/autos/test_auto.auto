@@ -5,12 +5,24 @@
       "x": 1.17,
       "y": 5.55
     },
-    "rotation": 0.0
+    "rotation": -178.9150924240816
   },
   "command": {
     "type": "sequential",
     "data": {
       "commands": [
+        {
+          "type": "named",
+          "data": {
+            "name": "Shoot"
+          }
+        },
+        {
+          "type": "wait",
+          "data": {
+            "waitTime": 10.0
+          }
+        },
         {
           "type": "path",
           "data": {

@@ -2,10 +2,10 @@
   "version": 1.0,
   "startingPose": {
     "position": {
-      "x": 1.17,
-      "y": 5.55
+      "x": 0.8,
+      "y": 4.6
     },
-    "rotation": 180.0
+    "rotation": 130.0
   },
   "command": {
     "type": "sequential",
@@ -20,7 +20,7 @@
         {
           "type": "path",
           "data": {
-            "pathName": "Stage Side Note"
+            "pathName": "Source Side to Bottom Note"
           }
         },
         {

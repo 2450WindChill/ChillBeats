@@ -1,32 +1,55 @@
 <xml version="1.0">
 <dashboard>
+	<widget field="target Wrist position" type="Number" class="edu.wpi.first.smartdashboard.gui.elements.FormattedField">
+		<location x="30" y="279"/>
+	</widget>
+	<widget field="Wrist is going up" type="Boolean" class="edu.wpi.first.smartdashboard.gui.elements.FormattedField">
+		<location x="44" y="305"/>
+	</widget>
+	<widget field="target elevator position" type="Number" class="edu.wpi.first.smartdashboard.gui.elements.FormattedField">
+		<location x="30" y="154"/>
+	</widget>
+	<widget field="current elevator position" type="Number" class="edu.wpi.first.smartdashboard.gui.elements.FormattedField">
+		<location x="25" y="177"/>
+	</widget>
+	<widget field="Current intake position:" type="Number" class="edu.wpi.first.smartdashboard.gui.elements.FormattedField">
+		<location x="37" y="492"/>
+	</widget>
+	<widget field="Target intake position:" type="Number" class="edu.wpi.first.smartdashboard.gui.elements.FormattedField">
+		<location x="42" y="446"/>
+	</widget>
+	<widget field="Intake currently deploying?" type="Boolean" class="edu.wpi.first.smartdashboard.gui.elements.FormattedField">
+		<location x="33" y="471"/>
+	</widget>
+	<widget field="is going up (elevator)" type="Boolean" class="edu.wpi.first.smartdashboard.gui.elements.BooleanBox">
+		<location x="66" y="203"/>
+		<width>171</width>
+		<height>44</height>
+	</widget>
 	<widget field="Index Beam Break" type="Boolean" class="edu.wpi.first.smartdashboard.gui.elements.BooleanBox">
-		<location x="52" y="59"/>
-		<width>97</width>
-		<height>77</height>
+		<location x="6" y="51"/>
+		<width>159</width>
+		<height>79</height>
 	</widget>
 	<widget field="Beam Break" type="Boolean" class="edu.wpi.first.smartdashboard.gui.elements.BooleanBox">
-		<location x="224" y="60"/>
-		<width>90</width>
+		<location x="192" y="49"/>
+		<width>138</width>
 		<height>80</height>
 	</widget>
-	<widget field="Elevator " type="Number" class="edu.wpi.first.smartdashboard.gui.elements.FormattedField">
-		<location x="126" y="185"/>
-	</widget>
 	<widget field="Intake angle" type="Number" class="edu.wpi.first.smartdashboard.gui.elements.FormattedField">
-		<location x="112" y="243"/>
+		<location x="42" y="424"/>
 	</widget>
 	<widget field="Wrist position" type="Number" class="edu.wpi.first.smartdashboard.gui.elements.FormattedField">
-		<location x="110" y="215"/>
+		<location x="55" y="332"/>
 	</widget>
 	<widget field="Chassis speed rotation" type="Number" class="edu.wpi.first.smartdashboard.gui.elements.FormattedField">
-		<location x="205" y="515"/>
+		<location x="223" y="582"/>
 	</widget>
 	<widget field="Chassis speed y" type="Number" class="edu.wpi.first.smartdashboard.gui.elements.FormattedField">
-		<location x="309" y="490"/>
+		<location x="332" y="556"/>
 	</widget>
 	<widget field="Chassis speed x" type="Number" class="edu.wpi.first.smartdashboard.gui.elements.FormattedField">
-		<location x="124" y="492"/>
+		<location x="141" y="556"/>
 	</widget>
 	<widget field="Desired Angle 0" type="Number" class="edu.wpi.first.smartdashboard.gui.elements.FormattedField">
 		<location x="369" y="139"/>
@@ -60,7 +83,7 @@
 		<location x="1217" y="407"/>
 		<width>287</width>
 		<height>160</height>
-		<property name="Image File" value="C:\Users\2450 Wind Chill\Documents\ChillBeats\Smartdashboard Images\Screenshot 2024-04-03 170200.png"/>
+		<property name="Image File" value="C:\Users\Robotics 2 2024\Documents\GitHub\ChillBeats\Smartdashboard Images\Screenshot 2024-04-03 170200.png"/>
 	</static-widget>
 	<static-widget class="edu.wpi.first.smartdashboard.gui.elements.Label">
 		<location x="789" y="199"/>
@@ -78,14 +101,11 @@
 		<location x="588" y="32"/>
 		<property name="Text" value="Mod 0 Intergrated"/>
 	</static-widget>
-	<static-widget class="edu.wpi.first.smartdashboard.gui.elements.RobotPreferences">
-		<location x="1206" y="193"/>
-	</static-widget>
 	<static-widget class="edu.wpi.first.smartdashboard.gui.elements.Image">
-		<location x="-1019" y="559"/>
+		<location x="-998" y="643"/>
 		<width>3469</width>
 		<height>240</height>
-		<property name="Image File" value="C:\Users\2450 Wind Chill\Downloads\hulky boy.png"/>
+		<property name="Image File" value="C:\Users\Robotics 2 2024\Documents\GitHub\ChillBeats\Smartdashboard Images\hulky boy.png"/>
 	</static-widget>
 	<widget field="Pose Y" type="Number" class="edu.wpi.first.smartdashboard.gui.elements.FormattedField">
 		<location x="551" y="371"/>
@@ -139,7 +159,7 @@
 		<location x="917" y="51"/>
 	</widget>
 	<widget field="Mod 0 Cancoder" type="Number" class="edu.wpi.first.smartdashboard.gui.elements.FormattedField">
-		<location x="367" y="51"/>
+		<location x="368" y="55"/>
 	</widget>
 	<widget field="Auto Mode" type="String Chooser" class="edu.wpi.first.smartdashboard.gui.elements.Chooser">
 		<location x="1204" y="23"/>
@@ -149,9 +169,9 @@
 		<property name="Text" value="Robot Status"/>
 	</static-widget>
 	<static-widget class="edu.wpi.first.smartdashboard.gui.elements.ConnectionIndicator">
-		<location x="1409" y="22"/>
-		<width>118</width>
-		<height>64</height>
+		<location x="1408" y="22"/>
+		<width>119</width>
+		<height>157</height>
 	</static-widget>
 	<widget field="Mod 2 Integrated" type="Number" class="edu.wpi.first.smartdashboard.gui.elements.SimpleDial">
 		<location x="498" y="210"/>
@@ -173,8 +193,48 @@
 		<property name="Upper Limit" value="360.0"/>
 		<property name="Tick Interval" value="30.0"/>
 	</widget>
+	<static-widget class="edu.wpi.first.smartdashboard.gui.elements.Label">
+		<location x="1076" y="482"/>
+		<property name="Text" value="He&apos;s helping you drive -----&gt;"/>
+	</static-widget>
+	<static-widget class="edu.wpi.first.smartdashboard.gui.elements.Image">
+		<location x="1217" y="407"/>
+		<width>287</width>
+		<height>160</height>
+		<property name="Image File" value="C:\Users\2450 Wind Chill\Documents\ChillBeats\Smartdashboard Images\Screenshot 2024-04-03 170200.png"/>
+	</static-widget>
+	<static-widget class="edu.wpi.first.smartdashboard.gui.elements.Label">
+		<location x="789" y="199"/>
+		<property name="Text" value="Mod 3 Intergrated"/>
+	</static-widget>
+	<static-widget class="edu.wpi.first.smartdashboard.gui.elements.Label">
+		<location x="585" y="202"/>
+		<property name="Text" value="Mod 2 Intergrated"/>
+	</static-widget>
+	<static-widget class="edu.wpi.first.smartdashboard.gui.elements.Label">
+		<location x="789" y="34"/>
+		<property name="Text" value="Mod 1 Intergrated"/>
+	</static-widget>
+	<static-widget class="edu.wpi.first.smartdashboard.gui.elements.Label">
+		<location x="588" y="32"/>
+		<property name="Text" value="Mod 0 Intergrated"/>
+	</static-widget>
+	<static-widget class="edu.wpi.first.smartdashboard.gui.elements.RobotPreferences">
+		<location x="1206" y="193"/>
+	</static-widget>
+	<static-widget class="edu.wpi.first.smartdashboard.gui.elements.Label">
+		<location x="1465" y="5"/>
+		<property name="Text" value="Robot Status"/>
+	</static-widget>
+	<static-widget class="edu.wpi.first.smartdashboard.gui.elements.ConnectionIndicator">
+		<location x="1409" y="22"/>
+		<width>118</width>
+		<height>64</height>
+	</static-widget>
 </dashboard>
 <live-window>
 </live-window>
 	<hidden field="rubikx"/>
+	<hidden field="current Wrist position"/>
+	<hidden field="Elevator "/>
 </xml>

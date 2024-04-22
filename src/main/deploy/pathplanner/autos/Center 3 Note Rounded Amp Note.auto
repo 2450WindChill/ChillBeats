@@ -32,18 +32,6 @@
         {
           "type": "path",
           "data": {
-            "pathName": "Source Side Note Rounded"
-          }
-        },
-        {
-          "type": "named",
-          "data": {
-            "name": "Shoot"
-          }
-        },
-        {
-          "type": "path",
-          "data": {
             "pathName": "Amp Side Note Rounded"
           }
         },
@@ -56,6 +44,6 @@
       ]
     }
   },
-  "folder": "4 Note Autos",
+  "folder": "3 Note Autos",
   "choreoAuto": false
 }

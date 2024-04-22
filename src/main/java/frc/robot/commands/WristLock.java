@@ -6,6 +6,7 @@ package frc.robot.commands;
 
 import frc.robot.subsystems.AimSubsystem;
 import frc.robot.subsystems.ElevatorSubsystem;
+import frc.robot.subsystems.LauncherSubsystem;
 
 import com.revrobotics.CANSparkBase.ControlType;
 
@@ -13,9 +14,10 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 
 /** An example command that uses an example subsystem. */
-public class LockMoveWristToPosCommand extends Command {
+public class WristLock extends Command {
   @SuppressWarnings({ "PMD.UnusedPrivateField", "PMD.SingularField" })
   private final AimSubsystem m_subsystem;
+  private final LauncherSubsystem m_launcherSubsystem;
   private double rotationTarget;
   private boolean isGoingUp;
 
@@ -24,11 +26,12 @@ public class LockMoveWristToPosCommand extends Command {
    *
    * @param subsystem The subsystem used by this command.
    */
-  public LockMoveWristToPosCommand(AimSubsystem subsystem, Double rotationTarget) {
+  public WristLock(AimSubsystem subsystem, LauncherSubsystem launcherSubsystem, Double rotationTarget) {
     m_subsystem = subsystem;
+    m_launcherSubsystem = launcherSubsystem;
     this.rotationTarget = rotationTarget;
     // Use addRequirements() here to declare subsystem dependencies.
-    addRequirements(subsystem);
+    addRequirements(subsystem, m_launcherSubsystem);
   }
 
   // Called when the command is initially scheduled.
@@ -46,10 +49,7 @@ public class LockMoveWristToPosCommand extends Command {
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-    double currentPosition = m_subsystem.wristMotor.getEncoder().getPosition();
       m_subsystem.wristController.setReference(rotationTarget, ControlType.kPosition);
-   
-
   }
 
   // Called once the command ends or is interrupted.
@@ -62,6 +62,6 @@ public class LockMoveWristToPosCommand extends Command {
   // Returns true when the command should end.
   @Override
   public boolean isFinished() {
-    return false;
+    return !m_launcherSubsystem.wristBeamBreak.get();
   }
 }

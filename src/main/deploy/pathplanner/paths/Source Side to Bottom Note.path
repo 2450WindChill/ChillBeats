@@ -8,40 +8,56 @@
       },
       "prevControl": null,
       "nextControl": {
-        "x": 0.0,
-        "y": 3.159213776807132
+        "x": 0.5507385043626915,
+        "y": 2.8379496492622294
       },
       "isLocked": false,
       "linkedName": "Source Side of Subwoofer"
     },
     {
       "anchor": {
-        "x": 7.976529338186315,
-        "y": 0.7635012828294246
+        "x": 6.048944572916893,
+        "y": 1.6538618648824441
       },
       "prevControl": {
-        "x": 7.912276512677333,
-        "y": 0.653353581956886
+        "x": 5.984691747407911,
+        "y": 1.5437141640099055
       },
       "nextControl": {
-        "x": 8.017896770927054,
-        "y": 0.834416881813547
+        "x": 6.090312005657633,
+        "y": 1.724777463866567
       },
       "isLocked": false,
       "linkedName": null
     },
     {
       "anchor": {
-        "x": 3.974496206484089,
-        "y": 2.351463970408518
+        "x": 8.040782163695294,
+        "y": 1.048049510083483
       },
       "prevControl": {
-        "x": 4.403000157722789,
-        "y": 2.1314214008535086
+        "x": 8.078847947612253,
+        "y": 1.2859606595644788
       },
       "nextControl": {
-        "x": 3.634874128793763,
-        "y": 2.5258644967900374
+        "x": 7.967350363113601,
+        "y": 0.5891007564479059
+      },
+      "isLocked": false,
+      "linkedName": null
+    },
+    {
+      "anchor": {
+        "x": 3.4329366771941094,
+        "y": 1.7272936654641362
+      },
+      "prevControl": {
+        "x": 3.8614406284328076,
+        "y": 1.507251095909127
+      },
+      "nextControl": {
+        "x": 3.0933145995037834,
+        "y": 1.9016941918456554
       },
       "isLocked": false,
       "linkedName": null
@@ -63,7 +79,12 @@
   "rotationTargets": [
     {
       "waypointRelativePos": 1,
-      "rotationDegrees": 180.0,
+      "rotationDegrees": 130.0,
+      "rotateFast": false
+    },
+    {
+      "waypointRelativePos": 2.0,
+      "rotationDegrees": 130.0,
       "rotateFast": false
     }
   ],
@@ -88,7 +109,7 @@
     },
     {
       "name": "Shoot",
-      "waypointRelativePos": 3.0,
+      "waypointRelativePos": 4.0,
       "command": {
         "type": "sequential",
         "data": {
@@ -96,7 +117,7 @@
             {
               "type": "named",
               "data": {
-                "name": "Shoot"
+                "name": "Instant Command"
               }
             }
           ]
@@ -105,8 +126,8 @@
     }
   ],
   "globalConstraints": {
-    "maxVelocity": 3.0,
-    "maxAcceleration": 3.0,
+    "maxVelocity": 5.0,
+    "maxAcceleration": 5.0,
     "maxAngularVelocity": 720.0,
     "maxAngularAcceleration": 1080.0
   },

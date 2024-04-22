@@ -8,23 +8,23 @@
       },
       "prevControl": null,
       "nextControl": {
-        "x": 0.7985708313259021,
-        "y": 3.5171938046428814
+        "x": 0.7251390307442104,
+        "y": 1.4427454382100777
       },
       "isLocked": false,
       "linkedName": "Source Side of Subwoofer"
     },
     {
       "anchor": {
-        "x": 7.8,
+        "x": 7.9,
         "y": 0.6258166567387514
       },
       "prevControl": {
-        "x": 7.800000000000004,
+        "x": 7.900000000000005,
         "y": 0.2576264672073041
       },
       "nextControl": {
-        "x": 7.800000000000004,
+        "x": 7.900000000000005,
         "y": 1.0667897516704485
       },
       "isLocked": false,
@@ -32,16 +32,16 @@
     },
     {
       "anchor": {
-        "x": 7.8,
+        "x": 7.9,
         "y": 7.454974110836125
       },
       "prevControl": {
-        "x": 7.8,
-        "y": 6.676378625965236
+        "x": 7.9,
+        "y": 6.654974110836125
       },
       "nextControl": {
-        "x": 7.8,
-        "y": 7.840606820665627
+        "x": 7.9,
+        "y": 7.554974110836125
       },
       "isLocked": false,
       "linkedName": null
@@ -75,14 +75,14 @@
   "constraintZones": [],
   "eventMarkers": [],
   "globalConstraints": {
-    "maxVelocity": 3.0,
-    "maxAcceleration": 3.0,
+    "maxVelocity": 5.0,
+    "maxAcceleration": 5.0,
     "maxAngularVelocity": 720.0,
     "maxAngularAcceleration": 1080.0
   },
   "goalEndState": {
     "velocity": 0,
-    "rotation": 0,
+    "rotation": 130.0,
     "rotateFast": false
   },
   "reversed": false,

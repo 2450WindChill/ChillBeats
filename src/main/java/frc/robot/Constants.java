@@ -48,7 +48,7 @@ public final class Constants {
   /* Drivetrain Constants */
   public static final double trackWidth = Units.inchesToMeters(21.73);
   public static final double wheelBase = Units.inchesToMeters(21.73);
-  public static final double wheelDiameter = Units.inchesToMeters(4.0);
+  public static final double wheelDiameter = Units.inchesToMeters(3.0);
   public static final double wheelCircumference = wheelDiameter * Math.PI;
 
   public static final double openLoopRamp = 0.25;
@@ -66,14 +66,18 @@ public final class Constants {
   public static final double sourceAngle = -17.1;
   public static final double sourceHeight = 0.0;
 
-  public static final double maxHeight = 127;
+  public static final double maxHeight = 130;
+
   public static final double climbingAngle = -24.6;
   public static final double unstuckNoteAngle = -10.0;
 
-   public static final double intakeDown = 12.0;
+  public static final double intakeDown = 12; // 9.5
   
   public static final double intakeUp = 0.0;
-  public static final double rotationsPerOneFoot = 0.33;
+   public static final double zeroIntake = -0.6;
+
+  public static final double rotationsPerOneFoot = 0.25;
+
   public static final double feetToMeters = 0.3048;
 
   public static final double driveGearRatio = (8.14 / 1.0); // 6.75:1
@@ -128,7 +132,7 @@ public final class Constants {
 
   /* Neutral Modes */
   // public static final IdleMode angleNeutralMode = IdleMode.kBrake;
-  public static final IdleMode angleIdleMode = IdleMode.kCoast;
+  public static final IdleMode angleIdleMode = IdleMode.kBrake;
   public static final IdleMode wristIdleMode = IdleMode.kBrake;
   public static final IdleMode driveIdleMode = IdleMode.kBrake;
   public static final IdleMode elevatorIdleMode = IdleMode.kBrake;

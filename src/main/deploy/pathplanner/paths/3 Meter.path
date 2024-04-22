@@ -8,19 +8,19 @@
       },
       "prevControl": null,
       "nextControl": {
-        "x": 2.3699115894774083,
-        "y": 5.521612575343309
+        "x": 2.174908809307075,
+        "y": 5.55
       },
       "isLocked": false,
       "linkedName": "Stage Side of Subwoofer"
     },
     {
       "anchor": {
-        "x": 2.59,
+        "x": 4.17,
         "y": 5.55
       },
       "prevControl": {
-        "x": 2.44,
+        "x": 3.17,
         "y": 5.55
       },
       "nextControl": null,
@@ -45,8 +45,8 @@
   "reversed": false,
   "folder": "Test",
   "previewStartingState": {
-    "rotation": -179.4101171518636,
-    "velocity": 0
+    "rotation": 180.0,
+    "velocity": 0.0
   },
   "useDefaultConstraints": true
 }

@@ -1,6 +1,6 @@
 {
   "robotWidth": 0.55,
-  "robotLength": 0.552,
+  "robotLength": 0.55,
   "holonomicMode": true,
   "pathFolders": [
     "Disruption Paths",
@@ -17,10 +17,11 @@
     "6 Note Autos",
     "7 Note Autos",
     "Disruption Autos",
+    "1 Note Autos",
     "Test Autos"
   ],
-  "defaultMaxVel": 3.0,
-  "defaultMaxAccel": 3.0,
+  "defaultMaxVel": 5.0,
+  "defaultMaxAccel": 5.0,
   "defaultMaxAngVel": 720.0,
   "defaultMaxAngAccel": 1080.0,
   "maxModuleSpeed": 3.0
