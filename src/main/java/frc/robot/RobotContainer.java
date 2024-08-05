@@ -62,7 +62,7 @@ public class RobotContainer {
   private final IndexSubsystem m_indexSubsystem = new IndexSubsystem();
   public Alliance teamColor;
   private final LightySubsystem m_ledSubsystem = new LightySubsystem(this);
-  private final IntakeSubsystem m_intakeSubsystem = new IntakeSubsystem();
+  // private final IntakeSubsystem m_intakeSubsystem = new IntakeSubsystem();
 
   // Replace with CommandPS4Controller or CommandJoystick if needed
   private final CommandXboxController m_driverController = new CommandXboxController(
@@ -203,7 +203,6 @@ public class RobotContainer {
 
   private void configureNamedCommands() {
     NamedCommands.registerCommand("Shoot", autoSpeakerLaunch());
-    NamedCommands.registerCommand("Intake", fullGroundIntake());
     NamedCommands.registerCommand("Instant Command", new InstantCommand());
   }
 
@@ -212,16 +211,6 @@ public class RobotContainer {
         .andThen(new WaitCommand(.1))
         .andThen(Commands.runOnce(() -> m_launcherSubsystem.feederOn(), m_launcherSubsystem))
         .andThen(Commands.runOnce(() -> m_launcherSubsystem.feederOff(), m_launcherSubsystem));
-  }
-
-  public Command reverseIntake() {
-    return Commands.runOnce(() -> m_indexSubsystem.indexReverse())
-        .andThen(Commands.runOnce(() -> m_intakeSubsystem.intakeReverse()))
-        .andThen(Commands.runOnce(() -> m_launcherSubsystem.feederReverse()))
-        .andThen(new WaitCommand(1))
-        .andThen(Commands.runOnce(() -> m_indexSubsystem.indexOff()))
-        .andThen(Commands.runOnce(() -> m_intakeSubsystem.intakeOff()))
-        .andThen(Commands.runOnce(() -> m_launcherSubsystem.feederOff()));
   }
 
   // Full speaker launch sequential command
@@ -257,70 +246,6 @@ public class RobotContainer {
             m_launcherSubsystem));
   }
 
-  // public Command fullGroundIntake() {
-
-  // // Rev intake
-  // return Commands.runOnce(() -> m_intakeSubsystem.intakeOn(),
-  // m_intakeSubsystem)
-
-  // // In parallel move intake down and turn on index
-  // .andThen(Commands.parallel(new MoveIntakeToPosCommand(m_intakeSubsystem,
-  // Constants.intakeDown),
-  // // Turn on intake
-  // Commands.runOnce(() -> m_indexSubsystem.indexOn(), m_indexSubsystem),
-  // (new MoveWristToPosCommand(m_aimSubsystem, -8.1)))
-  // // Turn on feeder
-  // .andThen(Commands.runOnce(() -> m_launcherSubsystem.turnOnFeeder())))
-  // .andThen(new WaitCommand(1))
-  // // Wait for index beam break to be trippedbane
-  // .andThen(new CheckIndexBeamBreak(m_indexSubsystem))
-  // //.andThen(new WaitCommand(.5))
-  // .andThen(new MoveWristToPosCommand(m_aimSubsystem,
-  // Constants.unstuckNoteAngle))
-  // .andThen(Commands.runOnce(() -> m_intakeSubsystem.intakeOff(),
-  // m_intakeSubsystem))
-  // .andThen(new MoveIntakeToPosCommand(m_intakeSubsystem, Constants.zeroIntake))
-  // .andThen(new CheckLauncherBeamBreak(m_launcherSubsystem))
-  // // .andThen(new MoveWristToPosCommand(m_aimSubsystem,
-  // Constants.zeroLaunchAngle))
-  // .andThen(Commands.runOnce(() -> m_launcherSubsystem.turnOffFeeder(),
-  // m_launcherSubsystem))
-  // .andThen(Commands.runOnce(() -> m_indexSubsystem.indexOff(),
-  // m_indexSubsystem))
-  // .andThen(Commands.runOnce(() -> m_launcherSubsystem.turnOffLauncher(),
-  // m_launcherSubsystem));
-  // }
-
-  public Command fullGroundIntake() {
-
-    // Rev intake
-    return Commands.runOnce(() -> m_intakeSubsystem.intakeOn(), m_intakeSubsystem)
-
-        // In parallel move intake down and turn on index
-        .andThen(Commands.parallel(new MoveIntakeToPosCommand(m_intakeSubsystem, Constants.intakeDown)),
-            Commands.runOnce(() -> m_launcherSubsystem.feederOn()),
-            // Turn on intake
-            Commands.runOnce(() -> m_indexSubsystem.indexOn(), m_indexSubsystem))
-        .andThen(new WristLock(m_aimSubsystem, m_launcherSubsystem, -8.7))
-
-        .andThen(Commands.runOnce(() -> m_intakeSubsystem.intakeOff(), m_intakeSubsystem))
-
-        .andThen(new CheckLauncherBeamBreak(m_launcherSubsystem))
-
-        .andThen(Commands.runOnce(() -> m_launcherSubsystem.slowIntake()))
-        .andThen(new WaitCommand(0.2))
-
-        // Turn off all the motors
-        .andThen(Commands.runOnce(() -> m_intakeSubsystem.intakeOff(), m_intakeSubsystem))
-        .andThen(Commands.runOnce(() -> m_launcherSubsystem.feederOff(), m_launcherSubsystem))
-        .andThen(Commands.runOnce(() -> m_indexSubsystem.indexOff(), m_indexSubsystem))
-        .andThen(Commands.runOnce(() -> m_launcherSubsystem.turnOffLauncher(), m_launcherSubsystem))
-        
-        // Zero wrist and intake
-        .andThen(Commands.parallel((new MoveIntakeToPosCommand(m_intakeSubsystem, Constants.zeroIntake))),
-            (new MoveWristToPosCommand(m_aimSubsystem, Constants.zeroLaunchAngle)));
-  }
-
   public Command farLaunch() {
 
     return new MoveWristToPosCommand(m_aimSubsystem, Constants.farNoteLaunch)
@@ -333,15 +258,13 @@ public class RobotContainer {
   public Command testAllOn() {
     return Commands.parallel(
         Commands.runOnce(() -> m_launcherSubsystem.feederOn(), m_launcherSubsystem),
-        Commands.runOnce(() -> m_indexSubsystem.indexOn(), m_indexSubsystem),
-        Commands.runOnce(() -> m_intakeSubsystem.intakeOn(), m_intakeSubsystem));
-  }
+        Commands.runOnce(() -> m_indexSubsystem.indexOn(), m_indexSubsystem));
+    }
 
   public Command testAllOff() {
     return Commands.parallel(
         Commands.runOnce(() -> m_launcherSubsystem.feederOff(), m_launcherSubsystem),
-        Commands.runOnce(() -> m_indexSubsystem.indexOff(), m_indexSubsystem),
-        Commands.runOnce(() -> m_intakeSubsystem.intakeOff(), m_intakeSubsystem));
+        Commands.runOnce(() -> m_indexSubsystem.indexOff(), m_indexSubsystem));
   }
 
   // Speaker launch w/ just wrist prep
@@ -381,15 +304,13 @@ public class RobotContainer {
   // Brings wrist and elevator to zero
   public Command zeroArm() {
     return Commands.parallel(Commands.parallel(new MoveWristToPosCommand(m_aimSubsystem, Constants.zeroLaunchAngle),
-        new MoveElevatorToPosCommand(m_elevatorSubsystem, Constants.zeroElevator),
-        new MoveIntakeToPosCommand(m_intakeSubsystem, Constants.intakeUp)));
+        new MoveElevatorToPosCommand(m_elevatorSubsystem, Constants.zeroElevator)));
   }
 
   public Command turnOffAllMotors() {
     return Commands.parallel(Commands.runOnce(() -> m_launcherSubsystem.feederOff()),
         Commands.runOnce(() -> m_indexSubsystem.indexOff()))
-        .andThen(Commands.runOnce(() -> m_launcherSubsystem.turnOffLauncher())
-            .andThen(Commands.runOnce(() -> m_intakeSubsystem.intakeOff())));
+        .andThen(Commands.runOnce(() -> m_launcherSubsystem.turnOffLauncher()));
   }
 
   // Rumbles controller for a specified amount of time
