@@ -435,6 +435,6 @@ public class RobotContainer {
 
   // Auto command
   public Command getAutonomousCommand() {
-    return m_chooser.getSelected();
+    return new InstantCommand();
   }
 }
