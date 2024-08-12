@@ -150,7 +150,7 @@ public class RobotContainer {
    * right trigger = run shoot
    * left trigger = feeder in
    * Left Bumper = feeder out
-   * Right Bumper = far launch
+   * Right Bumper = far launch DISABLED FOR NOW
    * a = source intake
    * up dpad = zero arm
    * down dpad = turn off all motors
