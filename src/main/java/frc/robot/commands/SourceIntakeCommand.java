@@ -35,7 +35,7 @@ public class SourceIntakeCommand extends Command {
   // Called when the command is initially scheduled.
   @Override
   public void initialize() {
-    m_launcherSubsystem.feederMotor.set(0.5);
+    m_launcherSubsystem.feederMotor.set(0.7);
     m_launcherSubsystem.topMotor.set(-0.4);
     m_launcherSubsystem.bottomMotor.set(0.4);
     currentBeamBreakState = m_launcherSubsystem.wristBeamBreak.get();

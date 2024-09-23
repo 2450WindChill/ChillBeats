@@ -297,6 +297,7 @@ public class RobotContainer {
     return new MoveWristToPosCommand(m_aimSubsystem, Constants.sourceAngle)
         .andThen(new SourceIntakeCommand(m_launcherSubsystem, m_ledSubsystem))
         .andThen(zeroArm())
+        .andThen(new WaitCommand(1))
         .andThen(Commands.runOnce(() -> m_launcherSubsystem.feederOff()))
         .andThen(rumbleDriveController(0.7));
   }
