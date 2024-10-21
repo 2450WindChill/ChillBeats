@@ -14,7 +14,6 @@ import frc.robot.commands.FieldCentricAutoDrive;
 import frc.robot.commands.CheckIndexBeamBreak;
 import frc.robot.commands.CheckLauncherBeamBreak;
 import frc.robot.commands.SourceIntakeCommand;
-import frc.robot.commands.WristLock;
 import frc.robot.commands.IndexCommand;
 import frc.robot.commands.LaunchCommand;
 import frc.robot.commands.MoveElevatorToPosCommand;
@@ -296,9 +295,8 @@ public class RobotContainer {
   public Command sourceIntake() {
     return new MoveWristToPosCommand(m_aimSubsystem, Constants.sourceAngle)
         .andThen(new SourceIntakeCommand(m_launcherSubsystem, m_ledSubsystem))
-        .andThen(zeroArm())
-        .andThen(new WaitCommand(1))
         .andThen(Commands.runOnce(() -> m_launcherSubsystem.feederOff()))
+        .andThen(zeroArm())
         .andThen(rumbleDriveController(0.7));
   }
 

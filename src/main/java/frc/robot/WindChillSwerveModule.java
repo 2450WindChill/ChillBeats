@@ -57,7 +57,12 @@ public class WindChillSwerveModule {
 
   private void setSpeed(SwerveModuleState desiredState, boolean isSlowMode) {
     double percentOutput = desiredState.speedMetersPerSecond / Constants.maxSpeed;
+    if (!isSlowMode) {
       driveMotor.set(percentOutput * 0.4);
+    } else {
+      driveMotor.set(percentOutput * 0.1);
+    }
+    
   }
 
   private void setAngle(SwerveModuleState desiredState) {

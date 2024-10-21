@@ -1,5 +1,11 @@
 <xml version="1.0">
 <dashboard>
+	<widget field="rubikx" type="Number" class="edu.wpi.first.smartdashboard.gui.elements.TextBox">
+		<location x="0" y="20"/>
+	</widget>
+	<widget field="Elevator " type="Number" class="edu.wpi.first.smartdashboard.gui.elements.TextBox">
+		<location x="0" y="0"/>
+	</widget>
 	<widget field="target Wrist position" type="Number" class="edu.wpi.first.smartdashboard.gui.elements.FormattedField">
 		<location x="30" y="279"/>
 	</widget>
@@ -234,7 +240,4 @@
 </dashboard>
 <live-window>
 </live-window>
-	<hidden field="rubikx"/>
-	<hidden field="current Wrist position"/>
-	<hidden field="Elevator "/>
 </xml>
